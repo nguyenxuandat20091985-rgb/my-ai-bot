@@ -1,22 +1,23 @@
 import os
 import google.generativeai as genai
 
-# Lấy API Key từ Secrets của GitHub
-api_key = os.getenv("MY_API_KEY")
-genai.configure(api_key=api_key)
-
-# Khởi tạo AI
-model = genai.GenerativeModel('gemini-pro')
-
+# Cấu hình API
 try:
-    # Gửi yêu cầu cho AI
-    response = model.generate_content("Hãy viết một câu danh ngôn hay về sự kiên trì.")
+    api_key = os.getenv("MY_API_KEY")
+    if not api_key:
+        raise ValueError("Chua tim thay API Key! Kiem tra lai Secrets.")
     
-    # Lưu kết quả vào file
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel('gemini-pro')
+
+    # Thử gọi AI
+    response = model.generate_content("Xin chao, ban la ai?")
+    
+    # Ghi kết quả thành công
     with open("result.txt", "w", encoding="utf-8") as f:
-        f.write(response.text)
-    print("AI đã trả lời thành công!")
+        f.write("AI tra loi: " + response.text)
+
 except Exception as e:
-    # Nếu lỗi, ghi lỗi ra file để mình biết
+    # Nếu lỗi, ghi thẳng lỗi vào result.txt để anh đọc
     with open("result.txt", "w", encoding="utf-8") as f:
-        f.write(f"Loi xay ra: {e}")
+        f.write(f"LOI ROI: {str(e)}")
