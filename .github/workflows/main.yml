@@ -1,0 +1,27 @@
+name: AI Auto Run
+on:
+  schedule:
+    - cron: '0 0 * * *' # Chạy tự động mỗi ngày vào 0h sáng
+  workflow_dispatch: # Cho phép anh nhấn nút "Run" bằng tay để test
+jobs:
+  run-ai:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Run Script
+        env:
+          MY_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "Kết nối tới AI..."
+          # Lệnh Python của anh sẽ chạy ở đây
+      - name: Push Code
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Auto generated code"
+          git push
