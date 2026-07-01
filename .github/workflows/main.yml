@@ -19,15 +19,13 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Install dependencies
+        run: pip install google-generativeai
+
       - name: Run Script
         env:
           MY_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          echo "Kết nối tới AI..."
-          # Dòng dưới đây giúp tạo file log để Git luôn có cái để lưu
-          echo "Bot run at $(date)" > run_log.txt
-          # Anh để các lệnh chạy Python của anh ở đây, ví dụ:
-          # python script_cua_anh.py
+        run: python bot.py
 
       - name: Push Code
         run: |
