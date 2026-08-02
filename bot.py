@@ -1,27 +1,31 @@
 import os
-import google.generativeai as genai
 import sys
+from google import genai
 
-# 1. Cấu hình API Key
 api_key = os.getenv("MY_API_KEY")
 
 if not api_key:
     print("Lỗi: Không tìm thấy biến môi trường MY_API_KEY.")
     sys.exit(1)
 
-# Debug: Chỉ in ra độ dài để kiểm tra key có bị rỗng hay quá ngắn không
 print(f"Độ dài API Key nhận được: {len(api_key)} ký tự.")
 
-genai.configure(api_key=api_key)
+client = genai.Client(api_key=api_key)
 
 try:
-    model = genai.GenerativeModel('gemini-1.5-flash')
     print("Đang gọi AI...")
-    response = model.generate_content("Xin chao, ban la ai?")
+    
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents="Xin chào, bạn là ai? Hãy giới thiệu ngắn gọn bằng tiếng Việt."
+    )
     
     print("AI đã trả lời thành công!")
+    
     with open("result.txt", "w", encoding="utf-8") as f:
         f.write(response.text)
+        
+    print("Đã lưu kết quả vào result.txt")
 
 except Exception as e:
     print(f"Lỗi API: {str(e)}")
