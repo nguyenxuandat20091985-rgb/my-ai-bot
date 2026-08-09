@@ -2,3 +2,4 @@ litellm
 requests
 beautifulsoup4
 groq
+streamlit
