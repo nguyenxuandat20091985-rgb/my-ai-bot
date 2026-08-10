@@ -25,7 +25,6 @@ jobs:
 
       - name: Run Agentic Bot
         env:
-          # Truyền API Key của Groq vào môi trường
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python bot.py
 
