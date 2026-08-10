@@ -48,7 +48,6 @@ def main():
     product = products[today.toordinal() % len(products)]
     logger.info(f"Hôm nay AI chọn sản phẩm: {product['name']}")
 
-    # ---- 1. Viết bài review dài, xuất bản lên báo ----
     raw = ai(
         "Bạn là cây viết review đồ gia dụng nổi tiếng Việt Nam, văn phong thật thà, gần gũi, hài hước nhẹ.\n"
         f"Hãy viết bài review khoảng 500 từ về: {product['name']}.\n"
@@ -70,13 +69,11 @@ def main():
         f.write(page_shell(title, inner))
     logger.info(f"Đã xuất bản: docs/bai-{slug}.html")
 
-    # ---- 2. Cập nhật trang chủ tờ báo (mục lục) ----
     posts = sorted([p for p in os.listdir("docs") if p.startswith("bai-")], reverse=True)
     items = "".join(f"<li><a href='{p}'>📰 Bài ngày {p.replace('bai-','').replace('.html','')}</a></li>" for p in posts)
     with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(page_shell("Góc Bếp Thông Minh – Săn Deal", f"<h1>Mục lục báo deal</h1><ul>{items}</ul>"))
 
-    # ---- 3. Viết 3 bài ngắn để anh copy gieo link ----
     social = ai(
         f"Dựa trên sản phẩm {product['name']} (điểm mạnh: {product['highlights']}), "
         f"viết 3 bài đăng mạng xã hội tiếng Việt ngắn dưới 8 câu, có emoji vui, cuối mỗi bài kèm link {product['link']} . "
