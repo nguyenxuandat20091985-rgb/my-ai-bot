@@ -1,16 +1,222 @@
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Góc Bếp Thông Minh – Săn Deal</title><style>
-body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f7f7fb;color:#222}
-header{background:linear-gradient(90deg,#4f46e5,#ec4899);color:#fff;padding:16px;text-align:center}
-.wrap{max-width:720px;margin:12px auto;padding:16px;background:#fff;border-radius:12px;line-height:1.7}
-h1{font-size:1.5rem;line-height:1.3}
-a.buy{display:block;text-align:center;background:#e11d48;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold;margin:20px 0}
-.small{color:#888;font-size:0.85rem}
-li{margin:6px 0}
-</style></head>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Góc Bếp Thông Minh – Săn Deal – Review thật lòng từ Góc Bếp Thông Minh">
+  <meta property="og:title" content="Góc Bếp Thông Minh – Săn Deal">
+  <meta property="og:description" content="Review đồ gia dụng & deal thật lòng mỗi ngày">
+  <meta property="og:type" content="article">
+  <title>Góc Bếp Thông Minh – Săn Deal</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --accent: #ec4899;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 16px;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.header {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+  color: white;
+  padding: 28px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.12), transparent 50%);
+}
+
+.header-inner { position: relative; z-index: 1; }
+
+.header h1 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+
+.header p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.article {
+  padding: 32px 28px;
+}
+
+.article h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.article p {
+  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+.article p:last-of-type { margin-bottom: 0; }
+
+.cta {
+  display: block;
+  margin: 36px 0 24px;
+  background: linear-gradient(135deg, #e11d48, #be123c);
+  color: white !important;
+  text-align: center;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+}
+
+.footer-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+/* Index page */
+.list-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.post-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-item a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: all 0.15s ease;
+}
+
+.post-item a:hover {
+  border-color: #c7d2fe;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+.post-item .icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.post-item .date {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .article { padding: 24px 20px; }
+  .article h1 { font-size: 1.45rem; }
+  .header h1 { font-size: 1.35rem; }
+}
+</style>
+</head>
 <body>
-<header><b>GÓC BẾP THÔNG MINH – SĂN DEAL</b><br><span class="small">Review thật lòng mỗi ngày</span></header>
-<div class="wrap"><h1>Mục lục báo deal</h1><ul><li><a href='bai-2026-08-10.html'>📰 Bài ngày 2026-08-10</a></li></ul></div>
-</body></html>
+  <header class="header">
+    <div class="header-inner">
+      <h1>Góc Bếp Thông Minh</h1>
+      <p>Săn deal · Review thật lòng mỗi ngày</p>
+    </div>
+  </header>
+  <main class="container">
+    
+    <div class="card" style="padding: 28px 24px;">
+      <h2 class="list-title">Mục lục săn deal</h2>
+      <ul class="post-list">
+        <li class="post-item">
+          <a href="bai-2026-08-10.html">
+            <span class="icon">📰</span>
+            <span>Bài ngày 2026-08-10</span>
+            <span class="date">2026-08-10</span>
+          </a>
+        </li></ul>
+    </div>
+    
+  </main>
+</body>
+</html>
