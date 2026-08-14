@@ -30,7 +30,7 @@ def _ai(prompt: str, temperature: float = None, max_retries: int = 3) -> str:
             last_err = e
             err_str = str(e).lower()
             if "ratelimit" in err_str or "rate_limit" in err_str or "tokens per minute" in err_str:
-                wait = 25 * attempt  # 25s, 50s, 75s
+                wait = 25 * attempt
                 logger.warning(f"Rate limit – đợi {wait}s rồi thử lại ({attempt}/{max_retries})")
                 time.sleep(wait)
                 continue
