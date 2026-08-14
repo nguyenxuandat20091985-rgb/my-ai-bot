@@ -1,10 +1,11 @@
 """
-Content Engine – Prompt tối ưu, văn phong tự nhiên, không bịa.
+Content Engine – Prompt tối ưu + retry khi rate limit Groq
 """
 
 from __future__ import annotations
 
 import logging
+import time
 from typing import Dict, Any
 from litellm import completion
 
@@ -13,18 +14,30 @@ from .config import MODEL, TEMPERATURE, MAX_TOKENS
 logger = logging.getLogger(__name__)
 
 
-def _ai(prompt: str, temperature: float = None) -> str:
-    try:
-        resp = completion(
-            model=MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=temperature if temperature is not None else TEMPERATURE,
-            max_tokens=MAX_TOKENS,
-        )
-        return resp.choices[0].message.content.strip()
-    except Exception as e:
-        logger.error(f"AI call failed: {e}")
-        raise
+def _ai(prompt: str, temperature: float = None, max_retries: int = 3) -> str:
+    """Gọi AI, tự đợi & thử lại nếu bị rate limit."""
+    last_err = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            resp = completion(
+                model=MODEL,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=temperature if temperature is not None else TEMPERATURE,
+                max_tokens=MAX_TOKENS,
+            )
+            return resp.choices[0].message.content.strip()
+        except Exception as e:
+            last_err = e
+            err_str = str(e).lower()
+            if "ratelimit" in err_str or "rate_limit" in err_str or "tokens per minute" in err_str:
+                wait = 25 * attempt  # 25s, 50s, 75s
+                logger.warning(f"Rate limit – đợi {wait}s rồi thử lại ({attempt}/{max_retries})")
+                time.sleep(wait)
+                continue
+            logger.error(f"AI call failed: {e}")
+            raise
+    logger.error(f"AI call failed after {max_retries} retries: {last_err}")
+    raise last_err
 
 
 def build_base_context(product: Dict[str, Any]) -> str:
@@ -98,7 +111,7 @@ YÊU CẦU:
 - Tập trung lợi ích + CTA.
 - Mỗi bài kết thúc bằng link: {link}
 """
-    return _ai(prompt, temperature=0.8)
+    return _ai(prompt, temperature=0.8, max_retries=3)
 
 
 def generate_seo_meta(product: Dict[str, Any], title: str) -> Dict[str, str]:
@@ -111,7 +124,7 @@ Trả về đúng 3 dòng:
 2. Meta description (≤155 ký tự)
 3. Keywords (5-8 từ, cách nhau dấu phẩy)
 """
-    raw = _ai(prompt, temperature=0.5)
+    raw = _ai(prompt, temperature=0.5, max_retries=3)
     lines = [l.strip() for l in raw.splitlines() if l.strip()]
     return {
         "seo_title": lines[0] if lines else title[:60],
