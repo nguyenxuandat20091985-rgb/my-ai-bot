@@ -45,6 +45,7 @@ MIN_SAFETY_SCORE = int(os.getenv("MIN_SAFETY_SCORE", "80"))
 ACCESSTRADE_API_TOKEN = os.getenv("ACCESSTRADE_API_TOKEN", "")
 ACCESSTRADE_CAMPAIGN_ID = os.getenv("ACCESSTRADE_CAMPAIGN_ID", "")
 ACCESSTRADE_BASE_URL = os.getenv("ACCESSTRADE_BASE_URL", "https://api.accesstrade.vn")
+
 # ============================================================
 # SCORING WEIGHTS (configurable)
 # ============================================================
