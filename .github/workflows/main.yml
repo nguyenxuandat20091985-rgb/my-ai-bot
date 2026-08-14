@@ -48,7 +48,11 @@ jobs:
           if git diff --staged --quiet; then
             echo "✅ Không có thay đổi mới – bỏ qua commit"
           else
-            git commit -m "Auto update AI result $(date -u +%Y-%m-%d)"
-            git push
+            git commit -m "Auto update AI result $(date -u +%Y-%m-%d)" || true
+
+            # Kéo về trước khi push để tránh rejected
+            git pull --rebase origin main || git pull --rebase --autostash origin main || true
+
+            git push origin HEAD:main
             echo "✅ Đã commit & push thành công"
           fi
