@@ -40,13 +40,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Thêm tất cả file có thể thay đổi
           git add docs/ || true
           git add result.txt index.html || true
           git add data/ || true
           git add bai-*.html 2>/dev/null || true
 
-          # Chỉ commit khi có thay đổi
           if git diff --staged --quiet; then
             echo "✅ Không có thay đổi mới – bỏ qua commit"
           else
