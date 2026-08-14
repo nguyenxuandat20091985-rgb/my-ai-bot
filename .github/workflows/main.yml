@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -27,15 +30,25 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           SAFE_MODE: "true"
-          AUTO_PUBLISH: "true"          # Bật publish khi nội dung đạt chất lượng
+          AUTO_PUBLISH: "true"
         run: python bot_v1.py
 
       - name: Commit & Push result
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/ result.txt bai-*.html index.html data/ || true
-          git diff --quiet && git diff --staged --quiet || (
-            git commit -m "Auto update AI result $(date -u +%Y-%m-%d)" &&
+
+          # Thêm tất cả file có thể thay đổi
+          git add docs/ || true
+          git add result.txt index.html || true
+          git add data/ || true
+          git add bai-*.html 2>/dev/null || true
+
+          # Chỉ commit khi có thay đổi
+          if git diff --staged --quiet; then
+            echo "✅ Không có thay đổi mới – bỏ qua commit"
+          else
+            git commit -m "Auto update AI result $(date -u +%Y-%m-%d)"
             git push
-          )
+            echo "✅ Đã commit & push thành công"
+          fi
