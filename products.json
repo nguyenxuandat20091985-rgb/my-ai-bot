@@ -1,18 +1,35 @@
 {
   "products": [
     {
+      "id": "noi-chien-001",
       "name": "Nồi chiên không dầu",
       "link": "https://shorten.asia/epmrd8Bx",
       "highlights": "chiên nướng không cần dầu, bớt 80% mỡ, hẹn giờ tự động, dễ vệ sinh",
       "audience": "các mẹ nội trợ, người thích nấu ăn nhanh gọn"
     },
     {
+      "id": "may-ep-001",
       "name": "Máy ép hoa quả",
       "link": "https://shorten.asia/wkSRMcmS",
       "highlights": "ép chậm giữ vitamin, chạy êm, bã khô, tháo rửa nhanh",
       "audience": "mẹ bỉm sữa, người ăn uống healthy"
     },
     {
+      "id": "may-ep-da-nang-001",
+      "name": "Máy ép đa năng",
+      "link": "https://shorten.asia/Ru9YGqZ6",
+      "highlights": "ép nhiều loại rau củ quả, công suất mạnh, dễ tháo lắp, vệ sinh nhanh",
+      "audience": "gia đình thích làm nước ép tại nhà"
+    },
+    {
+      "id": "bom-xe-001",
+      "name": "Bơm ô tô xe máy",
+      "link": "https://shorten.asia/UH5cYcwc",
+      "highlights": "bơm nhanh, dùng pin hoặc điện 12V, màn hình hiện áp suất, gọn nhẹ",
+      "audience": "tài xế, người đi xe máy thường xuyên"
+    },
+    {
+      "id": "mb-bank-001",
       "name": "Mở tài khoản MB Bank",
       "link": "https://shorten.asia/UngWPa85",
       "highlights": "mở online 5 phút, miễn phí chuyển khoản, ưu đãi khách mới, mã giới thiệu MBAT103085",
