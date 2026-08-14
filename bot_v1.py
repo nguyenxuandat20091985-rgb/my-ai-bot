@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import logging
+import time  # ✅ Đã thêm import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -41,13 +42,27 @@ DOCS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def original_ai(prompt: str) -> str:
-    resp = completion(
-        model=MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.8,
-    )
-    return resp.choices[0].message.content
+def original_ai(prompt: str, max_retries: int = 3) -> str:
+    """Gọi AI với cơ chế retry khi bị rate limit."""
+    last_err = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            resp = completion(
+                model=MODEL,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.8,
+            )
+            return resp.choices[0].message.content
+        except Exception as e:
+            last_err = e
+            err_str = str(e).lower()
+            if "ratelimit" in err_str or "rate_limit" in err_str or "tokens per minute" in err_str:
+                wait = 25 * attempt
+                logger.warning(f"Core rate limit – đợi {wait}s ({attempt}/{max_retries})")
+                time.sleep(wait)
+                continue
+            raise
+    raise last_err
 
 
 def write_social_outputs(
