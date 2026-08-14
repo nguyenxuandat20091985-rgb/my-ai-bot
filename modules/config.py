@@ -67,7 +67,7 @@ SITE_DESCRIPTION = "Review đồ gia dụng & deal thật lòng mỗi ngày"
 # ============================================================
 # FEATURE FLAGS
 # ============================================================
-ENABLE_ACCESSTRADE = bool(ACCESSTRADE_API_KEY and ACCESSTRADE_API_TOKEN)
+ENABLE_ACCESSTRADE = bool(ACCESSTRADE_API_TOKEN and ACCESSTRADE_CAMPAIGN_ID)
 ENABLE_IMAGE_GEN = os.getenv("ENABLE_IMAGE_GEN", "false").lower() in ("1", "true", "yes")
 ENABLE_SOCIAL_PUBLISH = os.getenv("ENABLE_SOCIAL_PUBLISH", "false").lower() in ("1", "true", "yes")
 
