@@ -40,13 +40,11 @@ MIN_SEO_SCORE = int(os.getenv("MIN_SEO_SCORE", "60"))
 MIN_SAFETY_SCORE = int(os.getenv("MIN_SAFETY_SCORE", "80"))
 
 # ============================================================
-# ACCESSTRADE (REQUIRES OFFICIAL CREDENTIALS)
+# ACCESSTRADE
 # ============================================================
-ACCESSTRADE_API_KEY = os.getenv("ACCESSTRADE_API_KEY", "")
 ACCESSTRADE_API_TOKEN = os.getenv("ACCESSTRADE_API_TOKEN", "")
-ACCESSTRADE_PUBLISHER_ID = os.getenv("ACCESSTRADE_PUBLISHER_ID", "")
-ACCESSTRADE_BASE_URL = os.getenv("ACCESSTRADE_BASE_URL", "https://api.accesstrade.vn")  # TODO: confirm official
-
+ACCESSTRADE_CAMPAIGN_ID = os.getenv("ACCESSTRADE_CAMPAIGN_ID", "")
+ACCESSTRADE_BASE_URL = os.getenv("ACCESSTRADE_BASE_URL", "https://api.accesstrade.vn")
 # ============================================================
 # SCORING WEIGHTS (configurable)
 # ============================================================
