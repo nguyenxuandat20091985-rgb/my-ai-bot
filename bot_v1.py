@@ -8,7 +8,7 @@ import os
 import sys
 import json
 import logging
-import time  # ✅ Đã thêm import time
+import time  # ✅ A. Đã thêm import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -42,8 +42,8 @@ DOCS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
+# ✅ B. Đã thay toàn bộ hàm original_ai
 def original_ai(prompt: str, max_retries: int = 3) -> str:
-    """Gọi AI với cơ chế retry khi bị rate limit."""
     last_err = None
     for attempt in range(1, max_retries + 1):
         try:
