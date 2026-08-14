@@ -233,15 +233,60 @@ def score_product(p: Dict[str, Any], weights: Optional[Dict[str, float]] = None)
 
 def select_product_for_today(products: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """
-    Keep original logic: day-based rotation.
-    But prefer higher score if multiple candidates.
+    Chọn sản phẩm thông minh:
+    1. Ưu tiên sản phẩm chưa đăng trong 3 ngày gần đây
+    2. Trong các sản phẩm còn lại → chọn điểm cao nhất
+    3. Nếu tất cả đã đăng gần đây → xoay theo ngày (fallback)
     """
     if not products:
         return None
+
     today = datetime.now(timezone(timedelta(hours=7)))
-    idx = today.toordinal() % len(products)
-    # original simple selection
-    return products[idx]
+    recent_ids = set()
+
+    # Đọc lịch sử nếu có
+    history_path = DATA_DIR / "content_history.json"
+    if history_path.exists():
+        try:
+            with open(history_path, "r", encoding="utf-8") as f:
+                history = json.load(f)
+            cutoff = (today - timedelta(days=3)).date()
+            for item in history if isinstance(history, list) else history.get("items", []):
+                try:
+                    d = item.get("date") or item.get("created_at") or ""
+                    # hỗ trợ cả ISO và YYYY-MM-DD
+                    if "T" in str(d):
+                        d = d[:10]
+                    item_date = datetime.strptime(str(d)[:10], "%Y-%m-%d").date()
+                    if item_date >= cutoff:
+                        pid = item.get("product_id") or item.get("id")
+                        if pid:
+                            recent_ids.add(pid)
+                except Exception:
+                    continue
+        except Exception as e:
+            logger.warning(f"Không đọc được content_history: {e}")
+
+    # Ưu tiên sản phẩm chưa đăng gần đây
+    candidates = [p for p in products if p.get("id") not in recent_ids]
+    if not candidates:
+        candidates = products  # fallback: dùng tất cả
+
+    # Chọn điểm cao nhất trong candidates
+    scored = [(score_product(p), p) for p in candidates]
+    scored.sort(key=lambda x: x[0], reverse=True)
+
+    # Nếu nhiều sản phẩm cùng điểm cao → xoay nhẹ theo ngày để đa dạng
+    top_score = scored[0][0]
+    top_group = [p for s, p in scored if s >= top_score - 5]
+    idx = today.toordinal() % len(top_group)
+    chosen = top_group[idx]
+
+    logger.info(
+        f"Selected: {chosen['name']} | score={score_product(chosen)} | "
+        f"avoided_recent={len(recent_ids)} | candidates={len(candidates)}"
+    )
+    return chosen
 
 
 def get_top_products(products: List[Dict[str, Any]], n: int = 5) -> List[Dict[str, Any]]:
