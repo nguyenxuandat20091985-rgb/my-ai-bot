@@ -1,5 +1,6 @@
 """
-MY AI AFFILIATE AGENT V1.0 - Orchestrator (đã chỉnh path + publish thực tế)
+MY AI AFFILIATE AGENT V1.0 - Orchestrator
+Đã sửa: luôn ghi đúng vào docs/ + cập nhật index đầy đủ
 """
 
 from __future__ import annotations
@@ -48,8 +49,23 @@ def original_ai(prompt: str) -> str:
     return resp.choices[0].message.content
 
 
+def update_all_indexes():
+    """Cập nhật index ở cả docs/ và root, lấy tất cả bài trong docs/"""
+    posts = sorted(
+        [p.name for p in DOCS_DIR.glob("bai-*.html")],
+        reverse=True
+    )
+    if not posts:
+        logger.warning("Không tìm thấy bài nào trong docs/")
+        return
+
+    update_index(posts, DOCS_DIR / "index.html")
+    update_index(posts, Path("index.html"))
+    logger.info(f"Đã cập nhật index với {len(posts)} bài")
+
+
 def run_original_core_flow(product: dict, today, date_str: str, slug: str) -> None:
-    """Core gốc – luôn ghi vào docs/ + root để tương thích."""
+    """Core gốc – ghi chính vào docs/"""
     logger.info(">>> Running ORIGINAL CORE flow (fallback)")
 
     raw = original_ai(
@@ -87,17 +103,17 @@ li{margin:6px 0}
 <div class="wrap">{inner}</div>
 </body></html>"""
 
-    # Ghi cả docs/ (chính) và root (tương thích)
-    for target in [DOCS_DIR / f"bai-{slug}.html", Path(f"bai-{slug}.html")]:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with open(target, "w", encoding="utf-8") as f:
-            f.write(html)
+    # Ghi chính vào docs/, phụ vào root
+    primary = DOCS_DIR / f"bai-{slug}.html"
+    with open(primary, "w", encoding="utf-8") as f:
+        f.write(html)
+    with open(f"bai-{slug}.html", "w", encoding="utf-8") as f:
+        f.write(html)
+
     logger.info(f"Core published → docs/bai-{slug}.html")
 
     # Cập nhật index
-    posts = sorted([p.name for p in DOCS_DIR.glob("bai-*.html")], reverse=True)
-    update_index(posts, DOCS_DIR / "index.html")
-    update_index(posts, Path("index.html"))
+    update_all_indexes()
 
     social = original_ai(
         f"Dựa trên sản phẩm {product['name']} (điểm mạnh: {product.get('highlights', '')}), "
@@ -114,62 +130,51 @@ li{margin:6px 0}
 def run_extended_pipeline(product: dict, today, date_str: str, slug: str) -> bool:
     logger.info(">>> Running EXTENDED V1.0 pipeline")
 
-    # 1. Affiliate link (safe fallback)
     product["affiliate_url"] = get_affiliate_link(
         product.get("product_url") or product.get("link") or ""
     )
 
-    # 2. Generate content
-    review = generate_long_review(product)
-    title = review["title"]
-    body = review["body"]
+    try:
+        review = generate_long_review(product)
+        title = review["title"]
+        body = review["body"]
+    except Exception as e:
+        logger.error(f"Content engine error: {e}")
+        return False
 
-    # 3. Anti-duplicate
     if is_duplicate(product["id"], title, body, angle="daily_review"):
         logger.warning("Duplicate detected → block extended publish")
         return False
 
-    # 4. SEO meta
     meta = generate_seo_meta(product, title)
-
-    # 5. Quality + Safety gate
     gate = run_quality_gate(body, title, product, meta, is_duplicate=False)
     safety = safety_check(body, product)
 
     logger.info(f"Quality: fact={gate['fact'].get('score')} quality={gate['quality']['score']} seo={gate['seo']['score']}")
     logger.info(f"Safety: passed={safety['passed']} score={safety.get('score')}")
 
-    # SAFE_MODE chỉ chặn nội dung kém chất lượng
     if SAFE_MODE and (not gate["passed"] or not safety["passed"]):
         logger.warning("SAFE_MODE: content failed quality/safety → fallback Core")
         return False
 
-    # Nếu AUTO_PUBLISH = false thì vẫn cho phép publish khi đã vượt gate
-    # (chỉ khi anh muốn tắt hoàn toàn mới set AUTO_PUBLISH=false + chỉnh thêm)
-
-    # 6. Render HTML
     body_html = "".join(f"<p>{p}</p>" for p in body.split("\n\n") if p.strip())
     html = render_html_page(title, body_html, product, meta, date_str, slug)
 
-    # 7. Ghi file (docs/ là chính)
-    for target in [DOCS_DIR / f"bai-{slug}.html", Path(f"bai-{slug}.html")]:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with open(target, "w", encoding="utf-8") as f:
-            f.write(html)
+    # Ghi chính vào docs/
+    primary = DOCS_DIR / f"bai-{slug}.html"
+    with open(primary, "w", encoding="utf-8") as f:
+        f.write(html)
+    with open(f"bai-{slug}.html", "w", encoding="utf-8") as f:
+        f.write(html)
 
-    # 8. Cập nhật index
-    posts = sorted([p.name for p in DOCS_DIR.glob("bai-*.html")], reverse=True)
-    update_index(posts, DOCS_DIR / "index.html")
-    update_index(posts, Path("index.html"))
+    update_all_indexes()
 
-    # 9. Social
     social = generate_social_posts(product)
     with open("result.txt", "w", encoding="utf-8") as f:
         f.write(f"📰 BÀI MỚI (V1.0):\n{BLOG_URL}/bai-{slug}.html\n\n")
         f.write("👇 3 BÀI NGẮN:\n\n")
         f.write(social)
 
-    # 10. Ghi lịch sử
     record_content(
         product_id=product["id"],
         title=title,
