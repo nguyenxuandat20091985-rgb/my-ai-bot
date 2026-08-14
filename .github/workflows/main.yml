@@ -1,5 +1,3 @@
-name: AI Auto Run
-
 on:
   workflow_dispatch:
   schedule:
@@ -29,6 +27,8 @@ jobs:
       - name: Run AI Bot V1.0
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          ACCESSTRADE_API_TOKEN: ${{ secrets.ACCESSTRADE_API_TOKEN }}
+          ACCESSTRADE_CAMPAIGN_ID: ${{ secrets.ACCESSTRADE_CAMPAIGN_ID }}
           SAFE_MODE: "true"
           AUTO_PUBLISH: "true"
         run: python bot_v1.py
