@@ -236,7 +236,7 @@ def main():
     date_str = today.strftime("%d/%m/%Y")
     slug = today.strftime("%Y-%m-%d")
 
-    # Optional: fetch SP mới từ AccessTrade (chỉ khi ENABLE_PRODUCT_FETCH=true)
+    # Optional: lấy SP mới từ AccessTrade datafeed
     try:
         from modules.product_fetcher import run_fetch_and_merge, ENABLE_PRODUCT_FETCH
         if ENABLE_PRODUCT_FETCH:
@@ -244,7 +244,7 @@ def main():
     except Exception as e:
         logger.warning(f"Product fetch skip: {e}")
 
-    products = load_products()
+    products = load_products()  # luôn load sau (có hoặc không fetch)
     if not products:
         logger.error("No products found in products.json")
         sys.exit(1)
