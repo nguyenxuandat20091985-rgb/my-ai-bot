@@ -15,6 +15,13 @@
       "audience": "mẹ bỉm sữa, người ăn uống healthy"
     },
     {
+      "id": "mb-bank-001",
+      "name": "Mở tài khoản MB Bank",
+      "link": "https://shorten.asia/UngWPa85",
+      "highlights": "mở online 5 phút, miễn phí chuyển khoản, ưu đãi khách mới, mã giới thiệu MBAT103085",
+      "audience": "người săn ưu đãi, dân kiếm tiền không vốn"
+    },
+    {
       "id": "may-ep-da-nang-001",
       "name": "Máy ép đa năng",
       "link": "https://shorten.asia/Ru9YGqZ6",
@@ -29,11 +36,221 @@
       "audience": "tài xế, người đi xe máy thường xuyên"
     },
     {
-      "id": "mb-bank-001",
-      "name": "Mở tài khoản MB Bank",
-      "link": "https://shorten.asia/UngWPa85",
-      "highlights": "mở online 5 phút, miễn phí chuyển khoản, ưu đãi khách mới, mã giới thiệu MBAT103085",
-      "audience": "người săn ưu đãi, dân kiếm tiền không vốn"
+      "id": "may-tinh-ben-001",
+      "name": "Máy tính bền",
+      "link": "https://shorten.asia/uvMfrBGM",
+      "highlights": "cấu hình ổn định, dùng lâu, phù hợp học tập văn phòng",
+      "audience": "học sinh sinh viên, nhân viên văn phòng"
+    },
+    {
+      "id": "vay-sieu-toc-001",
+      "name": "Vay siêu tốc",
+      "link": "https://shorten.asia/261nhWpK",
+      "highlights": "duyệt nhanh, giải ngân nhanh, thủ tục đơn giản",
+      "audience": "người cần vốn gấp, hộ kinh doanh nhỏ"
+    },
+    {
+      "id": "nan-khu-mui-001",
+      "name": "Năn khử mùi",
+      "link": "https://shorten.asia/Tc8MAZnS",
+      "highlights": "khử mùi hiệu quả, an toàn, dùng cho tủ lạnh phòng tắm",
+      "audience": "gia đình, người quan tâm không gian sạch"
+    },
+    {
+      "id": "kem-danh-rang-001",
+      "name": "Kem đánh răng",
+      "link": "https://shorten.asia/eZqcGeTc",
+      "highlights": "bảo vệ răng miệng, hơi thở thơm, dùng hàng ngày",
+      "audience": "cả gia đình"
+    },
+    {
+      "id": "tinh-bot-nghe-001",
+      "name": "Viên tinh bột nghệ mật ong",
+      "link": "https://shorten.asia/nsgTXs8M",
+      "highlights": "hỗ trợ tiêu hóa, đẹp da, tiện dùng hàng ngày",
+      "audience": "người quan tâm sức khỏe, làm đẹp"
+    },
+    {
+      "id": "cafe-hoa-tan-001",
+      "name": "Cafe hòa tan",
+      "link": "https://shorten.asia/8WStEGpF",
+      "highlights": "tiện lợi, hương vị đậm đà, pha nhanh",
+      "audience": "nhân viên văn phòng, người bận rộn"
+    },
+    {
+      "id": "protein-thuc-vat-001",
+      "name": "Bột protein thực vật - viên bổ sung đạm",
+      "link": "https://shorten.asia/yTGusxpS",
+      "highlights": "bổ sung đạm thực vật, hỗ trợ tập luyện, dễ hấp thu",
+      "audience": "người tập gym, ăn chay, quan tâm dinh dưỡng"
+    },
+    {
+      "id": "xit-duong-toc-001",
+      "name": "Xịt dưỡng tóc tinh dầu",
+      "link": "https://shorten.asia/9MYJTU55",
+      "highlights": "dưỡng tóc mềm mượt, giảm xơ rối, hương tinh dầu",
+      "audience": "chị em chăm sóc tóc"
+    },
+    {
+      "id": "goi-cong-thai-hoc-001",
+      "name": "Gối đầu công thái học",
+      "link": "https://shorten.asia/J5sZMPty",
+      "highlights": "hỗ trợ cột sống cổ, giảm đau mỏi, ngủ ngon hơn",
+      "audience": "dân văn phòng, người đau cổ vai gáy"
+    },
+    {
+      "id": "iphone-17-001",
+      "name": "Điện thoại iPhone 17",
+      "link": "https://shorten.asia/bRBAyMNe",
+      "highlights": "hiệu năng mạnh, camera tốt, trải nghiệm mượt",
+      "audience": "người dùng Apple, nâng cấp smartphone"
+    },
+    {
+      "id": "samsung-s25-001",
+      "name": "Điện thoại Samsung S25 Ultra 5G",
+      "link": "https://shorten.asia/KYb2FZeR",
+      "highlights": "màn hình lớn, camera zoom mạnh, pin trâu, 5G",
+      "audience": "người dùng Android cao cấp"
+    },
+    {
+      "id": "tra-sua-matcha-001",
+      "name": "Trà sữa matcha",
+      "link": "https://shorten.asia/FvUQRUXP",
+      "highlights": "vị matcha thơm, tiện pha, thưởng thức tại nhà",
+      "audience": "giới trẻ, fan đồ uống"
+    },
+    {
+      "id": "chao-thep-001",
+      "name": "Chảo nấu ăn bằng thép",
+      "link": "https://shorten.asia/zy5pcNqb",
+      "highlights": "bền, chịu nhiệt tốt, phù hợp bếp gia đình",
+      "audience": "mẹ nội trợ, người thích nấu ăn"
+    },
+    {
+      "id": "flycam-gt50-001",
+      "name": "Flycam GT50",
+      "link": "https://s.shopee.vn/2gAMdhIbRj",
+      "highlights": "bay ổn định, camera rõ, phù hợp giải trí",
+      "audience": "người thích công nghệ, quay clip"
+    },
+    {
+      "id": "flycam-e88-001",
+      "name": "Flycam E88 cho người mới",
+      "link": "https://shorten.asia/BXXFHZ5S",
+      "highlights": "dễ bay, giá mềm, phù hợp người mới bắt đầu",
+      "audience": "người mới chơi flycam"
+    },
+    {
+      "id": "tinh-dau-treo-xe-001",
+      "name": "Tinh dầu treo xe ô tô",
+      "link": "https://shorten.asia/Ytn73XpA",
+      "highlights": "thơm xe, khử mùi, treo tiện lợi",
+      "audience": "tài xế, chủ xe hơi"
+    },
+    {
+      "id": "camera-imou-001",
+      "name": "Camera Imou độ phân giải cao",
+      "link": "https://shorten.asia/GFG9GggH",
+      "highlights": "hình ảnh rõ, xem từ xa, an ninh nhà cửa",
+      "audience": "gia đình, chủ shop cần giám sát"
+    },
+    {
+      "id": "den-nang-luong-001",
+      "name": "Đèn năng lượng mặt trời",
+      "link": "https://shorten.asia/S5rNJSME",
+      "highlights": "tiết kiệm điện, sáng tự động, lắp ngoài trời",
+      "audience": "nhà vườn, sân trước, khu vực thiếu điện"
+    },
+    {
+      "id": "den-solar-002",
+      "name": "Đèn năng lượng mặt trời Solar Light",
+      "link": "https://shorten.asia/tVkhNDYe",
+      "highlights": "sạc nắng, sáng đêm, dễ lắp đặt",
+      "audience": "hộ gia đình, khu vực ngoài trời"
+    },
+    {
+      "id": "khoa-van-tay-001",
+      "name": "Ổ khóa vân tay",
+      "link": "https://shorten.asia/H46vVu4a",
+      "highlights": "mở bằng vân tay, an toàn, không cần chìa",
+      "audience": "gia đình, căn hộ hiện đại"
+    },
+    {
+      "id": "den-pin-001",
+      "name": "Đèn pin siêu sáng 300m",
+      "link": "https://shorten.asia/AhVdZdbm",
+      "highlights": "chiếu xa 300m, pin khỏe, dùng dã ngoại",
+      "audience": "đi phượt, sửa chữa, mất điện"
+    },
+    {
+      "id": "long-ban-001",
+      "name": "Lồng bàn thép đựng thức ăn chống côn trùng",
+      "link": "https://shorten.asia/RTwthgBH",
+      "highlights": "chống ruồi kiến, thép bền, giữ thức ăn sạch",
+      "audience": "gia đình, quán ăn nhỏ"
+    },
+    {
+      "id": "ao-dieu-hoa-001",
+      "name": "Áo điều hòa Nhật Bản",
+      "link": "https://shorten.asia/DE3JcS9H",
+      "highlights": "mát khi làm việc ngoài trời, pin quạt tích hợp",
+      "audience": "công nhân, shipper, làm đồng"
+    },
+    {
+      "id": "ghe-hoc-sinh-001",
+      "name": "Ghế học sinh chống gù lưng",
+      "link": "https://shorten.asia/2UwF23Hj",
+      "highlights": "chống gù, điều chỉnh độ cao, bảo vệ cột sống",
+      "audience": "phụ huynh có con học sinh"
+    },
+    {
+      "id": "may-loc-khu-mui-bep-001",
+      "name": "Máy lọc khử mùi bếp",
+      "link": "https://shorten.asia/SmQk81A2",
+      "highlights": "khử mùi nấu nướng, không khí bếp sạch hơn",
+      "audience": "gia đình nấu ăn nhiều"
+    },
+    {
+      "id": "may-rua-xe-001",
+      "name": "Máy rửa xe kinh tế",
+      "link": "https://shorten.asia/tPs5dMPH",
+      "highlights": "áp lực mạnh, tiết kiệm nước, rửa xe tại nhà",
+      "audience": "chủ xe máy, ô tô"
+    },
+    {
+      "id": "may-lam-da-001",
+      "name": "Máy làm đá mini",
+      "link": "https://shorten.asia/1vh3TYA4",
+      "highlights": "làm đá nhanh, gọn, dùng gia đình quán nhỏ",
+      "audience": "gia đình, quán nước"
+    },
+    {
+      "id": "robot-lau-nha-001",
+      "name": "Robot lau nhà tự lập trình",
+      "link": "https://shorten.asia/72Md8Cx2",
+      "highlights": "tự động lau hút, lập trình giờ, tiết kiệm công sức",
+      "audience": "gia đình bận rộn"
+    },
+    {
+      "id": "ghe-may-001",
+      "name": "Ghế mây thư giãn",
+      "link": "https://shorten.asia/HYWPvYKK",
+      "highlights": "ngồi êm, phong cách, trang trí ban công phòng khách",
+      "audience": "gia đình, quán cafe"
+    },
+    {
+      "id": "tui-du-lich-001",
+      "name": "Túi du lịch cỡ đại",
+      "link": "https://shorten.asia/3RPgCddf",
+      "highlights": "dung tích lớn, chắc chắn, đi xa nhiều ngày",
+      "audience": "người đi du lịch, công tác"
+    },
+    {
+      "id": "bo-ban-an-001",
+      "name": "Bộ bàn ăn cao cấp",
+      "link": "https://shorten.asia/1b4ZHDsC",
+      "highlights": "thiết kế đẹp, bền, nâng cấp không gian bếp",
+      "audience": "gia đình, nhà mới"
     }
   ]
 }
