@@ -33,6 +33,7 @@ jobs:
           ACCESSTRADE_CAMPAIGN_ID: ${{ secrets.ACCESSTRADE_CAMPAIGN_ID }}
           SAFE_MODE: "true"
           AUTO_PUBLISH: "true"
+          ENABLE_PRODUCT_FETCH: "false"
         run: python bot_v1.py
 
       - name: Commit & Push result
