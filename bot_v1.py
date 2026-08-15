@@ -8,7 +8,8 @@ import os
 import sys
 import json
 import logging
-import time  # ✅ A. Đã thêm import time
+import time
+import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -42,7 +43,6 @@ DOCS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-# ✅ B. Đã thay toàn bộ hàm original_ai
 def original_ai(prompt: str, max_retries: int = 3) -> str:
     last_err = None
     for attempt in range(1, max_retries + 1):
@@ -72,15 +72,19 @@ def write_social_outputs(
     social_raw: str,
     mode: str = "v1",
 ) -> None:
-    """Ghi result.txt (dễ copy Fanpage) + social.json (cho Make.com)."""
+    """Ghi result.txt + social.json (luôn đồng bộ)."""
     aff = product.get("affiliate_url") or product.get("link") or ""
     blog_link = f"{BLOG_URL}/bai-{slug}.html"
     date_str = datetime.now(timezone(timedelta(hours=7))).strftime("%d/%m/%Y")
 
-    # Tách 3 bài social
     parts = [p.strip() for p in social_raw.split("---") if p.strip()]
+    if len(parts) <= 1 and "=====" in social_raw:
+        parts = [
+            p.strip()
+            for p in re.split(r"===== BÀI \d+ =====", social_raw)
+            if p.strip() and "HASHTAG" not in p
+        ]
 
-    # ----- result.txt -----
     lines = [
         f"📰 BÀI MỚI ({mode.upper()}) – {date_str}",
         f"Sản phẩm: {product.get('name')}",
@@ -101,7 +105,6 @@ def write_social_outputs(
     with open("result.txt", "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
-    # ----- social.json (Make.com / Zapier dễ đọc) -----
     social_data = {
         "date": date_str,
         "product_name": product.get("name"),
@@ -110,15 +113,20 @@ def write_social_outputs(
         "affiliate_url": aff,
         "title": title,
         "posts": parts[:3],
-        "hashtags": ["#GocBepThongMinh", "#SanDeal", "#DoGiaDung", "#ReviewThatLong", "#Shopee"],
+        "hashtags": [
+            "#GocBepThongMinh",
+            "#SanDeal",
+            "#DoGiaDung",
+            "#ReviewThatLong",
+            "#Shopee",
+        ],
     }
     with open(DATA_DIR / "social.json", "w", encoding="utf-8") as f:
         json.dump(social_data, f, ensure_ascii=False, indent=2)
-    # copy ra docs để GitHub Pages cũng có (nếu cần)
     with open(DOCS_DIR / "social.json", "w", encoding="utf-8") as f:
         json.dump(social_data, f, ensure_ascii=False, indent=2)
 
-    logger.info("Social outputs saved → result.txt + data/social.json")
+    logger.info("Social outputs saved → result.txt + data/social.json + docs/social.json")
 
 
 def run_original_core_flow(product: dict, today, date_str: str, slug: str) -> None:
@@ -138,7 +146,11 @@ def run_original_core_flow(product: dict, today, date_str: str, slug: str) -> No
     body = "".join(f"<p>{l}</p>" for l in lines[1:])
 
     aff = product.get("affiliate_url") or product.get("link") or "#"
-    meta = {"seo_title": title, "meta_description": f"Review {product['name']}", "keywords": product["name"]}
+    meta = {
+        "seo_title": title,
+        "meta_description": f"Review {product['name']}",
+        "keywords": product["name"],
+    }
     html = render_html_page(title, body, product, meta, date_str, slug)
 
     for target in [DOCS_DIR / f"bai-{slug}.html", Path(f"bai-{slug}.html")]:
@@ -171,7 +183,8 @@ def run_extended_pipeline(product: dict, today, date_str: str, slug: str) -> boo
     title = review["title"]
     body = review["body"]
 
-    if is_duplicate(product["id"], title, body, angle="daily_review"):
+    pid = product.get("id") or product.get("name", "unknown")
+    if is_duplicate(pid, title, body, angle="daily_review"):
         logger.warning("Duplicate detected → block extended publish")
         return False
 
@@ -180,7 +193,8 @@ def run_extended_pipeline(product: dict, today, date_str: str, slug: str) -> boo
     safety = safety_check(body, product)
 
     logger.info(
-        f"Quality: fact={gate['fact'].get('score')} quality={gate['quality']['score']} seo={gate['seo']['score']}"
+        f"Quality: fact={gate['fact'].get('score')} "
+        f"quality={gate['quality']['score']} seo={gate['seo']['score']}"
     )
     logger.info(f"Safety: passed={safety['passed']} score={safety.get('score')}")
 
@@ -204,14 +218,14 @@ def run_extended_pipeline(product: dict, today, date_str: str, slug: str) -> boo
     write_social_outputs(product, title, slug, social, mode="v1")
 
     record_content(
-        product_id=product["id"],
+        product_id=pid,
         title=title,
         body=body,
         angle="daily_review",
         content_type="long_review",
         extra={"slug": slug, "score": score_product(product)},
     )
-    record_publish(product["id"], product["name"], slug, title, mode="extended")
+    record_publish(pid, product["name"], slug, title, mode="extended")
 
     logger.info("✅ Extended pipeline published successfully")
     return True
@@ -222,13 +236,25 @@ def main():
     date_str = today.strftime("%d/%m/%Y")
     slug = today.strftime("%Y-%m-%d")
 
+    # Optional: fetch SP mới từ AccessTrade (chỉ khi ENABLE_PRODUCT_FETCH=true)
+    try:
+        from modules.product_fetcher import run_fetch_and_merge, ENABLE_PRODUCT_FETCH
+        if ENABLE_PRODUCT_FETCH:
+            run_fetch_and_merge()
+    except Exception as e:
+        logger.warning(f"Product fetch skip: {e}")
+
     products = load_products()
     if not products:
         logger.error("No products found in products.json")
         sys.exit(1)
 
     product = select_product_for_today(products)
-    logger.info(f"Today product: {product['name']} | score={score_product(product)}")
+    if not product:
+        logger.error("select_product_for_today returned None")
+        sys.exit(1)
+
+    logger.info(f"Today product: {product.get('name')} | score={score_product(product)}")
 
     success = False
     try:
@@ -238,11 +264,18 @@ def main():
         success = False
 
     if not success:
-        run_original_core_flow(product, today, date_str, slug)
+        try:
+            run_original_core_flow(product, today, date_str, slug)
+        except Exception as e:
+            logger.error(f"Core flow also failed: {e}")
+            raise
 
-    # In tóm tắt analytics
-    s = summary()
-    logger.info(f"Analytics: total_posts={s['total_posts']} | by_product={s['by_product']}")
+    try:
+        s = summary()
+        logger.info(f"Analytics: total_posts={s['total_posts']} | by_product={s['by_product']}")
+    except Exception as e:
+        logger.warning(f"Analytics summary failed: {e}")
+
     logger.info("🎉 Done.")
 
 
