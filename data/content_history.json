@@ -46,5 +46,17 @@
       "slug": "2026-08-16",
       "score": 16.5
     }
+  },
+  {
+    "product_id": "mb-bank-001",
+    "title": "Mở tài khoản ngân hàng online chỉ trong vài phút - Tại sao không thử ngay?",
+    "content_hash": "3c31b30c2a52ede1",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-08-17T08:00:09.703319+07:00",
+    "extra": {
+      "slug": "2026-08-17",
+      "score": 15.0
+    }
   }
 ]
