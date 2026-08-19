@@ -23,7 +23,8 @@ DATA_DIR.mkdir(exist_ok=True)
 # ============================================================
 # AI
 # ============================================================
-MODEL = os.getenv("AI_MODEL", "groq/llama-3.3-70b-versatile")
+# Đã đổi model vì llama-3.3-70b-versatile bị Groq tắt từ 16/08/2026
+MODEL = os.getenv("AI_MODEL", "groq/openai/gpt-oss-120b")
 TEMPERATURE = float(os.getenv("AI_TEMPERATURE", "0.7"))
 MAX_TOKENS = int(os.getenv("AI_MAX_TOKENS", "4096"))
 
