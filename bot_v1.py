@@ -205,7 +205,7 @@ def run_extended_pipeline(product: dict, today, date_str: str, slug: str) -> boo
     body_html = "".join(f"<p>{p}</p>" for p in body.split("\n\n") if p.strip())
     html = render_html_page(title, body_html, product, meta, date_str, slug)
 
-    for target in [DOCS_DIR / f"bai-{slug}.html", Path(f"bai-{slug}.html")]:
+    for target in [DOCS_DIR / f"bai-{slug}.html"]:
         target.parent.mkdir(parents=True, exist_ok=True)
         with open(target, "w", encoding="utf-8") as f:
             f.write(html)
