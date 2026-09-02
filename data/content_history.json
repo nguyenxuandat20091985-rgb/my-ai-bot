@@ -226,5 +226,17 @@
       "slug": "2026-09-01",
       "score": 14.0
     }
+  },
+  {
+    "product_id": "den-pin-001",
+    "title": "Đêm tối, bạn đang lạc lối trên con đường núi rừng, ánh sáng duy nhất còn lại là chiếc đèn pin yếu ớt không đủ chiếu sáng? Hãy tưởng tượng một ánh sáng mạnh mẽ, có thể xuyên qua đêm tối sâu thẳm, giúp bạn tìm thấy lối về an toàn trong tích tắc.",
+    "content_hash": "9f7d0220a0118b13",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-09-02T09:36:51.474694+07:00",
+    "extra": {
+      "slug": "2026-09-02",
+      "score": 14.0
+    }
   }
 ]
