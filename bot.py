@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import logging
+import requests
 from datetime import datetime, timezone, timedelta
 from litellm import completion
 
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 MODEL = "groq/llama-3.3-70b-versatile"
 BLOG_URL = "https://nguyenxuandat20091985-rgb.github.io/my-ai-bot"
+WEBHOOK_URL = "https://hook.eu1.make.com/93lazxg8m91zwbwyvzpx32kgifl3g75c"
 
 CSS = """
 body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f7f7fb;color:#222}
@@ -38,6 +40,22 @@ def page_shell(title, inner):
 <header><b>GÓC BẾP THÔNG MINH – SĂN DEAL</b><br><span class="small">Review thật lòng mỗi ngày</span></header>
 <div class="wrap">{inner}</div>
 </body></html>"""
+
+def send_to_make_webhook(title, social_content, affiliate_link, blog_post_url):
+    payload = {
+        "title": title,
+        "content": social_content,
+        "affiliate_link": affiliate_link,
+        "blog_url": blog_post_url
+    }
+    try:
+        response = requests.post(WEBHOOK_URL, json=payload, timeout=10)
+        if response.status_code == 200:
+            logger.info("✅ Đã tự động bắn dữ liệu sang Make.com thành công!")
+        else:
+            logger.warning(f"⚠️ Gửi webhook thất bại, mã lỗi: {response.status_code}")
+    except Exception as e:
+        logger.error(f"❌ Lỗi kết nối đến Make.com: {e}")
 
 def main():
     today = datetime.now(timezone(timedelta(hours=7)))
@@ -75,19 +93,24 @@ def main():
 
     social = ai(
         f"Dựa trên sản phẩm {product['name']} (điểm mạnh: {product['highlights']}), "
-        f"viết 3 bài đăng mạng xã hội tiếng Việt ngắn dưới 8 câu, có emoji vui, cuối mỗi bài kèm link {product['link']} . "
-        "Phân cách các bài bằng đúng một dòng chứa ---"
+        f"viết 1 bài đăng mạng xã hội tiếng Việt ngắn dưới 8 câu, có emoji vui, cuối bài kèm link {product['link']}."
     )
+    
+    blog_post_url = f"{BLOG_URL}/bai-{slug}.html"
+
     with open("result.txt", "w", encoding="utf-8") as f:
-        f.write(f"📰 BÀI MỚI TRÊN BÁO CỦA ANH:\n{BLOG_URL}/bai-{slug}.html\n\n")
-        f.write("👇 3 BÀI NGẮN COPY ĐI GIEO LINK:\n\n")
+        f.write(f"📰 BÀI MỚI TRÊN BÁO CỦA ANH:\n{blog_post_url}\n\n")
+        f.write("👇 BÀI NGẮN COPY ĐI GIEO LINK:\n\n")
         f.write(social)
-    logger.info("Đã lưu 3 bài ngắn vào result.txt")
+    logger.info("Đã lưu bài ngắn vào result.txt")
+
+    # Tự động bắn dữ liệu qua Webhook của Make.com
+    send_to_make_webhook(title, social, product['link'], blog_post_url)
 
 if __name__ == "__main__":
     try:
         main()
-        logger.info("🎉 Hoàn thành! Tờ báo đã tự xuất bản.")
+        logger.info("🎉 Hoàn thành! Tờ báo đã tự xuất bản và kích hoạt phân phối tự động.")
     except Exception as e:
         logger.error(f"Lỗi hệ thống: {e}")
         sys.exit(1)
