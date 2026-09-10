@@ -322,5 +322,17 @@
       "slug": "2026-09-09",
       "score": 17.5
     }
+  },
+  {
+    "product_id": "kem-danh-rang-001",
+    "title": "Cười tươi mỗi sáng: Bí quyết “răng trắng, hơi thở thơm” cho cả nhà",
+    "content_hash": "f850918bfdf62edc",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-09-10T09:50:06.736425+07:00",
+    "extra": {
+      "slug": "2026-09-10",
+      "score": 17.5
+    }
   }
 ]
