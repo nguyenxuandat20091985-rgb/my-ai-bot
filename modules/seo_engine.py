@@ -137,7 +137,7 @@ def render_html_page(
   <link rel="canonical" href="{page_url}">
   <meta property="og:title" content="{seo_title}">
   <meta property="og:description" content="{meta_desc}">
-  <meta property="og:type" content="article">\n  <meta property="og:image" content="{product.get("image_url") or ""}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{seo_title}">\n  <meta name="twitter:description" content="{meta_desc}">\n  <meta name="twitter:image" content="{product.get("image_url") or ""}">
+  <meta property="og:type" content="article">\n  <meta property="og:image" content="{product.get("image_url") or ""}">\n  <meta property="og:image:alt" content="{product.get("name", title)}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:image" content="{product.get("image_url") or ""}">\n  <meta property="og:image" content="{product.get("image_url") or ""}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{seo_title}">\n  <meta name="twitter:description" content="{meta_desc}">\n  <meta name="twitter:image" content="{product.get("image_url") or ""}">
   <meta property="og:url" content="{page_url}">
   <meta property="og:site_name" content="{SITE_NAME}">
   <script type="application/ld+json">{json_ld}</script>
