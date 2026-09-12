@@ -103,6 +103,18 @@ def sync_accesstrade():
     except Exception:
         return [], []
 
+def update_home(h):
+    cards=[]
+    for x in reversed(h[-20:]):
+        slug=x.get("slug",""); title=html.escape(x.get("title","Bản tin"))
+        image=x.get("image_url","")
+        thumb=f'<img src="{html.escape(image,quote=True)}" loading="lazy">' if image else ""
+        cards.append(f'<article><a href="bai-{slug}.html">{thumb}<h2>{title}</h2><span>{x.get("created_at","")[:16].replace("T"," ")}</span></a></article>')
+    css="body{margin:0;background:#f5f7fb;font-family:Inter,system-ui,sans-serif;color:#172033}.wrap{max-width:1000px;margin:auto;padding:20px}.mast{background:linear-gradient(135deg,#111827,#4338ca,#7c3aed);color:#fff;border-radius:26px;padding:32px;margin-bottom:24px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}article{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px #11182710}article a{color:inherit;text-decoration:none}article img{width:100%;height:170px;object-fit:cover}article h2{font-size:19px;line-height:1.35;padding:0 16px}article span{display:block;color:#64748b;font-size:12px;padding:0 16px 18px}"
+    html_page=f'<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tờ Báo AI</title><style>{css}</style></head><body><main class="wrap"><header class="mast"><h1>📰 Tờ Báo AI</h1><p>Độc lập • an toàn • 3 số mỗi ngày • có ChatBoss</p></header><section class="grid">{"".join(cards)}</section></main></body></html>'
+    Path("index.html").write_text(html_page,encoding="utf-8")
+    (DOCS_DIR/"index.html").write_text(html_page,encoding="utf-8")
+
 def main():
     campaigns, promos = sync_accesstrade()
     h=history(); used={x.get("source_url") for x in h}; titles={x.get("title","").lower() for x in h}
@@ -122,5 +134,6 @@ def main():
             target.parent.mkdir(parents=True,exist_ok=True);target.write_text(page,encoding="utf-8")
         h.append({"slug":slug,"title":title,"source_url":item["url"],"image_url":image,"created_at":now.isoformat()});titles.add(title.lower());break
     save_history(h)
+    update_home(h)
 
 if __name__=="__main__":main()
