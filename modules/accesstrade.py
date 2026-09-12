@@ -105,7 +105,40 @@ class AccessTradeClient:
         return []
 
     def get_campaigns(self) -> List[Dict[str, Any]]:
-        return []
+        """Lấy các campaign đã được publisher đăng ký/duyệt từ AccessTrade."""
+        if not self.is_ready():
+            return []
+        url = f"{self.base_url}/v1/campaign"
+        headers = {"Authorization": f"Token {self.token}", "Content-Type": "application/json"}
+        try:
+            resp = requests.get(url, headers=headers, params={"approval": "successful"}, timeout=15)
+            if resp.status_code != 200:
+                logger.error("AccessTrade campaign HTTP %s: %s", resp.status_code, resp.text[:200])
+                return []
+            data = resp.json()
+            return data.get("data", []) if isinstance(data, dict) else (data if isinstance(data, list) else [])
+        except Exception as e:
+            logger.error("AccessTrade campaign error: %s", e)
+            return []
+
+    def get_promos(self, campaign_id: str = None, size: int = 50, start_index: int = 0) -> List[Dict[str, Any]]:
+        """Lấy khuyến mại đang hoạt động; token chỉ nằm ở backend/GitHub Actions."""
+        if not self.is_ready():
+            return []
+        url = f"{self.base_url}/v1/publishers/me/promos"
+        params = {"siteId": self.campaign_id, "size": size, "startIndex": start_index}
+        if campaign_id:
+            params["campaignId"] = campaign_id
+        try:
+            resp = requests.get(url, headers={"Authorization": f"Token {self.token}"}, params=params, timeout=15)
+            if resp.status_code != 200:
+                logger.warning("AccessTrade promos HTTP %s", resp.status_code)
+                return []
+            data = resp.json()
+            return data if isinstance(data, list) else data.get("data", [])
+        except Exception as e:
+            logger.error("AccessTrade promos error: %s", e)
+            return []
 
 
 # Singleton
