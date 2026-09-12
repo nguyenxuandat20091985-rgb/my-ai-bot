@@ -1,56 +1,41 @@
-name: AI Auto Run
+name: AI News Boss
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'   # 07:00 sáng giờ Việt Nam (UTC 00:00)
+    - cron: '0 1 * * *'
+    - cron: '0 9 * * *'
+    - cron: '0 17 * * *'
+
+permissions:
+  contents: write
 
 jobs:
-  run-ai:
+  publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          persist-credentials: true
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Run AI Bot V1.0
+      - name: Run News Boss
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ACCESSTRADE_API_TOKEN: ${{ secrets.ACCESSTRADE_API_TOKEN }}
+          ACCESSTRADE_SITE_ID: ${{ secrets.ACCESSTRADE_SITE_ID }}
           ACCESSTRADE_CAMPAIGN_ID: ${{ secrets.ACCESSTRADE_CAMPAIGN_ID }}
           SAFE_MODE: "true"
           AUTO_PUBLISH: "true"
-          ENABLE_PRODUCT_FETCH: "false"
-        run: python bot_v1.py
-
-      - name: Commit & Push result
+          NEWS_PER_RUN: "1"
+        run: python news_bot.py
+      - name: Commit generated newspaper
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add docs/ || true
-          git add result.txt index.html || true
-          git add data/ || true
-          git add bai-*.html 2>/dev/null || true
-
-          if git diff --staged --quiet; then
-            echo "✅ Không có thay đổi mới – bỏ qua commit"
-          else
-            git commit -m "Auto update AI result $(date -u +%Y-%m-%d)" || true
-            git pull --rebase origin main || git pull --rebase --autostash origin main || true
-            git push origin HEAD:main
-            echo "✅ Đã commit & push thành công"
-          fi
+          git config user.name "my-ai-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/ data/ index.html bai-*.html 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "chore: publish AI newspaper"
+          git push
