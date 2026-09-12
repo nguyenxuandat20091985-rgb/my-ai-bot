@@ -13,6 +13,7 @@ import requests
 from .config import (
     ACCESSTRADE_API_TOKEN,
     ACCESSTRADE_CAMPAIGN_ID,
+    ACCESSTRADE_SITE_ID,
     ACCESSTRADE_BASE_URL,
     ENABLE_ACCESSTRADE,
 )
@@ -126,7 +127,7 @@ class AccessTradeClient:
         if not self.is_ready():
             return []
         url = f"{self.base_url}/v1/publishers/me/promos"
-        params = {"siteId": self.campaign_id, "size": size, "startIndex": start_index}
+        params = {"siteId": ACCESSTRADE_SITE_ID, "size": size, "startIndex": start_index}
         if campaign_id:
             params["campaignId"] = campaign_id
         try:
