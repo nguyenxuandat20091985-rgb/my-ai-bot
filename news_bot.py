@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from litellm import completion
 from modules.config import BLOG_URL, DOCS_DIR, DATA_DIR, MODEL, TEMPERATURE, MAX_TOKENS, NEWS_SOURCES, NEWS_SAFETY_BLOCKLIST
 from modules.product_manager import load_products, score_product
+from modules.accesstrade import client
 
 HEADERS={"User-Agent":"Mozilla/5.0 (compatible; MyAIBot/2.0)"}
 
@@ -92,12 +93,23 @@ def render(title,body,source,image,product,date,slug):
     css="""*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#172033;font-family:Inter,system-ui,sans-serif}.wrap{max-width:900px;margin:auto;padding:18px}.mast{background:linear-gradient(135deg,#111827,#4338ca,#7c3aed);color:#fff;border-radius:26px;padding:30px;margin-bottom:20px}.mast h1{margin:0;font-size:28px}.article{background:#fff;border-radius:24px;padding:28px;box-shadow:0 12px 40px #11182712}.kicker{color:#4f46e5;font-weight:800;text-transform:uppercase;font-size:12px}.title{font-size:38px;line-height:1.15;margin:10px 0}.meta{color:#64748b}.hero-image{display:block;width:100%;max-height:470px;object-fit:cover;border-radius:18px;margin:22px 0}.body{font-size:18px;line-height:1.8}.body p{margin:0 0 18px}.recommend{margin-top:24px;padding:18px;border-radius:16px;background:#fff7ed;border:1px solid #fed7aa}.recommend a{color:#c2410c;font-weight:800;text-decoration:none}.chatboss{margin-top:28px;border:1px solid #e5e7eb;border-radius:20px;overflow:hidden;background:#fafafa}.chatboss-head{display:flex;justify-content:space-between;padding:15px 18px;background:#111827;color:#fff}.chatboss-head span{font-size:12px;opacity:.7}.chatboss-body{padding:14px;max-height:300px;overflow:auto}.msg{padding:10px 12px;border-radius:14px;margin:7px 0;max-width:90%}.msg.bot{background:#eef2ff}.msg.user{background:#e0e7ff;margin-left:auto}.quick{display:flex;gap:8px;padding:0 14px 12px;flex-wrap:wrap}.quick button,.input button{border:0;border-radius:10px;padding:9px 12px;cursor:pointer}.quick button{background:#e0e7ff;color:#3730a3}.input{display:flex;gap:8px;padding:14px;border-top:1px solid #e5e7eb}.input input{flex:1;border:1px solid #d1d5db;border-radius:12px;padding:11px}.input button{background:#4f46e5;color:#fff}@media(max-width:600px){.wrap{padding:10px}.article{padding:18px}.title{font-size:29px}.body{font-size:17px}}"""
     return f"""<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)}</title><meta name="description" content="{html.escape(title)}"><meta property="og:type" content="article"><meta property="og:title" content="{html.escape(title)}"><meta property="og:image" content="{html.escape(image,quote=True)}"><meta property="og:url" content="{BLOG_URL}/bai-{slug}.html"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{html.escape(image,quote=True)}"><style>{css}</style></head><body><main class="wrap"><header class="mast"><h1>Tờ Báo AI</h1><p>Tin tức độc lập • 3 số mỗi ngày</p></header><article class="article"><div class="kicker">Bản tin AI</div><h2 class="title">{html.escape(title)}</h2><div class="meta">📅 {date} • <a href="{html.escape(source,quote=True)}" rel="nofollow">Nguồn tham khảo</a></div>{img}<div class="body">{paras}</div><div class="meta">Bài được biên tập lại từ nguồn tham khảo; không sao chép nguyên văn.</div>{rec}{chatboss(product)}</article></main></body></html>"""
 
+def sync_accesstrade():
+    try:
+        campaigns=client.get_campaigns()
+        (DATA_DIR/"accesstrade_campaigns.json").write_text(json.dumps(campaigns,ensure_ascii=False,indent=2),encoding="utf-8")
+        promos=client.get_promos()
+        (DATA_DIR/"accesstrade_promos.json").write_text(json.dumps(promos,ensure_ascii=False,indent=2),encoding="utf-8")
+        return campaigns, promos
+    except Exception:
+        return [], []
+
 def main():
+    campaigns, promos = sync_accesstrade()
     h=history(); used={x.get("source_url") for x in h}; titles={x.get("title","").lower() for x in h}
     items=[x for x in fetch_items() if x["url"] not in used and x["title"].lower() not in titles]
     if not items:return
     products=sorted(load_products(),key=score_product,reverse=True); product=products[0] if products else {}
-    context=product.get("name","")+" | "+(product.get("affiliate_url") or product.get("link",""))
+    context=product.get("name","")+" | "+(product.get("affiliate_url") or product.get("link",""))+" | Campaigns="+", ".join(str(x.get("name","")) for x in campaigns[:10])+" | Promos="+", ".join(str(x.get("title","")) for x in promos[:10])
     for item in items:
         if blocked(item["title"]+" "+item["description"]):continue
         text=ai_write(item,context)
