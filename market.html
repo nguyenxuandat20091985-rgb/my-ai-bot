@@ -206,20 +206,6 @@ function showScreen(name) {
   window.scrollTo({ top: 0 });
 }
 
-function renderUserInfo(user) {
-  const nameEl   = $("#user-name");
-  const avatarEl = $("#user-avatar");
-  const displayName = user.displayName || (user.email ? user.email.split("@")[0] : null) || "Người dùng";
-  nameEl.textContent = displayName;
-  if (user.photoURL) {
-    avatarEl.src = user.photoURL;
-    avatarEl.alt = displayName;
-    avatarEl.onerror = () => { avatarEl.src = makeLetterAvatar(displayName); };
-  } else {
-    avatarEl.src = makeLetterAvatar(displayName);
-  }
-}
-
 function makeLetterAvatar(name) {
   const letter = (name || "U").trim().charAt(0).toUpperCase();
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">
@@ -282,7 +268,7 @@ function renderDeals() {
              style="animation-delay:${Math.min(index * 35, 350)}ms">
       <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
         <span class="absolute inset-0 grid place-items-center text-5xl">${d.emo}</span>
-        <img src="\( {d.img}" alt=" \){d.title}" loading="lazy"
+        <img src="${d.img}" alt="${d.title}" loading="lazy"
              onerror="this.remove()"
              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         <span class="absolute top-2 left-2 bg-brand-500 text-white text-[11px] font-extrabold px-2 py-1 rounded-lg shadow-md leading-none">-${pct}%</span>
@@ -371,7 +357,6 @@ function bindEvents() {
 (function bootstrap() {
   const guest = { displayName: "Khách", email: "", photoURL: "" };
   state.user = guest;
-  renderUserInfo(guest);
   showScreen("app");
   requestAnimationFrame(() => {
     renderCategories();
