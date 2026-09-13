@@ -153,33 +153,27 @@
       <p class="mt-1 text-sm text-slate-400">Thử từ khoá khác hoặc chọn danh mục khác nhé!</p>
     </div>
 
-    <div class="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white/60 p-5 text-xs text-slate-500 leading-relaxed">
-      <p class="font-bold text-slate-700 mb-1.5"><i class="fa-solid fa-code mr-1 text-brand-500"></i> Gợi ý mở rộng</p>
-      <p>• Thay link affiliate Shopee thật trong mảng <code class="bg-slate-100 px-1 rounded">DEALS[].link</code>.<br>
-         • Kết nối Supabase / Firestore để lưu danh sách deal động thay vì hard-code.<br>
-         • Thêm bộ lọc theo khoảng giá, sắp xếp theo % giảm, hoặc lưu deal yêu thích.</p>
-    </div>
+
+    <section id="ai-deal" class="mt-10 rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-brand-50 text-brand-500 grid place-items-center"><i class="fa-solid fa-robot text-xl"></i></div>
+        <div><h3 class="font-extrabold text-slate-800">AI Deal Assistant</h3><p class="text-xs text-slate-400 mt-0.5">Trợ lý giúp anh tìm và chọn deal phù hợp.</p></div>
+      </div>
+      <div class="mt-4 flex gap-2">
+        <input id="ai-input" type="text" placeholder="Ví dụ: điện tử dưới 300.000đ..." class="min-w-0 flex-1 h-10 rounded-xl border border-slate-200 px-3 text-sm outline-none">
+        <button id="ai-ask" class="h-10 px-4 rounded-xl bg-brand-500 text-white font-bold text-sm">Hỏi AI</button>
+      </div>
+      <div id="ai-result" class="hidden mt-3 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 leading-relaxed"></div>
+    </section>
+
   </main>
 
   <nav class="fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 md:hidden safe-bottom">
     <div class="grid grid-cols-4 h-16">
-      <button class="flex flex-col items-center justify-center gap-0.5 text-brand-500">
-        <i class="fa-solid fa-house text-lg"></i>
-        <span class="text-[10px] font-semibold">Trang chủ</span>
-      </button>
-      <button data-soon class="flex flex-col items-center justify-center gap-0.5 text-slate-400">
-        <i class="fa-solid fa-layer-group text-lg"></i>
-        <span class="text-[10px] font-medium">Danh mục</span>
-      </button>
-      <button data-soon class="flex flex-col items-center justify-center gap-0.5 text-slate-400 relative">
-        <i class="fa-regular fa-heart text-lg"></i>
-        <span class="text-[10px] font-medium">Yêu thích</span>
-        <span class="absolute top-2 right-[26%] w-4 h-4 bg-brand-500 text-white text-[9px] font-bold rounded-full grid place-items-center">3</span>
-      </button>
-      <button data-soon class="flex flex-col items-center justify-center gap-0.5 text-slate-400">
-        <i class="fa-regular fa-user text-lg"></i>
-        <span class="text-[10px] font-medium">Tài khoản</span>
-      </button>
+      <button data-tab="home" class="flex flex-col items-center justify-center gap-0.5 text-brand-500"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px] font-semibold">Trang chủ</span></button>
+      <button data-tab="category" class="flex flex-col items-center justify-center gap-0.5 text-slate-400"><i class="fa-solid fa-layer-group text-lg"></i><span class="text-[10px] font-medium">Danh mục</span></button>
+      <button data-tab="favorite" class="flex flex-col items-center justify-center gap-0.5 text-slate-400"><i class="fa-regular fa-heart text-lg"></i><span class="text-[10px] font-medium">Yêu thích</span></button>
+      <button data-tab="ai" class="flex flex-col items-center justify-center gap-0.5 text-slate-400"><i class="fa-solid fa-robot text-lg"></i><span class="text-[10px] font-medium">AI Deal</span></button>
     </div>
   </nav>
   <footer class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
@@ -389,6 +383,27 @@ function bindEvents() {
     btn.addEventListener("click", () => showToast("Tính năng đang được phát triển 🚧", "fa-screwdriver-wrench"));
   });
 }
+
+
+  document.querySelector("#ai-ask").addEventListener("click", () => {
+    const q = document.querySelector("#ai-input").value.trim().toLowerCase();
+    const box = document.querySelector("#ai-result");
+    if (!q) { box.textContent = "Anh hãy nhập nhu cầu mua sắm."; box.classList.remove("hidden"); return; }
+    let items = DEALS.slice();
+    const cat = [...new Set(DEALS.map(d => d.cat))].find(c => q.includes(c.toLowerCase()));
+    if (cat) items = items.filter(d => d.cat === cat);
+    const m = q.match(/(?:dưới|<)\s*([\d.]+)/);
+    if (m) items = items.filter(d => d.price <= Number(m[1].replace(/\./g,"")));
+    items.sort((a,b) => discountPct(b.old,b.price) - discountPct(a.old,a.price));
+    box.innerHTML = items.slice(0,3).map(d => d.title + " — " + vnd(d.price) + " (giảm " + discountPct(d.old,d.price) + "%)").join("<br>");
+    box.classList.remove("hidden");
+  });
+  document.querySelectorAll("[data-tab]").forEach(btn => btn.addEventListener("click", () => {
+    if (btn.dataset.tab === "ai") document.querySelector("#ai-deal").scrollIntoView({behavior:"smooth",block:"center"});
+    else if (btn.dataset.tab === "category") document.querySelector("#category-bar").scrollIntoView({behavior:"smooth",block:"center"});
+    else if (btn.dataset.tab === "favorite") showToast("Yêu thích sẽ được lưu khi kết nối kho dữ liệu.", "fa-heart");
+    else window.scrollTo({top:0,behavior:"smooth"});
+  }));
 
 (function bootstrap() {
   const guest = { displayName: "Khách", email: "", photoURL: "" };
