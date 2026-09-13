@@ -170,38 +170,63 @@
 <script>
 
 const DEALS = [
-  { id: 1,  title: "Tai Nghe Bluetooth TWS Pro Chống Ồn Chủ Động", cat: "Điện tử",   price: 189000,  old: 590000,   emo: "🎧", hot: true,  sold: 1240, rating: 4.8, img: "https://picsum.photos/seed/dealhub01/500/500", link: "https://shopee.vn/" },
-  { id: 2,  title: "Áo Thun Cotton Basic Unisex Form Rộng",        cat: "Thời trang", price: 79000,   old: 199000,   emo: "👕", hot: false, sold: 3420, rating: 4.7, img: "https://picsum.photos/seed/dealhub02/500/500", link: "https://shopee.vn/" },
-  { id: 3,  title: "Nồi Chiên Không Dầu 5L Đa Năng",               cat: "Gia dụng",  price: 890000,  old: 1990000,  emo: "🍳", hot: true,  sold: 890,  rating: 4.9, img: "https://picsum.photos/seed/dealhub03/500/500", link: "https://shopee.vn/" },
-  { id: 4,  title: "Serum Vitamin C Sáng Da 30ml",                 cat: "Làm đẹp",   price: 149000,  old: 450000,   emo: "🧴", hot: false, sold: 2100, rating: 4.6, img: "https://picsum.photos/seed/dealhub04/500/500", link: "https://shopee.vn/" },
-  { id: 5,  title: "Sách Nghĩ Giàu Và Làm Giàu (Bản Đặc Biệt)",    cat: "Sách",      price: 59000,   old: 135000,   emo: "📚", hot: false, sold: 5600, rating: 4.8, img: "https://picsum.photos/seed/dealhub05/500/500", link: "https://shopee.vn/" },
-  { id: 6,  title: "Giày Thể Thao Running Nam Siêu Nhẹ",           cat: "Thể thao",  price: 299000,  old: 850000,   emo: "👟", hot: true,  sold: 1780, rating: 4.7, img: "https://picsum.photos/seed/dealhub06/500/500", link: "https://shopee.vn/" },
-  { id: 7,  title: "Cà Phê Rang Xay Nguyên Chất 500g",             cat: "Đồ ăn",     price: 99000,   old: 180000,   emo: "☕", hot: false, sold: 4200, rating: 4.9, img: "https://picsum.photos/seed/dealhub07/500/500", link: "https://shopee.vn/" },
-  { id: 8,  title: "Bộ Đồ Chơi Xếp Hình 500 Chi Tiết",             cat: "Mẹ & Bé",   price: 129000,  old: 390000,   emo: "🧸", hot: false, sold: 760,  rating: 4.5, img: "https://picsum.photos/seed/dealhub08/500/500", link: "https://shopee.vn/" },
-  { id: 9,  title: "Sạc Dự Phòng 20.000mAh Sạc Nhanh 22.5W",       cat: "Điện tử",   price: 249000,  old: 650000,   emo: "🔋", hot: true,  sold: 3100, rating: 4.8, img: "https://picsum.photos/seed/dealhub09/500/500", link: "https://shopee.vn/" },
-  { id: 10, title: "Balo Chống Nước 25L Đa Năng",                  cat: "Thời trang", price: 199000,  old: 550000,   emo: "🎒", hot: false, sold: 1120, rating: 4.6, img: "https://picsum.photos/seed/dealhub10/500/500", link: "https://shopee.vn/" },
-  { id: 11, title: "Máy Hút Bụi Cầm Tay Mini 8000Pa",              cat: "Gia dụng",  price: 349000,  old: 890000,   emo: "🧹", hot: false, sold: 620,  rating: 4.7, img: "https://picsum.photos/seed/dealhub11/500/500", link: "https://shopee.vn/" },
-  { id: 12, title: "Son Kem Lì Cao Cấp 4g Mịn Môi",                cat: "Làm đẹp",   price: 119000,  old: 310000,   emo: "💄", hot: true,  sold: 3900, rating: 4.8, img: "https://picsum.photos/seed/dealhub12/500/500", link: "https://shopee.vn/" },
-  { id: 13, title: "Bình Giữ Nhiệt Inox 500ml Giữ Nóng 12h",       cat: "Gia dụng",  price: 89000,   old: 250000,   emo: "🍶", hot: false, sold: 2450, rating: 4.7, img: "https://picsum.photos/seed/dealhub13/500/500", link: "https://shopee.vn/" },
-  { id: 14, title: "Đồng Hồ Thông Minh Theo Dõi Sức Khoẻ",         cat: "Điện tử",   price: 459000,  old: 1290000,  emo: "⌚", hot: true,  sold: 980,  rating: 4.6, img: "https://picsum.photos/seed/dealhub14/500/500", link: "https://shopee.vn/" }
+  {id:1,title:"Nồi Chiên Không Dầu",cat:"Gia dụng",price:null,old:null,emo:"🍳",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub01/500/500",link:"https://shorten.asia/epmrd8Bx"},
+  {id:2,title:"Máy Ép Hoa Quả",cat:"Gia dụng",price:null,old:null,emo:"🍹",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub02/500/500",link:"https://shorten.asia/wkSRMcmS"},
+  {id:3,title:"Mở Tài Khoản MB Bank",cat:"Tài chính",price:null,old:null,emo:"🏦",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub03/500/500",link:"https://shorten.asia/UngWPa85"},
+  {id:4,title:"Máy Ép Đa Năng",cat:"Gia dụng",price:null,old:null,emo:"🥤",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub04/500/500",link:"https://shorten.asia/Ru9YGqZ6"},
+  {id:5,title:"Bơm Ô Tô Xe Máy",cat:"Phụ kiện xe",price:null,old:null,emo:"🚗",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub05/500/500",link:"https://shorten.asia/UH5cYcwc"},
+  {id:6,title:"Máy Tính Bền",cat:"Điện tử",price:null,old:null,emo:"💻",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub06/500/500",link:"https://shorten.asia/uvMfrBGM"},
+  {id:7,title:"Vay Siêu Tốc",cat:"Tài chính",price:null,old:null,emo:"💳",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub07/500/500",link:"https://shorten.asia/261nhWpK"},
+  {id:8,title:"Nước Khử Mùi",cat:"Gia dụng",price:null,old:null,emo:"🧴",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub08/500/500",link:"https://shorten.asia/Tc8MAZnS"},
+  {id:9,title:"Kem Đánh Răng",cat:"Làm đẹp",price:null,old:null,emo:"🪥",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub09/500/500",link:"https://shorten.asia/eZqcGeTc"},
+  {id:10,title:"Viên Tinh Bột Nghệ Mật Ong",cat:"Sức khỏe",price:null,old:null,emo:"🍯",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub10/500/500",link:"https://shorten.asia/nsgTXs8M"},
+  {id:11,title:"Cafe Hòa Tan",cat:"Đồ ăn",price:null,old:null,emo:"☕",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub11/500/500",link:"https://shorten.asia/8WStEGpF"},
+  {id:12,title:"Bột Protein Thực Vật",cat:"Sức khỏe",price:null,old:null,emo:"🥤",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub12/500/500",link:"https://shorten.asia/yTGusxpS"},
+  {id:13,title:"Xịt Dưỡng Tóc Tinh Dầu",cat:"Làm đẹp",price:null,old:null,emo:"💇",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub13/500/500",link:"https://shorten.asia/9MYJTU55"},
+  {id:14,title:"Gối Đầu Công Thái Học",cat:"Gia dụng",price:null,old:null,emo:"🛏️",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub14/500/500",link:"https://shorten.asia/J5sZMPty"},
+  {id:15,title:"Điện Thoại iPhone 17",cat:"Điện tử",price:null,old:null,emo:"📱",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub15/500/500",link:"https://shorten.asia/bRBAyMNe"},
+  {id:16,title:"Điện Thoại Samsung S25 Ultra 5G",cat:"Điện tử",price:null,old:null,emo:"📱",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub16/500/500",link:"https://shorten.asia/KYb2FZeR"},
+  {id:17,title:"Trà Sữa Matcha",cat:"Đồ ăn",price:null,old:null,emo:"🧋",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub17/500/500",link:"https://shorten.asia/FvUQRUXP"},
+  {id:18,title:"Chảo Nấu Ăn Bằng Thép",cat:"Gia dụng",price:null,old:null,emo:"🍳",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub18/500/500",link:"https://shorten.asia/zy5pcNqb"},
+  {id:19,title:"Flycam GT50",cat:"Điện tử",price:null,old:null,emo:"🚁",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub19/500/500",link:"https://s.shopee.vn/2gAMdhIbRj"},
+  {id:20,title:"Flycam E88 Cho Người Mới",cat:"Điện tử",price:null,old:null,emo:"🚁",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub20/500/500",link:"https://shorten.asia/BXXFHZ5S"},
+  {id:21,title:"Tinh Dầu Treo Xe Ô Tô",cat:"Phụ kiện xe",price:null,old:null,emo:"🚘",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub21/500/500",link:"https://shorten.asia/Ytn73XpA"},
+  {id:22,title:"Camera IMOU Độ Phân Giải Cao",cat:"Điện tử",price:null,old:null,emo:"📷",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub22/500/500",link:"https://shorten.asia/GFG9GggH"},
+  {id:23,title:"Đèn Năng Lượng Mặt Trời",cat:"Nhà cửa",price:null,old:null,emo:"☀️",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub23/500/500",link:"https://shorten.asia/S5rNJSME"},
+  {id:24,title:"Đèn Năng Lượng Mặt Trời Solar Light",cat:"Nhà cửa",price:null,old:null,emo:"💡",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub24/500/500",link:"https://shorten.asia/tVkhNDYe"},
+  {id:25,title:"Ổ Khóa Vân Tay",cat:"Nhà cửa",price:null,old:null,emo:"🔐",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub25/500/500",link:"https://shorten.asia/H46vVu4a"},
+  {id:26,title:"Đèn Pin Siêu Sáng 300M",cat:"Thể thao",price:null,old:null,emo:"🔦",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub26/500/500",link:"https://shorten.asia/AhVdZdbm"},
+  {id:27,title:"Lồng Bàn Thép Đựng Thức Ăn",cat:"Gia dụng",price:null,old:null,emo:"🍱",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub27/500/500",link:"https://shorten.asia/RTwthgBH"},
+  {id:28,title:"Áo Điều Hòa Nhật Bản",cat:"Thời trang",price:null,old:null,emo:"🦺",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub28/500/500",link:"https://shorten.asia/DE3JcS9H"},
+  {id:29,title:"Ghế Học Sinh Chống Gù Lưng",cat:"Mẹ & Bé",price:null,old:null,emo:"🪑",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub29/500/500",link:"https://shorten.asia/2UwF23Hj"},
+  {id:30,title:"Máy Lọc Khử Mùi Bếp",cat:"Gia dụng",price:null,old:null,emo:"🌬️",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub30/500/500",link:"https://shorten.asia/SmQk81A2"},
+  {id:31,title:"Máy Rửa Xe Kinh Tế",cat:"Phụ kiện xe",price:null,old:null,emo:"🚿",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub31/500/500",link:"https://shorten.asia/tPs5dMPH"},
+  {id:32,title:"Máy Làm Đá Mini",cat:"Gia dụng",price:null,old:null,emo:"🧊",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub32/500/500",link:"https://shorten.asia/1vh3TYA4"},
+  {id:33,title:"Robot Lau Nhà Tự Lập Trình",cat:"Nhà cửa",price:null,old:null,emo:"🤖",hot:true,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub33/500/500",link:"https://shorten.asia/72Md8Cx2"},
+  {id:34,title:"Ghế Mây Thư Giãn",cat:"Nhà cửa",price:null,old:null,emo:"🪑",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub34/500/500",link:"https://shorten.asia/HYWPvYKK"},
+  {id:35,title:"Túi Du Lịch Cỡ Đại",cat:"Thời trang",price:null,old:null,emo:"🧳",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub35/500/500",link:"https://shorten.asia/3RPgCddf"},
+  {id:36,title:"Bộ Bàn Ăn Cao Cấp",cat:"Nhà cửa",price:null,old:null,emo:"🍽️",hot:false,sold:0,rating:null,img:"https://picsum.photos/seed/dealhub36/500/500",link:"https://shorten.asia/1b4ZHDsC"}
 ];
 
 const CATEGORIES = [
-  { key: "all",        label: "Tất cả",      icon: "fa-solid fa-border-all" },
-  { key: "Điện tử",    label: "Điện tử",     icon: "fa-solid fa-mobile-screen" },
-  { key: "Thời trang", label: "Thời trang",  icon: "fa-solid fa-shirt" },
-  { key: "Gia dụng",   label: "Gia dụng",    icon: "fa-solid fa-blender" },
-  { key: "Làm đẹp",    label: "Làm đẹp",     icon: "fa-solid fa-spray-can-sparkles" },
-  { key: "Mẹ & Bé",    label: "Mẹ & Bé",     icon: "fa-solid fa-baby" },
-  { key: "Thể thao",   label: "Thể thao",    icon: "fa-solid fa-futbol" },
-  { key: "Sách",       label: "Sách",        icon: "fa-solid fa-book" },
-  { key: "Đồ ăn",      label: "Đồ ăn",       icon: "fa-solid fa-utensils" }
+  {key:"all",label:"Tất cả",icon:"fa-solid fa-border-all"},
+  {key:"Điện tử",label:"Điện tử",icon:"fa-solid fa-mobile-screen"},
+  {key:"Gia dụng",label:"Gia dụng",icon:"fa-solid fa-blender"},
+  {key:"Thời trang",label:"Thời trang",icon:"fa-solid fa-shirt"},
+  {key:"Làm đẹp",label:"Làm đẹp",icon:"fa-solid fa-spray-can-sparkles"},
+  {key:"Nhà cửa",label:"Nhà cửa",icon:"fa-solid fa-house"},
+  {key:"Phụ kiện xe",label:"Phụ kiện xe",icon:"fa-solid fa-car"},
+  {key:"Mẹ & Bé",label:"Mẹ & Bé",icon:"fa-solid fa-baby"},
+  {key:"Sức khỏe",label:"Sức khỏe",icon:"fa-solid fa-heart-pulse"},
+  {key:"Đồ ăn",label:"Đồ ăn",icon:"fa-solid fa-utensils"},
+  {key:"Thể thao",label:"Thể thao",icon:"fa-solid fa-futbol"},
+  {key:"Tài chính",label:"Tài chính",icon:"fa-solid fa-wallet"}
 ];
 
 const state = { user: null, category: "all", keyword: "", isDemo: false };
 const $ = (sel) => document.querySelector(sel);
-const vnd = (n) => new Intl.NumberFormat("vi-VN").format(n) + "đ";
-const discountPct = (oldPrice, price) => Math.round((1 - price / oldPrice) * 100);
+const vnd = (n) => n == null ? "Xem giá" : new Intl.NumberFormat("vi-VN").format(n) + "đ";
+const discountPct = (oldPrice, price) => oldPrice && price ? Math.round((1 - price / oldPrice) * 100) : 0;
 
 let toastTimer = null;
 function showToast(message, icon = "fa-circle-check") {
@@ -287,17 +312,17 @@ function renderDeals() {
         <img src="${d.img}" alt="${d.title}" loading="lazy"
              onerror="this.remove()"
              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-        <span class="absolute top-2 left-2 bg-brand-500 text-white text-[11px] font-extrabold px-2 py-1 rounded-lg shadow-md leading-none">-${pct}%</span>
+        ${pct ? `<span class="absolute top-2 left-2 bg-brand-500 text-white text-[11px] font-extrabold px-2 py-1 rounded-lg shadow-md leading-none">-${pct}%</span>` : ""}
         ${d.hot ? `<span class="absolute top-2 right-2 bg-gradient-to-r from-accent-500 to-brand-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg flex items-center gap-1 shadow-md animate-pulse-soft leading-none"><i class="fa-solid fa-fire"></i>HOT</span>` : ``}
       </div>
       <div class="p-2.5 flex flex-col flex-1">
         <h4 class="text-[13px] font-semibold text-slate-700 leading-snug line-clamp-2 min-h-[34px]">${d.title}</h4>
         <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
           <span class="text-brand-500 font-extrabold text-[15px] leading-none">${vnd(d.price)}</span>
-          <span class="text-slate-400 text-[11px] line-through leading-none">${vnd(d.old)}</span>
+          ${d.old ? `<span class="text-slate-400 text-[11px] line-through leading-none">${vnd(d.old)}</span>` : ""}
         </div>
         <div class="mt-1.5 flex items-center gap-2 text-[10.5px] text-slate-400">
-          <span class="flex items-center gap-0.5 text-accent-500 font-semibold"><i class="fa-solid fa-star text-[9px]"></i>${d.rating}</span>
+          ${d.rating ? `<span class="flex items-center gap-0.5 text-accent-500 font-semibold"><i class="fa-solid fa-star text-[9px]"></i>${d.rating}</span>` : ""}
           <span class="w-px h-2.5 bg-slate-200"></span>
           <span>Đã bán ${d.sold >= 1000 ? (d.sold / 1000).toFixed(1) + "k" : d.sold}</span>
         </div>
