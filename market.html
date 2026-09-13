@@ -72,39 +72,10 @@
 <!-- 3. GIAO DIỆN CHÍNH -->
 <div id="screen-app" class="hidden min-h-screen bg-slate-100">
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/70">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="flex items-center gap-3 h-16">
-        <div class="relative shrink-0">
-          <img id="user-avatar" src="" alt="Avatar"
-               class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-100 bg-brand-100">
-          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
-        </div>
-        <div class="min-w-0 flex-1">
-          <p class="text-[11px] text-slate-400 leading-none mb-0.5">Xin chào 👋</p>
-          <p id="user-name" class="text-[15px] font-bold text-slate-800 truncate leading-tight">Người dùng</p>
-        </div>
-        <button data-soon class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95
-                                   flex items-center justify-center text-slate-500 transition relative">
-          <i class="fa-regular fa-bell"></i>
-          <span class="absolute top-2 right-2.5 w-2 h-2 bg-brand-500 rounded-full ring-2 ring-white"></span>
-        </button>
-        <a href="https://nguyenxuandat20091985-rgb.github.io/my-ai-bot" class="h-10 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 active:scale-95 transition flex items-center gap-1.5 font-semibold text-[13px]">
-          <i class="fa-solid fa-house"></i><span>Trang chính</span>
-        </a>
-        
-      </div>
-      <div class="pb-3">
-        <div class="relative">
-          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-          <input id="search-input" type="search" placeholder="Tìm deal, sản phẩm, thương hiệu..."
-                 class="w-full h-11 pl-11 pr-4 rounded-full bg-slate-100 border border-transparent
-                        text-sm placeholder:text-slate-400 outline-none transition
-                        focus:bg-white focus:border-brand-300 focus:ring-4 focus:ring-brand-100">
-        </div>
-      </div>
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center">
+      <h1 class="text-xl font-extrabold tracking-tight text-slate-800">Market <span class="text-brand-500">Deal</span></h1>
     </div>
   </header>
-
   <main class="max-w-5xl mx-auto px-4 pt-4 pb-28 md:pb-10">
     <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-500 via-brand-500 to-accent-500
                     p-5 shadow-lg shadow-brand-500/25 mb-5">
