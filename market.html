@@ -128,35 +128,28 @@
     <section id="ai-deal" class="mt-10 rounded-[32px] bg-gradient-to-br from-white via-brand-50/40 to-orange-50 border border-brand-200 shadow-xl p-6 sm:p-8">
       <div class="rounded-3xl bg-gradient-to-r from-brand-500 to-accent-500 p-6 sm:p-7 text-white shadow-lg">
         <div class="flex items-center gap-4">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-white/20 backdrop-blur grid place-items-center shrink-0">
-            <i class="fa-solid fa-robot text-3xl sm:text-4xl"></i>
-          </div>
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-white/20 backdrop-blur grid place-items-center shrink-0"><i class="fa-solid fa-robot text-3xl sm:text-4xl"></i></div>
           <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <h3 class="font-extrabold text-2xl sm:text-3xl tracking-tight">Market Deal AI</h3>
-              <span class="px-2.5 py-1 rounded-full bg-white/20 text-[10px] sm:text-xs font-bold">AI</span>
-            </div>
-            <p class="text-sm sm:text-base text-white/85 mt-1">Trợ lý săn deal thông minh — tìm nhanh sản phẩm phù hợp với nhu cầu của anh.</p>
+            <div class="flex items-center gap-2"><h3 class="font-extrabold text-2xl sm:text-3xl tracking-tight">Market Deal AI</h3><span class="px-2.5 py-1 rounded-full bg-white/20 text-[10px] sm:text-xs font-bold">AI</span></div>
+            <p class="text-sm sm:text-base text-white/85 mt-1">Trợ lý mua hàng — hiểu nhu cầu, ngân sách, so sánh và đưa anh tới deal phù hợp.</p>
           </div>
         </div>
       </div>
-
       <div class="mt-5 bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-5">
-        <label for="ai-input" class="block text-sm font-bold text-slate-700 mb-2">Anh đang tìm gì?</label>
+        <div id="ai-chat" class="min-h-[110px] max-h-[360px] overflow-y-auto space-y-3 mb-4">
+          <div class="flex gap-2"><div class="w-8 h-8 rounded-full bg-brand-100 text-brand-500 grid place-items-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-50 rounded-2xl rounded-tl-md px-3 py-2 text-sm text-slate-600">Chào anh 👋 Anh cần mua gì? Hãy nói <b>sản phẩm + ngân sách + ưu tiên</b>, ví dụ: “tai nghe dưới 300 nghìn, ưu tiên giảm nhiều”.</div></div>
+        </div>
         <div class="flex flex-col sm:flex-row gap-3">
-          <input id="ai-input" type="text" placeholder="Ví dụ: điện tử dưới 300.000đ..." class="w-full flex-1 h-14 rounded-2xl border border-slate-200 px-4 text-base outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100">
-          <button id="ai-ask" class="w-full sm:w-auto min-w-[130px] h-14 px-6 rounded-2xl bg-brand-500 text-white font-extrabold text-base shadow-md active:scale-95 hover:bg-brand-600 transition">
-            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Hỏi AI
-          </button>
+          <input id="ai-input" type="text" placeholder="Ví dụ: tai nghe dưới 300.000đ, ưu tiên giảm nhiều..." class="w-full flex-1 h-14 rounded-2xl border border-slate-200 px-4 text-base outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100">
+          <button id="ai-ask" class="w-full sm:w-auto min-w-[130px] h-14 px-6 rounded-2xl bg-brand-500 text-white font-extrabold text-base shadow-md active:scale-95 hover:bg-brand-600 transition"><i class="fa-solid fa-paper-plane mr-2"></i>Gửi</button>
         </div>
         <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button type="button" class="ai-suggestion h-10 rounded-xl bg-brand-50 text-brand-600 text-xs font-bold" data-query="điện tử">📱 Điện tử</button>
-          <button type="button" class="ai-suggestion h-10 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold" data-query="thời trang">👕 Thời trang</button>
-          <button type="button" class="ai-suggestion h-10 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold" data-query="gia dụng">🏠 Gia dụng</button>
-          <button type="button" class="ai-suggestion h-10 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold" data-query="làm đẹp">✨ Làm đẹp</button>
+          <button type="button" class="ai-suggestion h-10 rounded-xl bg-brand-50 text-brand-600 text-xs font-bold" data-query="tai nghe dưới 300000 ưu tiên giảm nhiều">🎧 Tai nghe</button>
+          <button type="button" class="ai-suggestion h-10 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold" data-query="thời trang dưới 200000">👕 Thời trang</button>
+          <button type="button" class="ai-suggestion h-10 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold" data-query="gia dụng dưới 500000">🏠 Gia dụng</button>
+          <button type="button" class="ai-suggestion h-10 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold" data-query="deal giảm nhiều nhất">🔥 Giảm nhiều</button>
         </div>
       </div>
-
       <div id="ai-result" class="hidden mt-5 rounded-3xl bg-slate-900 p-5 sm:p-6 text-white text-sm leading-relaxed shadow-inner"></div>
     </section>
 
@@ -357,28 +350,48 @@ function bindEvents() {
 }
 
 
+  const aiHistory = [];
+  const aiAsk = () => {
+    const input = document.querySelector("#ai-input");
+    const chat = document.querySelector("#ai-chat");
+    const qRaw = input.value.trim();
+    if (!qRaw) return;
+    const q = qRaw.toLowerCase();
+    aiHistory.push(qRaw);
+    chat.insertAdjacentHTML("beforeend", '<div class="flex justify-end"><div class="max-w-[85%] bg-brand-500 text-white rounded-2xl rounded-tr-md px-3 py-2 text-sm">' + qRaw.replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])) + '</div></div>');
+    let items = DEALS.slice();
+    const categories = [...new Set(DEALS.map(d => d.cat))];
+    const cat = categories.find(c => q.includes(c.toLowerCase()));
+    if (cat) items = items.filter(d => d.cat === cat);
+    const money = q.match(/(?:dưới|<=?|ngân sách(?: là)?|budget)\s*([\d.,]+)\s*(k|nghìn|tr|triệu|đ|dong)?/i);
+    if (money) {
+      let n = Number(money[1].replace(/\./g,"").replace(/,/g,""));
+      const unit = (money[2] || "").toLowerCase();
+      if (unit === "k" || unit === "nghìn") n *= 1000;
+      if (unit === "tr" || unit === "triệu") n *= 1000000;
+      items = items.filter(d => d.price <= n);
+    }
+    const wantsDiscount = /giảm|rẻ|tiết kiệm|discount/.test(q);
+    const wantsRating = /đánh giá|rating|tốt|uy tín/.test(q);
+    const wantsPopular = /bán chạy|nhiều người|phổ biến/.test(q);
+    items.sort((a,b) => {
+      if (wantsDiscount) return discountPct(b.old,b.price)-discountPct(a.old,a.price);
+      if (wantsRating) return b.rating-a.rating;
+      if (wantsPopular) return b.sold-a.sold;
+      return (b.rating*0.5 + discountPct(b.old,b.price)*0.03 + Math.min(b.sold,5000)/5000*0.5) - (a.rating*0.5 + discountPct(a.old,a.price)*0.03 + Math.min(a.sold,5000)/5000*0.5);
+    });
+    const top = items.slice(0,3);
+    const safe = x => x.replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+    const reply = top.length ? 'Anh có ' + top.length + ' lựa chọn phù hợp. Em ưu tiên các deal sau:' : 'Em chưa tìm thấy deal phù hợp với điều kiện này. Anh thử tăng ngân sách hoặc đổi danh mục nhé.';
+    chat.insertAdjacentHTML("beforeend", '<div class="flex gap-2"><div class="w-8 h-8 rounded-full bg-brand-100 text-brand-500 grid place-items-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-50 rounded-2xl rounded-tl-md px-3 py-2 text-sm text-slate-600 w-full"><div class="mb-2">'+reply+'</div>'+top.map((d,i)=>'<div class="border-t border-slate-200 pt-2 mt-2"><div class="font-bold text-slate-700">'+(i+1)+'. '+safe(d.title)+'</div><div class="mt-1"><span class="font-extrabold text-brand-500">'+vnd(d.price)+'</span> <span class="line-through text-slate-400 text-xs">'+vnd(d.old)+'</span> <span class="text-xs font-bold text-emerald-600">-'+discountPct(d.old,d.price)+'%</span></div><div class="text-xs text-slate-400 mt-1">⭐ '+d.rating+' • Đã bán '+d.sold+'</div><a href="'+d.link+'" target="_blank" rel="noopener sponsored" class="inline-flex mt-2 px-3 py-1.5 rounded-lg bg-brand-500 text-white text-xs font-bold">Xem deal →</a></div>').join('')+'</div></div>');
+    input.value = "";
+    chat.scrollTop = chat.scrollHeight;
+  };
+  document.querySelector("#ai-ask").addEventListener("click", aiAsk);
+  document.querySelector("#ai-input").addEventListener("keydown", e => { if (e.key === "Enter") aiAsk(); });
   document.querySelectorAll(".ai-suggestion").forEach(btn => btn.addEventListener("click", () => {
     document.querySelector("#ai-input").value = btn.dataset.query;
-    document.querySelector("#ai-ask").click();
-  }));
-  document.querySelector("#ai-ask").addEventListener("click", () => {
-    const q = document.querySelector("#ai-input").value.trim().toLowerCase();
-    const box = document.querySelector("#ai-result");
-    if (!q) { box.textContent = "Anh hãy nhập nhu cầu mua sắm."; box.classList.remove("hidden"); return; }
-    let items = DEALS.slice();
-    const cat = [...new Set(DEALS.map(d => d.cat))].find(c => q.includes(c.toLowerCase()));
-    if (cat) items = items.filter(d => d.cat === cat);
-    const m = q.match(/(?:dưới|<)\s*([\d.]+)/);
-    if (m) items = items.filter(d => d.price <= Number(m[1].replace(/\./g,"")));
-    items.sort((a,b) => discountPct(b.old,b.price) - discountPct(a.old,a.price));
-    box.innerHTML = items.slice(0,3).map(d => d.title + " — " + vnd(d.price) + " (giảm " + discountPct(d.old,d.price) + "%)").join("<br>");
-    box.classList.remove("hidden");
-  });
-  document.querySelectorAll("[data-tab]").forEach(btn => btn.addEventListener("click", () => {
-    if (btn.dataset.tab === "ai") document.querySelector("#ai-deal").scrollIntoView({behavior:"smooth",block:"center"});
-    else if (btn.dataset.tab === "category") document.querySelector("#category-bar").scrollIntoView({behavior:"smooth",block:"center"});
-    else if (btn.dataset.tab === "favorite") showToast("Yêu thích sẽ được lưu khi kết nối kho dữ liệu.", "fa-heart");
-    else window.scrollTo({top:0,behavior:"smooth"});
+    aiAsk();
   }));
 
 (function bootstrap() {
