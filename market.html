@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ee4d2d">
+<title>DealHub — Chợ Deal Tổng Hợp</title>
+
+<!-- ============================================================
+     CDN: Tailwind CSS v4 (Browser Build)
+     ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<!-- ============================================================
+     CDN: FontAwesome 6 — Icons
+     ============================================================ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- ============================================================
+     FONT: Be Vietnam Pro (hỗ trợ tiếng Việt tốt)
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     TAILWIND THEME TUỲ CHỈNH (Tailwind v4 dùng @theme)
+     ============================================================ -->
+<style type="text/tailwindcss">
+  @theme {
+    /* Bảng màu thương hiệu — lấy cảm hứng từ Shopee/Lazada */
+    --color-brand-50:  #fff5f2;
+    --color-brand-100: #ffe8e1;
+    --color-brand-200: #ffd0c3;
+    --color-brand-300: #ffab94;
+    --color-brand-400: #ff7d5c;
+    --color-brand-500: #ee4d2d;
+    --color-brand-600: #d93b1c;
+    --color-brand-700: #b52e14;
+    --color-brand-800: #942714;
+    --color-brand-900: #7a2414;
+
+    /* Màu phụ trợ */
+    --color-accent-400: #ffc93c;
+    --color-accent-500: #ffb020;
+    --color-accent-600: #f59e0b;
+
+    --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Ẩn thanh cuộn ngang cho dải danh mục */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Hiệu ứng xuất hiện cho card deal */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up { animation: fadeUp .38s cubic-bezier(.2,.8,.3,1) both; }
+
+  /* Hiệu ứng nhịp cho badge HOT */
+  @keyframes pulseSoft {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.08); }
+  }
+  .animate-pulse-soft { animation: pulseSoft 1.4s ease-in-out infinite; }
+
+  /* Hiệu ứng trượt lên của toast */
+  @keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, 24px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+  .animate-toast-in { animation: toastIn .3s cubic-bezier(.2,.8,.3,1) both; }
+</style>
+
+<!-- CSS tối thiểu, đảm bảo trang không bị vỡ nếu CDN Tailwind lỗi -->
+<style>
+  html, body { height: 100%; }
+  body { font-family: 'Be Vietnam Pro', system-ui, sans-serif; background: #f6f7f9; }
+  /* Vùng an toàn cho iPhone (tai thỏ / thanh home) */
+  .safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
+</style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-200 selection:text-brand-900">
+
+<!-- ============================================================
+     1. MÀN HÌNH CHỜ (SPLASH / LOADING)
+     Hiển thị trong lúc Firebase kiểm tra trạng thái đăng nhập
+     ============================================================ -->
+<div id="screen-loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+  <div class="relative">
+    <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+      <i class="fa-solid fa-bolt text-white text-3xl"></i>
+    </div>
+    <span class="absolute -inset-2 rounded-[28px] border-2 border-brand-200 border-t-brand-500 animate-spin"></span>
+  </div>
+  <p class="mt-6 font-extrabold text-xl tracking-tight text-slate-800">Deal<span class="text-brand-500">Hub</span></p>
+  <p class="mt-1 text-sm text-slate-400">Đang tải siêu deal...</p>
+</div>
+
+<!-- ============================================================
+     2. MÀN HÌNH ĐĂNG NHẬP (CHƯA XÁC THỰC)
+     ============================================================ -->
+<div id="screen-auth" class="hidden fixed inset-0 z-40 overflow-y-auto bg-gradient-to-b from-brand-500 via-brand-500 to-brand-600">
+
+  <!-- Hoạ tiết trang trí nền -->
+  <div class="pointer-events-none absolute -top-24 -right-20 w-72 h-72 rounded-full bg-white/10"></div>
+  <div class="pointer-events-none absolute top-40 -left-24 w-64 h-64 rounded-full bg-white/10"></div>
+  <div class="pointer-events-none absolute bottom-0 right-0 w-56 h-56 rounded-full bg-accent-400/20"></div>
+
+  <div class="relative min-h-full flex flex-col justify-center px-6 py-10 max-w-md mx-auto">
+
+    <!-- Logo + tên app -->
+    <div class="text-center">
+      <div class="w-24 h-24 mx-auto rounded-[28px] bg-white flex items-center justify-center shadow-2xl shadow-black/20">
+        <i class="fa-solid fa-bolt text-brand-500 text-5xl"></i>
+      </div>
+      <h1 class="mt-5 text-4xl font-extrabold text-white tracking-tight">Deal<span class="text-accent-400">Hub</span></h1>
+      <p class="mt-2 text-white/85 text-[15px] leading-relaxed">
+        Tổng hợp deal "hời" mỗi ngày từ<br>Shopee · Lazada · TikTok Shop
+      </p>
+    </div>
+
+    <!-- Danh sách điểm nổi bật -->
+    <div class="mt-9 space-y-3">
+      <div class="flex items-center gap-3.5 bg-white/12 backdrop-blur-sm border border-white/15 rounded-2xl px-4 py-3.5">
+        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center">
+          <i class="fa-solid fa-fire-flame-curved text-accent-400 text-lg"></i>
+        </div>
+        <div>
+          <p class="text-white font-semibold text-sm">Deal giảm đến 70%</p>
+          <p class="text-white/70 text-xs">Cập nhật liên tục mỗi giờ</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3.5 bg-white/12 backdrop-blur-sm border border-white/15 rounded-2xl px-4 py-3.5">
+        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center">
+          <i class="fa-solid fa-tags text-accent-400 text-lg"></i>
+        </div>
+        <div>
+          <p class="text-white font-semibold text-sm">Mã giảm giá độc quyền</p>
+          <p class="text-white/70 text-xs">Voucher riêng cho thành viên</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3.5 bg-white/12 backdrop-blur-sm border border-white/15 rounded-2xl px-4 py-3.5">
+        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center">
+          <i class="fa-solid fa-bell text-accent-400 text-lg"></i>
+        </div>
+        <div>
+          <p class="text-white font-semibold text-sm">Thông báo deal sốc</p>
+          <p class="text-white/70 text-xs">Không bỏ lỡ săn sale 0h</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút đăng nhập Google -->
+    <div class="mt-9">
+      <button id="btn-google-signin"
+              class="w-full h-14 bg-white rounded-2xl font-bold text-slate-700 text-[15px]
+                     flex items-center justify-center gap-3 shadow-xl shadow-black/15
+                     active:scale-[.98] transition-transform duration-150 hover:bg-slate-50">
+        <!-- Logo Google (SVG chính thức) -->
+        <svg width="21" height="21" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+          <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.6 39.6 16.2 44 24 44z"/>
+          <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C41 35.2 44 30 44 24c0-1.3-.1-2.6-.4-3.9z"/>
+        </svg>
+        <span>Đăng nhập bằng Google</span>
+      </button>
+
+      <!-- Nút demo (chỉ hiển thị khi chưa cấu hình Firebase) -->
+      <button id="btn-demo-signin"
+              class="hidden w-full h-12 mt-3 bg-white/15 border border-white/30 rounded-2xl
+                     font-semibold text-white text-sm backdrop-blur-sm
+                     flex items-center justify-center gap-2 active:scale-[.98] transition-transform">
+        <i class="fa-solid fa-flask"></i>
+        <span>Dùng thử chế độ Demo</span>
+      </button>
+
+      <!-- Cảnh báo cấu hình Firebase -->
+      <div id="config-warning" class="hidden mt-4 bg-black/25 border border-white/20 rounded-2xl p-4 text-white/90 text-xs leading-relaxed">
+        <p class="font-bold text-white mb-1.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Chưa cấu hình Firebase</p>
+        <p>Mở file <code class="bg-white/20 px-1.5 py-0.5 rounded">index.html</code>, tìm biến
+          <code class="bg-white/20 px-1.5 py-0.5 rounded">firebaseConfig</code> và điền thông tin dự án của bạn.
+          Trong lúc chờ, bạn có thể dùng <b>chế độ Demo</b> ở trên.</p>
+      </div>
+
+      <p class="mt-5 text-center text-white/65 text-[11px] leading-relaxed px-4">
+        Bằng việc tiếp tục, bạn đồng ý với
+        <a href="#" class="underline text-white/90 font-medium">Điều khoản sử dụng</a> và
+        <a href="#" class="underline text-white/90 font-medium">Chính sách bảo mật</a> của DealHub.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     3. GIAO DIỆN CHÍNH (ĐÃ ĐĂNG NHẬP)
+     ============================================================ -->
+<div id="screen-app" class="hidden min-h-screen bg-slate-100">
+
+  <!-- ---------- 3.1 HEADER (dính trên cùng) ---------- -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/70">
+    <div class="max-w-5xl mx-auto px-4">
+
+      <!-- Hàng 1: Avatar + lời chào + nút đăng xuất -->
+      <div class="flex items-center gap-3 h-16">
+        <!-- Avatar người dùng -->
+        <div class="relative shrink-0">
+          <img id="user-avatar" src="" alt="Avatar"
+               class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-100 bg-brand-100">
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+        </div>
+
+        <!-- Lời chào + tên -->
+        <div class="min-w-0 flex-1">
+          <p class="text-[11px] text-slate-400 leading-none mb-0.5">Xin chào 👋</p>
+          <p id="user-name" class="text-[15px] font-bold text-slate-800 truncate leading-tight">Người dùng</p>
+        </div>
+
+        <!-- Nút thông báo -->
+        <button data-soon class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95
+                                   flex items-center justify-center text-slate-500 transition relative">
+          <i class="fa-regular fa-bell"></i>
+          <span class="absolute top-2 right-2.5 w-2 h-2 bg-brand-500 rounded-full ring-2 ring-white"></span>
+        </button>
+
+        <!-- Nút đăng xuất -->
+        <button id="btn-signout"
+                class="h-10 px-3 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600
+                       active:scale-95 transition flex items-center gap-1.5 font-semibold text-[13px]">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span class="hidden xs:inline sm:inline">Đăng xuất</span>
+        </button>
+      </div>
+
+      <!-- Hàng 2: Ô tìm kiếm -->
+      <div class="pb-3">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input id="search-input" type="search" placeholder="Tìm deal, sản phẩm, thương hiệu..."
+                 class="w-full h-11 pl-11 pr-4 rounded-full bg-slate-100 border border-transparent
+                        text-sm placeholder:text-slate-400 outline-none transition
+                        focus:bg-white focus:border-brand-300 focus:ring-4 focus:ring-brand-100">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ---------- 3.2 NỘI DUNG CHÍNH ---------- -->
+  <main class="max-w-5xl mx-auto px-4 pt-4 pb-28 md:pb-10">
+
+    <!-- Banner Flash Sale + đếm ngược -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-500 via-brand-500 to-accent-500
+                    p-5 shadow-lg shadow-brand-500/25 mb-5">
+      <div class="pointer-events-none absolute -right-8 -top-10 w-36 h-36 rounded-full bg-white/15"></div>
+      <div class="pointer-events-none absolute -right-2 bottom--8 w-24 h-24 rounded-full bg-white/10"></div>
+
+      <div class="relative flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-accent-400 text-lg"></i>
+            <h2 class="text-white font-extrabold text-lg tracking-tight">Flash Sale Hôm Nay</h2>
+          </div>
+          <p class="text-white/85 text-xs mt-1">Giảm sốc — số lượng có hạn!</p>
+        </div>
+
+        <!-- Đồng hồ đếm ngược -->
+        <div class="flex items-center gap-1.5">
+          <span class="text-white/80 text-[11px] font-medium mr-0.5">Kết thúc sau</span>
+          <div class="flex items-center gap-1">
+            <span id="cd-h" class="w-8 h-8 rounded-lg bg-black/25 text-white text-sm font-bold grid place-items-center tabular-nums">00</span>
+            <span class="text-white font-bold">:</span>
+            <span id="cd-m" class="w-8 h-8 rounded-lg bg-black/25 text-white text-sm font-bold grid place-items-center tabular-nums">00</span>
+            <span class="text-white font-bold">:</span>
+            <span id="cd-s" class="w-8 h-8 rounded-lg bg-black/25 text-white text-sm font-bold grid place-items-center tabular-nums">00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dải danh mục (cuộn ngang) -->
+    <section class="mb-4">
+      <div id="category-bar" class="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 pb-1"></div>
+    </section>
+
+    <!-- Tiêu đề + số lượng kết quả -->
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-extrabold text-slate-800 text-base">
+        <i class="fa-solid fa-fire text-brand-500 mr-1"></i>
+        <span id="feed-title">Deal hot hôm nay</span>
+      </h3>
+      <span id="result-count" class="text-xs text-slate-400 font-medium"></span>
+    </div>
+
+    <!-- LƯỚI DEAL -->
+    <section id="deal-grid"
+             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+      <!-- Nội dung được render bằng JavaScript -->
+    </section>
+
+    <!-- Trạng thái rỗng -->
+    <div id="empty-state" class="hidden text-center py-20">
+      <div class="w-20 h-20 mx-auto rounded-full bg-slate-100 flex items-center justify-center">
+        <i class="fa-solid fa-box-open text-3xl text-slate-300"></i>
+      </div>
+      <p class="mt-4 font-semibold text-slate-600">Không tìm thấy deal nào</p>
+      <p class="mt-1 text-sm text-slate-400">Thử từ khoá khác hoặc chọn danh mục khác nhé!</p>
+    </div>
+
+    <!-- Ghi chú mở rộng cho lập trình viên -->
+    <div class="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white/60 p-5 text-xs text-slate-500 leading-relaxed">
+      <p class="font-bold text-slate-700 mb-1.5"><i class="fa-solid fa-code mr-1 text-brand-500"></i> Gợi ý mở rộng</p>
+      <p>• Thay link affiliate Shopee thật trong mảng <code class="bg-slate-100 px-1 rounded">DEALS[].link</code>.<br>
+         • Kết nối Supabase / Firestore để lưu danh sách deal động thay vì hard-code.<br>
+         • Thêm bộ lọc theo khoảng giá, sắp xếp theo % giảm, hoặc lưu deal yêu thích.</p>
+    </div>
+  </main>
+
+  <!-- ---------- 3.3 BOTTOM NAVIGATION (chỉ hiện trên mobile) ---------- -->
+  <nav class="fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 md:hidden safe-bottom">
+    <div class="grid grid-cols-4 h-16">
+      <button class="flex flex-col items-center justify-center gap-0.5 text-brand-500">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[10px] font-semibold">Trang chủ</span>
+      </button>
+      <button data-soon class="flex flex-col items-center justify-center gap-0.5 text-slate-400">
+        <i class="fa-solid fa-layer-group text-lg"></i>
+        <span class="text-[10px] font-medium">Danh mục</span>
+      </button>
+      <button data-soon class="flex flex-col items-center justify-center gap-0.5 text-slate-400 relative">
+        <i class="fa-regular fa-heart text-lg"></i>
+        <span class="text-[10px] font-medium">Yêu thích</span>
+        <span class="absolute top-2 right-[26%] w-4 h-4 bg-brand-500 text-white text-[9px] font-bold rounded-full grid place-items-center">3</span>
+      </button>
+      <button data-soon class="flex flex-col items-center justify-center gap-0.5 text-slate-400">
+        <i class="fa-regular fa-user text-lg"></i>
+        <span class="text-[10px] font-medium">Tài khoản</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- ============================================================
+     4. TOAST THÔNG BÁO
+     ============================================================ -->
+<div id="toast"
+     class="hidden fixed left-1/2 bottom-24 md:bottom-8 z-[60] -translate-x-1/2
+            bg-slate-900 text-white text-sm font-medium px-5 py-3 rounded-full
+            shadow-2xl max-w-[90vw] text-center animate-toast-in">
+</div>
+
+<!-- ============================================================
+     5. JAVASCRIPT — LOGIC ỨNG DỤNG
+     (ES Module, chạy sau khi DOM đã parse xong)
+     ============================================================ -->
+<script type="module">
+
+/* ============================================================
+   5.1 IMPORT FIREBASE SDK (Modular v10+ qua CDN Google)
+   ============================================================ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut,
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+/* ============================================================
+   5.2 CẤU HÌNH FIREBASE
+   ------------------------------------------------------------------
+   👉 THAY CÁC GIÁ TRỊ DƯỚI ĐÂY bằng config dự án Firebase của bạn.
+      Lấy tại: https://console.firebase.google.com
+      → Project settings → General → Your apps → SDK setup and configuration
+
+   ⚠️  Đừng quên bật Google Sign-In:
+      Firebase Console → Authentication → Sign-in method → Google → Enable
+      Và thêm domain của bạn vào Authorized domains.
+   ============================================================ */
+const firebaseConfig = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+/** Kiểm tra xem người dùng đã điền config thật hay chưa */
+const CONFIG_READY = !firebaseConfig.apiKey.startsWith("YOUR_");
+
+
+/* ============================================================
+   5.3 DỮ LIỆU DEAL MẪU
+   ------------------------------------------------------------------
+   TODO: Thay `link` bằng link affiliate Shopee thật của bạn.
+         Ví dụ: https://shope.ee/xxxxxxx
+   ============================================================ */
+const DEALS = [
+  { id: 1,  title: "Tai Nghe Bluetooth TWS Pro Chống Ồn Chủ Động", cat: "Điện tử",   price: 189000,  old: 590000,   emo: "🎧", hot: true,  sold: 1240, rating: 4.8, img: "https://picsum.photos/seed/dealhub01/500/500", link: "https://shopee.vn/" },
+  { id: 2,  title: "Áo Thun Cotton Basic Unisex Form Rộng",        cat: "Thời trang", price: 79000,   old: 199000,   emo: "👕", hot: false, sold: 3420, rating: 4.7, img: "https://picsum.photos/seed/dealhub02/500/500", link: "https://shopee.vn/" },
+  { id: 3,  title: "Nồi Chiên Không Dầu 5L Đa Năng",               cat: "Gia dụng",  price: 890000,  old: 1990000,  emo: "🍳", hot: true,  sold: 890,  rating: 4.9, img: "https://picsum.photos/seed/dealhub03/500/500", link: "https://shopee.vn/" },
+  { id: 4,  title: "Serum Vitamin C Sáng Da 30ml",                 cat: "Làm đẹp",   price: 149000,  old: 450000,   emo: "🧴", hot: false, sold: 2100, rating: 4.6, img: "https://picsum.photos/seed/dealhub04/500/500", link: "https://shopee.vn/" },
+  { id: 5,  title: "Sách Nghĩ Giàu Và Làm Giàu (Bản Đặc Biệt)",    cat: "Sách",      price: 59000,   old: 135000,   emo: "📚", hot: false, sold: 5600, rating: 4.8, img: "https://picsum.photos/seed/dealhub05/500/500", link: "https://shopee.vn/" },
+  { id: 6,  title: "Giày Thể Thao Running Nam Siêu Nhẹ",           cat: "Thể thao",  price: 299000,  old: 850000,   emo: "👟", hot: true,  sold: 1780, rating: 4.7, img: "https://picsum.photos/seed/dealhub06/500/500", link: "https://shopee.vn/" },
+  { id: 7,  title: "Cà Phê Rang Xay Nguyên Chất 500g",             cat: "Đồ ăn",     price: 99000,   old: 180000,   emo: "☕", hot: false, sold: 4200, rating: 4.9, img: "https://picsum.photos/seed/dealhub07/500/500", link: "https://shopee.vn/" },
+  { id: 8,  title: "Bộ Đồ Chơi Xếp Hình 500 Chi Tiết",             cat: "Mẹ & Bé",   price: 129000,  old: 390000,   emo: "🧸", hot: false, sold: 760,  rating: 4.5, img: "https://picsum.photos/seed/dealhub08/500/500", link: "https://shopee.vn/" },
+  { id: 9,  title: "Sạc Dự Phòng 20.000mAh Sạc Nhanh 22.5W",       cat: "Điện tử",   price: 249000,  old: 650000,   emo: "🔋", hot: true,  sold: 3100, rating: 4.8, img: "https://picsum.photos/seed/dealhub09/500/500", link: "https://shopee.vn/" },
+  { id: 10, title: "Balo Chống Nước 25L Đa Năng",                  cat: "Thời trang", price: 199000,  old: 550000,   emo: "🎒", hot: false, sold: 1120, rating: 4.6, img: "https://picsum.photos/seed/dealhub10/500/500", link: "https://shopee.vn/" },
+  { id: 11, title: "Máy Hút Bụi Cầm Tay Mini 8000Pa",              cat: "Gia dụng",  price: 349000,  old: 890000,   emo: "🧹", hot: false, sold: 620,  rating: 4.7, img: "https://picsum.photos/seed/dealhub11/500/500", link: "https://shopee.vn/" },
+  { id: 12, title: "Son Kem Lì Cao Cấp 4g Mịn Môi",                cat: "Làm đẹp",   price: 119000,  old: 310000,   emo: "💄", hot: true,  sold: 3900, rating: 4.8, img: "https://picsum.photos/seed/dealhub12/500/500", link: "https://shopee.vn/" },
+  { id: 13, title: "Bình Giữ Nhiệt Inox 500ml Giữ Nóng 12h",       cat: "Gia dụng",  price: 89000,   old: 250000,   emo: "🍶", hot: false, sold: 2450, rating: 4.7, img: "https://picsum.photos/seed/dealhub13/500/500", link: "https://shopee.vn/" },
+  { id: 14, title: "Đồng Hồ Thông Minh Theo Dõi Sức Khoẻ",         cat: "Điện tử",   price: 459000,  old: 1290000,  emo: "⌚", hot: true,  sold: 980,  rating: 4.6, img: "https://picsum.photos/seed/dealhub14/500/500", link: "https://shopee.vn/" }
+];
+
+/** Danh mục hiển thị trên thanh cuộn ngang */
+const CATEGORIES = [
+  { key: "all",        label: "Tất cả",      icon: "fa-solid fa-border-all" },
+  { key: "Điện tử",    label: "Điện tử",     icon: "fa-solid fa-mobile-screen" },
+  { key: "Thời trang", label: "Thời trang",  icon: "fa-solid fa-shirt" },
+  { key: "Gia dụng",   label: "Gia dụng",    icon: "fa-solid fa-blender" },
+  { key: "Làm đẹp",    label: "Làm đẹp",     icon: "fa-solid fa-spray-can-sparkles" },
+  { key: "Mẹ & Bé",    label: "Mẹ & Bé",     icon: "fa-solid fa-baby" },
+  { key: "Thể thao",   label: "Thể thao",    icon: "fa-solid fa-futbol" },
+  { key: "Sách",       label: "Sách",        icon: "fa-solid fa-book" },
+  { key: "Đồ ăn",      label: "Đồ ăn",       icon: "fa-solid fa-utensils" }
+];
+
+
+/* ============================================================
+   5.4 STATE TOÀN CỤC
+   ============================================================ */
+const state = {
+  user: null,            // Thông tin user hiện tại
+  category: "all",       // Danh mục đang chọn
+  keyword: "",           // Từ khoá tìm kiếm
+  isDemo: false          // Đang chạy chế độ demo (không có Firebase)
+};
+
+
+/* ============================================================
+   5.5 TIỆN ÍCH DÙNG CHUNG
+   ============================================================ */
+const $ = (sel) => document.querySelector(sel);
+
+/** Định dạng tiền tệ VNĐ */
+const vnd = (n) => new Intl.NumberFormat("vi-VN").format(n) + "đ";
+
+/** Tính % giảm giá */
+const discountPct = (oldPrice, price) => Math.round((1 - price / oldPrice) * 100);
+
+/** Hiện toast thông báo */
+let toastTimer = null;
+function showToast(message, icon = "fa-circle-check") {
+  const el = $("#toast");
+  el.innerHTML = `<i class="fa-solid ${icon} mr-2 text-brand-400"></i>${message}`;
+  el.classList.remove("hidden");
+  // Reset animation
+  el.style.animation = "none";
+  void el.offsetWidth;
+  el.style.animation = "";
+  el.classList.add("animate-toast-in");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add("hidden"), 2600);
+}
+
+/** Chuyển đổi giữa các màn hình: loading | auth | app */
+function showScreen(name) {
+  $("#screen-loading").classList.toggle("hidden", name !== "loading");
+  $("#screen-auth").classList.toggle("hidden", name !== "auth");
+  $("#screen-app").classList.toggle("hidden", name !== "app");
+  window.scrollTo({ top: 0 });
+}
+
+/** Dịch mã lỗi Firebase sang tiếng Việt dễ hiểu */
+function translateAuthError(code) {
+  const map = {
+    "auth/popup-closed-by-user":    "Bạn đã đóng cửa sổ đăng nhập.",
+    "auth/popup-blocked":           "Trình duyệt chặn popup. Đang thử cách khác...",
+    "auth/cancelled-popup-request": "Yêu cầu đăng nhập bị huỷ.",
+    "auth/unauthorized-domain":     "Domain này chưa được cấp phép trong Firebase Console.",
+    "auth/network-request-failed":  "Lỗi kết nối mạng. Vui lòng thử lại.",
+    "auth/operation-not-allowed":   "Chưa bật phương thức đăng nhập Google trong Firebase.",
+    "auth/internal-error":          "Lỗi hệ thống. Vui lòng thử lại sau."
+  };
+  return map[code] || "Đăng nhập thất bại. Vui lòng thử lại.";
+}
+
+
+/* ============================================================
+   5.6 KHỞI TẠO FIREBASE + LỚP TRỪU TƯỢNG AUTH
+   ------------------------------------------------------------
+   Ta bọc Firebase trong một object `AuthAPI` để có thể dễ dàng
+   thay thế bằng Supabase / Auth0 / backend riêng sau này.
+   ============================================================ */
+let auth = null;
+let googleProvider = null;
+
+const AuthAPI = {
+
+  /** Khởi tạo Firebase App + Auth + Provider */
+  init() {
+    if (!CONFIG_READY) {
+      // Không có config → chạy chế độ demo
+      state.isDemo = true;
+      $("#btn-demo-signin").classList.remove("hidden");
+      $("#config-warning").classList.remove("hidden");
+      console.warn("[DealHub] Chưa cấu hình Firebase — đang chạy chế độ DEMO.");
+      return;
+    }
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+
+      // Giữ trạng thái đăng nhập kể cả khi tắt trình duyệt
+      setPersistence(auth, browserLocalPersistence).catch(() => {});
+
+      // Cấu hình Google Provider
+      googleProvider = new GoogleAuthProvider();
+      googleProvider.setCustomParameters({ prompt: "select_account" });
+      // Yêu cầu thêm scope nếu cần (ví dụ: email, profile đã có mặc định)
+      // googleProvider.addScope("https://www.googleapis.com/auth/userinfo.email");
+
+      // Lắng nghe trạng thái đăng nhập theo thời gian thực
+      onAuthStateChanged(auth, handleAuthStateChanged);
+
+      // Xử lý kết quả trả về nếu dùng signInWithRedirect
+      getRedirectResult(auth).catch(() => {});
+
+    } catch (err) {
+      console.error("[DealHub] Lỗi khởi tạo Firebase:", err);
+      state.isDemo = true;
+      $("#btn-demo-signin").classList.remove("hidden");
+      $("#config-warning").classList.remove("hidden");
+    }
+  },
+
+  /** Đăng nhập bằng Google */
+  async signIn() {
+    // --- Chế độ demo ---
+    if (state.isDemo) {
+      const demoUser = {
+        uid: "demo-uid-001",
+        displayName: "Nguyễn Văn Demo",
+        email: "demo.user@gmail.com",
+        photoURL: "https://api.dicebear.com/7.x/avataaars/svg?seed=DealHubDemo"
+      };
+      localStorage.setItem("dealhub_demo_user", JSON.stringify(demoUser));
+      handleAuthStateChanged(demoUser);
+      showToast("Đăng nhập Demo thành công!", "fa-flask");
+      return;
+    }
+
+    // --- Firebase thật ---
+    try {
+      await signInWithPopup(auth, googleProvider);
+      // onAuthStateChanged sẽ tự động xử lý phần còn lại
+    } catch (err) {
+      console.error("[DealHub] Lỗi đăng nhập:", err);
+
+      // Popup bị chặn → thử chuyển sang redirect
+      if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment") {
+        showToast("Đang chuyển hướng đăng nhập...", "fa-arrow-right");
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          return;
+        } catch (err2) {
+          showToast(translateAuthError(err2.code), "fa-circle-exclamation");
+          return;
+        }
+      }
+
+      showToast(translateAuthError(err.code), "fa-circle-exclamation");
+    }
+  },
+
+  /** Đăng xuất */
+  async signOut() {
+    if (state.isDemo) {
+      localStorage.removeItem("dealhub_demo_user");
+      handleAuthStateChanged(null);
+      showToast("Đã đăng xuất", "fa-arrow-right-from-bracket");
+      return;
+    }
+
+    try {
+      await signOut(auth);
+      showToast("Đã đăng xuất", "fa-arrow-right-from-bracket");
+    } catch (err) {
+      console.error("[DealHub] Lỗi đăng xuất:", err);
+      showToast("Không thể đăng xuất. Thử lại nhé!", "fa-circle-exclamation");
+    }
+  }
+};
+
+
+/* ============================================================
+   5.7 XỬ LÝ TRẠNG THÁI ĐĂNG NHẬP
+   ------------------------------------------------------------
+   Đây là "trái tim" của luồng auth: mỗi khi trạng thái thay đổi
+   (đăng nhập / đăng xuất / khôi phục phiên), hàm này chạy và
+   quyết định hiển thị màn hình nào.
+   ============================================================ */
+function handleAuthStateChanged(user) {
+  state.user = user;
+
+  if (user) {
+    /* ---------- ĐÃ ĐĂNG NHẬP ---------- */
+    renderUserInfo(user);
+    showScreen("app");
+    // Render feed sau khi màn hình app hiện ra (mượt hơn)
+    requestAnimationFrame(() => {
+      renderCategories();
+      renderDeals();
+      startCountdown();
+    });
+  } else {
+    /* ---------- CHƯA ĐĂNG NHẬP ---------- */
+    state.user = null;
+    showScreen("auth");
+  }
+}
+
+/** Hiển thị thông tin người dùng lên header */
+function renderUserInfo(user) {
+  const nameEl   = $("#user-name");
+  const avatarEl = $("#user-avatar");
+
+  // Tên hiển thị: ưu tiên displayName → phần trước @ của email → "Người dùng"
+  const displayName =
+    user.displayName ||
+    (user.email ? user.email.split("@")[0] : null) ||
+    "Người dùng";
+
+  nameEl.textContent = displayName;
+
+  // Avatar: dùng photoURL nếu có, ngược lại tạo avatar chữ cái đầu
+  if (user.photoURL) {
+    avatarEl.src = user.photoURL;
+    avatarEl.alt = displayName;
+    avatarEl.onerror = () => {
+      avatarEl.src = makeLetterAvatar(displayName);
+    };
+  } else {
+    avatarEl.src = makeLetterAvatar(displayName);
+  }
+}
+
+/** Tạo ảnh avatar dạng chữ cái đầu (data URI, không cần mạng) */
+function makeLetterAvatar(name) {
+  const letter = (name || "U").trim().charAt(0).toUpperCase();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+    <rect width="80" height="80" rx="40" fill="#ee4d2d"/>
+    <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#ffffff">${letter}</text>
+  </svg>`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
+
+
+/* ============================================================
+   5.8 RENDER DANH MỤC
+   ============================================================ */
+function renderCategories() {
+  const bar = $("#category-bar");
+
+  bar.innerHTML = CATEGORIES.map((c) => {
+    const active = state.category === c.key;
+    return `
+      <button data-cat="${c.key}"
+        class="shrink-0 h-9 px-4 rounded-full text-[13px] font-semibold whitespace-nowrap
+               flex items-center gap-1.5 transition active:scale-95
+               ${active
+                 ? "bg-brand-500 text-white shadow-md shadow-brand-500/30"
+                 : "bg-white text-slate-600 border border-slate-200 hover:border-brand-300 hover:text-brand-500"}">
+        <i class="${c.icon} text-[11px]"></i>
+        ${c.label}
+      </button>`;
+  }).join("");
+
+  // Gắn sự kiện click cho từng nút danh mục
+  bar.querySelectorAll("[data-cat]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.category = btn.dataset.cat;
+      renderCategories();
+      renderDeals();
+    });
+  });
+}
+
+
+/* ============================================================
+   5.9 RENDER LƯỚI DEAL
+   ============================================================ */
+function renderDeals() {
+  const grid       = $("#deal-grid");
+  const emptyState = $("#empty-state");
+  const countEl    = $("#result-count");
+  const titleEl    = $("#feed-title");
+
+  const kw = state.keyword.trim().toLowerCase();
+
+  // Lọc theo danh mục + từ khoá
+  const list = DEALS.filter((d) => {
+    const okCat = state.category === "all" || d.cat === state.category;
+    const okKw  = !kw || d.title.toLowerCase().includes(kw) || d.cat.toLowerCase().includes(kw);
+    return okCat && okKw;
+  });
+
+  // Cập nhật tiêu đề + số lượng
+  titleEl.textContent = state.category === "all"
+    ? "Deal hot hôm nay"
+    : `Danh mục: ${state.category}`;
+  countEl.textContent = `${list.length} deal`;
+
+  // Trạng thái rỗng
+  if (list.length === 0) {
+    grid.innerHTML = "";
+    emptyState.classList.remove("hidden");
+    return;
+  }
+  emptyState.classList.add("hidden");
+
+  // Render từng card
+  grid.innerHTML = list.map((d, index) => {
+    const pct = discountPct(d.old, d.price);
+
+    return `
+    <article class="animate-fade-up group bg-white rounded-2xl overflow-hidden
+                    shadow-sm hover:shadow-xl hover:-translate-y-1
+                    transition-all duration-300 flex flex-col"
+             style="animation-delay:${Math.min(index * 35, 350)}ms">
+
+      <!-- Ảnh sản phẩm -->
+      <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
+        <!-- Emoji dự phòng, nằm dưới ảnh -->
+        <span class="absolute inset-0 grid place-items-center text-5xl">${d.emo}</span>
+
+        <!-- Ảnh thật (tự ẩn nếu lỗi tải) -->
+        <img src="${d.img}" alt="${d.title}" loading="lazy"
+             onerror="this.remove()"
+             class="absolute inset-0 w-full h-full object-cover
+                    group-hover:scale-105 transition-transform duration-500">
+
+        <!-- Badge giảm giá -->
+        <span class="absolute top-2 left-2 bg-brand-500 text-white text-[11px] font-extrabold
+                     px-2 py-1 rounded-lg shadow-md leading-none">
+          -${pct}%
+        </span>
+
+        ${d.hot ? `
+        <!-- Badge HOT -->
+        <span class="absolute top-2 right-2 bg-gradient-to-r from-accent-500 to-brand-500
+                     text-white text-[10px] font-extrabold px-2 py-1 rounded-lg
+                     flex items-center gap-1 shadow-md animate-pulse-soft leading-none">
+          <i class="fa-solid fa-fire"></i>HOT
+        </span>` : ``}
+      </div>
+
+      <!-- Thông tin sản phẩm -->
+      <div class="p-2.5 flex flex-col flex-1">
+
+        <h4 class="text-[13px] font-semibold text-slate-700 leading-snug line-clamp-2 min-h-[34px]">
+          ${d.title}
+        </h4>
+
+        <!-- Giá -->
+        <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
+          <span class="text-brand-500 font-extrabold text-[15px] leading-none">${vnd(d.price)}</span>
+          <span class="text-slate-400 text-[11px] line-through leading-none">${vnd(d.old)}</span>
+        </div>
+
+        <!-- Đánh giá + đã bán -->
+        <div class="mt-1.5 flex items-center gap-2 text-[10.5px] text-slate-400">
+          <span class="flex items-center gap-0.5 text-accent-500 font-semibold">
+            <i class="fa-solid fa-star text-[9px]"></i>${d.rating}
+          </span>
+          <span class="w-px h-2.5 bg-slate-200"></span>
+          <span>Đã bán ${d.sold >= 1000 ? (d.sold / 1000).toFixed(1) + "k" : d.sold}</span>
+        </div>
+
+        <!-- Nút CTA -->
+        <a href="${d.link}" target="_blank" rel="noopener sponsored"
+           class="mt-2.5 h-9 rounded-xl bg-brand-50 hover:bg-brand-500 text-brand-600 hover:text-white
+                  font-bold text-[12.5px] flex items-center justify-center gap-1.5
+                  active:scale-95 transition-all duration-200">
+          <i class="fa-solid fa-bolt text-[11px]"></i>
+          Săn Deal Ngay
+        </a>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+
+/* ============================================================
+   5.10 ĐỒNG HỒ ĐẾM NGƯỢC FLASH SALE
+   ------------------------------------------------------------
+   Đếm ngược tới 23:59:59 của ngày hiện tại.
+   ============================================================ */
+let countdownInterval = null;
+
+function startCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const pad = (n) => String(n).padStart(2, "0");
+
+  const tick = () => {
+    const diff = endOfDay - new Date();
+    if (diff <= 0) {
+      clearInterval(countdownInterval);
+      $("#cd-h").textContent = $("#cd-m").textContent = $("#cd-s").textContent = "00";
+      return;
+    }
+    const h = Math.floor(diff / 3_600_000);
+    const m = Math.floor((diff % 3_600_000) / 60_000);
+    const s = Math.floor((diff % 60_000) / 1000);
+
+    $("#cd-h").textContent = pad(h);
+    $("#cd-m").textContent = pad(m);
+    $("#cd-s").textContent = pad(s);
+  };
+
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
+
+/* ============================================================
+   5.11 GẮN SỰ KIỆN CHO CÁC NÚT
+   ============================================================ */
+function bindEvents() {
+
+  // --- Nút đăng nhập Google ---
+  $("#btn-google-signin").addEventListener("click", () => AuthAPI.signIn());
+
+  // --- Nút đăng nhập Demo ---
+  $("#btn-demo-signin").addEventListener("click", () => AuthAPI.signIn());
+
+  // --- Nút đăng xuất ---
+  $("#btn-signout").addEventListener("click", () => {
+    if (confirm("Bạn chắc chắn muốn đăng xuất khỏi DealHub?")) {
+      AuthAPI.signOut();
+    }
+  });
+
+  // --- Ô tìm kiếm (debounce nhẹ để mượt) ---
+  let searchTimer = null;
+  $("#search-input").addEventListener("input", (e) => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      state.keyword = e.target.value;
+      renderDeals();
+    }, 180);
+  });
+
+  // --- Các nút "tính năng đang phát triển" ---
+  document.querySelectorAll("[data-soon]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      showToast("Tính năng đang được phát triển 🚧", "fa-screwdriver-wrench");
+    });
+  });
+}
+
+
+/* ============================================================
+   5.12 KHỞI ĐỘNG ỨNG DỤNG
+   ============================================================ */
+(function bootstrap() {
+  bindEvents();
+  AuthAPI.init();
+
+  // Nếu đang ở chế độ demo, kiểm tra xem đã có phiên demo trước đó chưa
+  if (state.isDemo) {
+    const saved = localStorage.getItem("dealhub_demo_user");
+    if (saved) {
+      try {
+        handleAuthStateChanged(JSON.parse(saved));
+      } catch (e) {
+        showScreen("auth");
+      }
+    } else {
+      showScreen("auth");
+    }
+  } else if (!CONFIG_READY) {
+    showScreen("auth");
+  }
+  // Nếu Firebase đã cấu hình: onAuthStateChanged sẽ tự gọi handleAuthStateChanged
+  // và chuyển màn hình. Trong lúc chờ, giữ màn hình loading.
+
+})();
+
+</script>
+
+<!-- ============================================================
+     GHI CHÚ TRIỂN KHAI
+     ------------------------------------------------------------
+     1) Firebase:
+        • Điền `firebaseConfig` ở mục 5.2
+        • Bật Google Sign-In trong Authentication
+        • Thêm domain (localhost, *.github.io, *.vercel.app) vào
+          Authentication → Settings → Authorized domains
+
+     2) Deploy:
+        • GitHub Pages: push file index.html lên nhánh gh-pages
+        • Vercel / Netlify: kéo thả file, không cần build
+
+     3) Bảo mật:
+        • API key của Firebase là công khai (được thiết kế như vậy).
+          Bảo mật thực sự nằm ở Firestore Rules / Security Rules.
+        • Nhớ giới hạn API key theo HTTP referrer trong Google Cloud Console.
+     ============================================================ -->
+</body>
+</html>
