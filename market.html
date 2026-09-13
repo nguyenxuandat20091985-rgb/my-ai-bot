@@ -233,7 +233,7 @@ const discountPct = (oldPrice, price) => Math.round((1 - price / oldPrice) * 100
 let toastTimer = null;
 function showToast(message, icon = "fa-circle-check") {
   const el = $("#toast");
-  el.innerHTML = `<i class="fa-solid \( {icon} mr-2 text-brand-400"></i> \){message}`;
+  el.innerHTML = `<i class="fa-solid ${icon} mr-2 text-brand-400"></i> ${message}`;
   el.classList.remove("hidden");
   el.style.animation = "none";
   void el.offsetWidth;
@@ -245,7 +245,6 @@ function showToast(message, icon = "fa-circle-check") {
 
 function showScreen(name) {
   $("#screen-loading").classList.toggle("hidden", name !== "loading");
-  $("#screen-auth").classList.toggle("hidden", name !== "auth");
   $("#screen-app").classList.toggle("hidden", name !== "app");
   window.scrollTo({ top: 0 });
 }
