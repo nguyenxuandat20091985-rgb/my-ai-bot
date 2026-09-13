@@ -69,94 +69,6 @@
   <p class="mt-1 text-sm text-slate-400">Đang tải siêu deal...</p>
 </div>
 
-<!-- 2. ĐĂNG NHẬP -->
-<div id="screen-auth" class="hidden fixed inset-0 z-40 overflow-y-auto bg-gradient-to-b from-brand-500 via-brand-500 to-brand-600">
-  <div class="pointer-events-none absolute -top-24 -right-20 w-72 h-72 rounded-full bg-white/10"></div>
-  <div class="pointer-events-none absolute top-40 -left-24 w-64 h-64 rounded-full bg-white/10"></div>
-  <div class="pointer-events-none absolute bottom-0 right-0 w-56 h-56 rounded-full bg-accent-400/20"></div>
-
-  <div class="relative min-h-full flex flex-col justify-center px-6 py-10 max-w-md mx-auto">
-    <div class="text-center">
-      <a href="https://nguyenxuandat20091985-rgb.github.io/my-ai-bot" class="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full bg-white/15 border border-white/20 text-white text-xs font-semibold backdrop-blur-sm hover:bg-white/25 transition">
-        <i class="fa-solid fa-arrow-left"></i><span>Về trang chính</span>
-      </a>
-      <div class="w-24 h-24 mx-auto rounded-[28px] bg-white flex items-center justify-center shadow-2xl shadow-black/20">
-        <i class="fa-solid fa-bolt text-brand-500 text-5xl"></i>
-      </div>
-      <h1 class="mt-5 text-4xl font-extrabold text-white tracking-tight">Deal<span class="text-accent-400">Hub</span></h1>
-      <p class="mt-2 text-white/85 text-[15px] leading-relaxed">
-        Tổng hợp deal "hời" mỗi ngày từ<br>Shopee · Lazada · TikTok Shop
-      </p>
-    </div>
-
-    <div class="mt-9 space-y-3">
-      <div class="flex items-center gap-3.5 bg-white/12 backdrop-blur-sm border border-white/15 rounded-2xl px-4 py-3.5">
-        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center">
-          <i class="fa-solid fa-fire-flame-curved text-accent-400 text-lg"></i>
-        </div>
-        <div>
-          <p class="text-white font-semibold text-sm">Deal giảm đến 70%</p>
-          <p class="text-white/70 text-xs">Cập nhật liên tục mỗi giờ</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3.5 bg-white/12 backdrop-blur-sm border border-white/15 rounded-2xl px-4 py-3.5">
-        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center">
-          <i class="fa-solid fa-tags text-accent-400 text-lg"></i>
-        </div>
-        <div>
-          <p class="text-white font-semibold text-sm">Mã giảm giá độc quyền</p>
-          <p class="text-white/70 text-xs">Voucher riêng cho thành viên</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3.5 bg-white/12 backdrop-blur-sm border border-white/15 rounded-2xl px-4 py-3.5">
-        <div class="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center">
-          <i class="fa-solid fa-bell text-accent-400 text-lg"></i>
-        </div>
-        <div>
-          <p class="text-white font-semibold text-sm">Thông báo deal sốc</p>
-          <p class="text-white/70 text-xs">Không bỏ lỡ săn sale 0h</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-9">
-      <button id="btn-google-signin"
-              class="w-full h-14 bg-white rounded-2xl font-bold text-slate-700 text-[15px]
-                     flex items-center justify-center gap-3 shadow-xl shadow-black/15
-                     active:scale-[.98] transition-transform duration-150 hover:bg-slate-50">
-        <svg width="21" height="21" viewBox="0 0 48 48" aria-hidden="true">
-          <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/>
-          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-          <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.6 39.6 16.2 44 24 44z"/>
-          <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C41 35.2 44 30 44 24c0-1.3-.1-2.6-.4-3.9z"/>
-        </svg>
-        <span>Đăng nhập bằng Google</span>
-      </button>
-
-      <button id="btn-demo-signin"
-              class="hidden w-full h-12 mt-3 bg-white/15 border border-white/30 rounded-2xl
-                     font-semibold text-white text-sm backdrop-blur-sm
-                     flex items-center justify-center gap-2 active:scale-[.98] transition-transform">
-        <i class="fa-solid fa-flask"></i>
-        <span>Dùng thử chế độ Demo</span>
-      </button>
-
-      <div id="config-warning" class="hidden mt-4 bg-black/25 border border-white/20 rounded-2xl p-4 text-white/90 text-xs leading-relaxed">
-        <p class="font-bold text-white mb-1.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Chưa cấu hình Firebase</p>
-        <p>Mở file <code class="bg-white/20 px-1.5 py-0.5 rounded">market.html</code> (hoặc index.html nếu deploy Vercel), tìm biến
-          <code class="bg-white/20 px-1.5 py-0.5 rounded">firebaseConfig</code> và điền thông tin dự án của bạn.
-          Trong lúc chờ, bạn có thể dùng <b>chế độ Demo</b> ở trên.</p>
-      </div>
-
-      <p class="mt-5 text-center text-white/65 text-[11px] leading-relaxed px-4">
-        Bằng việc tiếp tục, bạn đồng ý với
-        <a href="#" class="underline text-white/90 font-medium">Điều khoản sử dụng</a> và
-        <a href="#" class="underline text-white/90 font-medium">Chính sách bảo mật</a> của DealHub.
-      </p>
-    </div>
-  </div>
-</div>
-
 <!-- 3. GIAO DIỆN CHÍNH -->
 <div id="screen-app" class="hidden min-h-screen bg-slate-100">
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/70">
@@ -179,12 +91,7 @@
         <a href="https://nguyenxuandat20091985-rgb.github.io/my-ai-bot" class="h-10 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 active:scale-95 transition flex items-center gap-1.5 font-semibold text-[13px]">
           <i class="fa-solid fa-house"></i><span>Trang chính</span>
         </a>
-        <button id="btn-signout"
-                class="h-10 px-3 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-600
-                       active:scale-95 transition flex items-center gap-1.5 font-semibold text-[13px]">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span class="hidden xs:inline sm:inline">Đăng xuất</span>
-        </button>
+        
       </div>
       <div class="pb-3">
         <div class="relative">
@@ -275,6 +182,10 @@
       </button>
     </div>
   </nav>
+  <footer class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
+    <p class="font-semibold text-slate-500">DealHub — Chợ Deal</p>
+    <p class="mt-1">Mua sắm thông minh • Không cần tài khoản</p>
+  </footer>
 </div>
 
 <div id="toast"
@@ -283,23 +194,7 @@
             shadow-2xl max-w-[90vw] text-center animate-toast-in">
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect,
-  getRedirectResult, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
-};
-
-const CONFIG_READY = !firebaseConfig.apiKey.startsWith("YOUR_");
+<script>
 
 const DEALS = [
   { id: 1,  title: "Tai Nghe Bluetooth TWS Pro Chống Ồn Chủ Động", cat: "Điện tử",   price: 189000,  old: 590000,   emo: "🎧", hot: true,  sold: 1240, rating: 4.8, img: "https://picsum.photos/seed/dealhub01/500/500", link: "https://shopee.vn/" },
@@ -353,111 +248,6 @@ function showScreen(name) {
   $("#screen-auth").classList.toggle("hidden", name !== "auth");
   $("#screen-app").classList.toggle("hidden", name !== "app");
   window.scrollTo({ top: 0 });
-}
-
-function translateAuthError(code) {
-  const map = {
-    "auth/popup-closed-by-user":    "Bạn đã đóng cửa sổ đăng nhập.",
-    "auth/popup-blocked":           "Trình duyệt chặn popup. Đang thử cách khác...",
-    "auth/cancelled-popup-request": "Yêu cầu đăng nhập bị huỷ.",
-    "auth/unauthorized-domain":     "Domain này chưa được cấp phép trong Firebase Console.",
-    "auth/network-request-failed":  "Lỗi kết nối mạng. Vui lòng thử lại.",
-    "auth/operation-not-allowed":   "Chưa bật phương thức đăng nhập Google trong Firebase.",
-    "auth/internal-error":          "Lỗi hệ thống. Vui lòng thử lại sau."
-  };
-  return map[code] || "Đăng nhập thất bại. Vui lòng thử lại.";
-}
-
-let auth = null;
-let googleProvider = null;
-
-const AuthAPI = {
-  init() {
-    if (!CONFIG_READY) {
-      state.isDemo = true;
-      $("#btn-demo-signin").classList.remove("hidden");
-      $("#config-warning").classList.remove("hidden");
-      console.warn("[DealHub] Chưa cấu hình Firebase — đang chạy chế độ DEMO.");
-      return;
-    }
-    try {
-      const app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      setPersistence(auth, browserLocalPersistence).catch(() => {});
-      googleProvider = new GoogleAuthProvider();
-      googleProvider.setCustomParameters({ prompt: "select_account" });
-      onAuthStateChanged(auth, handleAuthStateChanged);
-      getRedirectResult(auth).catch(() => {});
-    } catch (err) {
-      console.error("[DealHub] Lỗi khởi tạo Firebase:", err);
-      state.isDemo = true;
-      $("#btn-demo-signin").classList.remove("hidden");
-      $("#config-warning").classList.remove("hidden");
-    }
-  },
-
-  async signIn() {
-    if (state.isDemo) {
-      const demoUser = {
-        uid: "demo-uid-001",
-        displayName: "Nguyễn Văn Demo",
-        email: "demo.user@gmail.com",
-        photoURL: "https://api.dicebear.com/7.x/avataaars/svg?seed=DealHubDemo"
-      };
-      localStorage.setItem("dealhub_demo_user", JSON.stringify(demoUser));
-      handleAuthStateChanged(demoUser);
-      showToast("Đăng nhập Demo thành công!", "fa-flask");
-      return;
-    }
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (err) {
-      console.error("[DealHub] Lỗi đăng nhập:", err);
-      if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment") {
-        showToast("Đang chuyển hướng đăng nhập...", "fa-arrow-right");
-        try {
-          await signInWithRedirect(auth, googleProvider);
-          return;
-        } catch (err2) {
-          showToast(translateAuthError(err2.code), "fa-circle-exclamation");
-          return;
-        }
-      }
-      showToast(translateAuthError(err.code), "fa-circle-exclamation");
-    }
-  },
-
-  async signOut() {
-    if (state.isDemo) {
-      localStorage.removeItem("dealhub_demo_user");
-      handleAuthStateChanged(null);
-      showToast("Đã đăng xuất", "fa-arrow-right-from-bracket");
-      return;
-    }
-    try {
-      await signOut(auth);
-      showToast("Đã đăng xuất", "fa-arrow-right-from-bracket");
-    } catch (err) {
-      console.error("[DealHub] Lỗi đăng xuất:", err);
-      showToast("Không thể đăng xuất. Thử lại nhé!", "fa-circle-exclamation");
-    }
-  }
-};
-
-function handleAuthStateChanged(user) {
-  state.user = user;
-  if (user) {
-    renderUserInfo(user);
-    showScreen("app");
-    requestAnimationFrame(() => {
-      renderCategories();
-      renderDeals();
-      startCountdown();
-    });
-  } else {
-    state.user = null;
-    showScreen("auth");
-  }
 }
 
 function renderUserInfo(user) {
@@ -588,11 +378,6 @@ function startCountdown() {
 }
 
 function bindEvents() {
-  $("#btn-google-signin").addEventListener("click", () => AuthAPI.signIn());
-  $("#btn-demo-signin").addEventListener("click", () => AuthAPI.signIn());
-  $("#btn-signout").addEventListener("click", () => {
-    if (confirm("Bạn chắc chắn muốn đăng xuất khỏi DealHub?")) AuthAPI.signOut();
-  });
   let searchTimer = null;
   $("#search-input").addEventListener("input", (e) => {
     clearTimeout(searchTimer);
@@ -607,19 +392,15 @@ function bindEvents() {
 }
 
 (function bootstrap() {
-  bindEvents();
-  AuthAPI.init();
-  if (state.isDemo) {
-    const saved = localStorage.getItem("dealhub_demo_user");
-    if (saved) {
-      try { handleAuthStateChanged(JSON.parse(saved)); }
-      catch (e) { showScreen("auth"); }
-    } else {
-      showScreen("auth");
-    }
-  } else if (!CONFIG_READY) {
-    showScreen("auth");
-  }
+  const guest = { displayName: "Khách", email: "", photoURL: "" };
+  state.user = guest;
+  renderUserInfo(guest);
+  showScreen("app");
+  requestAnimationFrame(() => {
+    renderCategories();
+    renderDeals();
+    startCountdown();
+  });
 })();
 </script>
 </body>
