@@ -44,13 +44,61 @@ export default async function handler(req, res) {
       }
     }
 
+    const looksLikePlaceholder = (value) => !value || /susercontent\.com\/file\/vn-11134207-7r98o-lvmhwp0f8n2j64/i.test(value);
+
+    async function resolveOgImage(url) {
+      if (!url) return '';
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4500);
+      try {
+        const response = await fetch(url, {
+          redirect: 'follow',
+          signal: controller.signal,
+          headers: { 'User-Agent': 'Mozilla/5.0 Market-Deal/1.0' }
+        });
+        if (!response.ok) return '';
+        const html = await response.text();
+        const patterns = [
+          /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
+          /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
+          /<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i
+        ];
+        for (const pattern of patterns) {
+          const match = html.match(pattern);
+          if (match?.[1]) return match[1].replace(/&amp;/g, '&');
+        }
+        return '';
+      } catch (_) {
+        return '';
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    const resolvedImages = new Map();
+    const candidates = products.map(p => {
+      const link = linkMap.get(String(p.id));
+      return { p, link };
+    }).filter(({ p, link }) => looksLikePlaceholder(p.image_url) && link?.short_url);
+
+    // Resolve real product images from the affiliate destination when the DB contains the old shared placeholder.
+    for (let i = 0; i < candidates.length; i += 6) {
+      const batch = candidates.slice(i, i + 6);
+      const results = await Promise.all(batch.map(async ({ p, link }) => [
+        String(p.id),
+        await resolveOgImage(link.short_url)
+      ]));
+      for (const [id, image] of results) if (image) resolvedImages.set(id, image);
+    }
+
     const safeProducts = products.map(p => {
       const link = linkMap.get(String(p.id));
+      const resolved = resolvedImages.get(String(p.id));
       return {
         id: p.id,
         title: p.title,
         price: p.price,
-        image_url: p.image_url,
+        image_url: resolved || p.image_url || '',
         affiliate_url: link?.short_url || '',
         platform: link?.platform || 'Affiliate'
       };
