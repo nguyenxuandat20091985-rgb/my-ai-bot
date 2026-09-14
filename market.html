@@ -210,7 +210,7 @@
     });
     if (!response.ok) throw new Error('Market API HTTP ' + response.status);
     const payload = await response.json();
-    if (!payload || !Array.isArray(payload.products)) throw new Error('Invalid Market API response');
+    if (!payload || !Array.isArray(payload.products) || payload.products.length === 0) throw new Error('Market API returned no products');
 
     DEALS = payload.products.map(p => ({
       id: p.id,
@@ -236,6 +236,7 @@
 
     if (productsError) throw productsError;
     if (linksError) throw linksError;
+    if (!products || products.length === 0) throw new Error('Supabase products table returned 0 rows');
 
     const linkMap = new Map();
     (links || []).forEach(link => {
@@ -256,6 +257,36 @@
         cat: 'all'
       };
     });
+  }
+
+  async function loadDealsFromProductsJson() {
+    const response = await fetch('./products.json?market_catalog=1', {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      cache: 'no-store'
+    });
+    if (!response.ok) throw new Error('products.json HTTP ' + response.status);
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.products) || payload.products.length === 0) {
+      throw new Error('products.json has no products');
+    }
+
+    DEALS = payload.products.map(p => ({
+      id: p.id,
+      title: p.name || 'Sản phẩm',
+      price: null,
+      old: null,
+      img: p.image_url || '',
+      link: p.link || '',
+      platform: 'shopee',
+      cat: 'all',
+      rating: 5,
+      sold: 0,
+      hot: false,
+      emo: '🛒',
+      audience: p.audience || '',
+      highlights: p.highlights || ''
+    }));
   }
 
   const CATEGORIES = [
@@ -459,22 +490,30 @@
   async function bootstrap() {
     bindEvents();
     showScreen("loading");
-    loadDealsFromSecureAPI().catch(async (apiErr) => {
-      console.warn("[DealHub] Secure API unavailable, falling back to Supabase:", apiErr);
-      await loadDealsFromSupabase();
-    }).then(() => {
-      showScreen("app");
-      renderCategories();
-      renderDeals();
-      startCountdown();
-    }).catch((err) => {
-      console.error("[DealHub] Catalog error:", err);
-      showToast("Không thể tải catalog Market-Deal", "fa-circle-exclamation");
-      DEALS = [];
-      showScreen("app");
-      renderCategories();
-      renderDeals();
-    });
+    loadDealsFromSecureAPI()
+      .catch(async (apiErr) => {
+        console.warn("[DealHub] API unavailable, falling back to Supabase:", apiErr);
+        try {
+          await loadDealsFromSupabase();
+        } catch (supabaseErr) {
+          console.warn("[DealHub] Supabase unavailable/empty, falling back to products.json:", supabaseErr);
+          await loadDealsFromProductsJson();
+        }
+      })
+      .then(() => {
+        showScreen("app");
+        renderCategories();
+        renderDeals();
+        startCountdown();
+      })
+      .catch((err) => {
+        console.error("[DealHub] All catalog sources failed:", err);
+        showToast("Không thể tải catalog Market-Deal", "fa-circle-exclamation");
+        DEALS = [];
+        showScreen("app");
+        renderCategories();
+        renderDeals();
+      });
   }
 
   bootstrap();
