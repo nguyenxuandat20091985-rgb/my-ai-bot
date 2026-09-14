@@ -193,13 +193,44 @@
 </div>
 
 <script>
-  // Cấu hình kết nối Supabase của anh
+  // Market-Deal: catalog is loaded from Supabase at runtime.
+  // IMPORTANT: use only the Supabase Publishable key here, never a secret/service_role key.
   const SUPABASE_URL = 'https://pkyaoclgzyejlfozkbiw.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_uR0WKMOakw9L2G...'; // Anh thay key đầy đủ vào đây nhé
-  
+  const SUPABASE_KEY = 'sb_publishable_uR0WKMOakw9L2G...'; // Set the full Publishable key in deployment/config.
+
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   let DEALS = [];
+
+  async function loadDealsFromSupabase() {
+    const [{ data: products, error: productsError }, { data: links, error: linksError }] = await Promise.all([
+      supabaseClient.from('products').select('id,title,price,image_url').order('id', { ascending: false }),
+      supabaseClient.from('affiliate_links').select('product_id,short_url,platform')
+    ]);
+
+    if (productsError) throw productsError;
+    if (linksError) throw linksError;
+
+    const linkMap = new Map();
+    (links || []).forEach(link => {
+      if (link.product_id != null && link.short_url && !linkMap.has(String(link.product_id))) {
+        linkMap.set(String(link.product_id), link);
+      }
+    });
+
+    DEALS = (products || []).map(p => {
+      const link = linkMap.get(String(p.id));
+      return {
+        id: p.id,
+        title: p.title || 'Sản phẩm',
+        price: p.price,
+        image: p.image_url || '',
+        link: link?.short_url || '',
+        platform: link?.platform || 'Affiliate',
+        cat: 'all'
+      };
+    });
+  }
 
   const CATEGORIES = [
     {key:"all",label:"Tất cả",icon:"fa-solid fa-border-all"},
