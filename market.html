@@ -260,6 +260,13 @@
     });
   }
 
+  function withTimeout(promise, ms, label) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(label + " timed out after " + ms + "ms")), ms))
+    ]);
+  }
+
   async function loadDealsFromProductsJson() {
     const response = await fetch('./products.json?market_catalog=1', {
       method: 'GET',
@@ -496,14 +503,14 @@
     showScreen("loading");
     // GitHub Pages is the public storefront: read the live Market-Deal Supabase catalog first.
     // Vercel API remains a fallback so the store does not depend on a GitHub/Vercel project link.
-    loadDealsFromSupabase()
+    withTimeout(loadDealsFromSupabase(), 7000, "Supabase catalog")
       .catch(async (supabaseErr) => {
         console.warn("[DealHub] Supabase unavailable/empty, falling back to Vercel API:", supabaseErr);
         try {
-          await loadDealsFromSecureAPI();
+          await withTimeout(loadDealsFromSecureAPI(), 7000, "Vercel market API");
         } catch (apiErr) {
           console.warn("[DealHub] Vercel API unavailable, falling back to products.json:", apiErr);
-          await loadDealsFromProductsJson();
+          await withTimeout(loadDealsFromProductsJson(), 5000, "products.json");
         }
       })
       .then(() => {
