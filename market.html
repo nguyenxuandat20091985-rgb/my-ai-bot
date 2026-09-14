@@ -431,19 +431,13 @@
 
   // Tải dữ liệu trực tiếp từ bảng Supabase khi khởi chạy
   async function bootstrap() {
+    showScreen("loading");
     try {
-      // Giả sử bảng lưu deal trong Supabase tên là "deals". 
-      // Nếu tên bảng của anh khác (ví dụ: products), anh chỉ cần sửa lại tên trong .from('...')
-      const { data, error } = await supabaseClient.from('deals').select('*');
-      
-      if (error) {
-        console.warn("Lỗi tải từ Supabase, dùng dữ liệu dự phòng:", error.message);
-        showToast("Không kết nối được bảng Supabase, đang hiển thị bản offline", "fa-triangle-exclamation");
-      } else if (data && data.length > 0) {
-        DEALS = data;
-      }
+      await loadDealsFromSupabase();
     } catch (err) {
-      console.error("Lỗi kết nối:", err);
+      console.error("Market Deal catalog error:", err);
+      showToast("Chưa thể tải catalog từ Market-Deal", "fa-triangle-exclamation");
+      DEALS = [];
     }
 
     showScreen("app");
