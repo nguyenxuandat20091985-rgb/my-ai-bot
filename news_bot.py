@@ -67,13 +67,27 @@ Không dùng markdown #."""
     r=completion(model=MODEL,messages=[{"role":"user","content":prompt}],temperature=TEMPERATURE,max_tokens=MAX_TOKENS)
     return r.choices[0].message.content.strip()
 
+def _fingerprint(text):
+    import hashlib
+    normalized=re.sub(r"[^a-z0-9\\s]"," ",(text or "").lower())
+    normalized=re.sub(r"\\s+"," ",normalized).strip()
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:20]
+
+def _topic_key(title):
+    words=re.findall(r"[a-zA-ZÀ-ỹĐđ0-9]{4,}",(title or "").lower())
+    return " ".join(sorted(set(words))[:8])
+
 def history():
-    p=DATA_DIR/"news_history.json"
-    try:return json.loads(p.read_text(encoding="utf-8"))
-    except:return []
+    p=DATA_DIR/"news_fingerprints.json"
+    try:
+        data=json.loads(p.read_text(encoding="utf-8"))
+        return data if isinstance(data,list) else []
+    except Exception:
+        return []
 
 def save_history(h):
-    (DATA_DIR/"news_history.json").write_text(json.dumps(h[-500:],ensure_ascii=False,indent=2),encoding="utf-8")
+    # Chỉ lưu dấu vết chống trùng: hash tiêu đề/nguồn + chủ đề; KHÔNG lưu nội dung bài.
+    (DATA_DIR/"news_fingerprints.json").write_text(json.dumps(h[-1000:],ensure_ascii=False,indent=2),encoding="utf-8")
 
 def chatboss(product):
     purl=product.get("affiliate_url") or product.get("link") or "#"
@@ -103,37 +117,68 @@ def sync_accesstrade():
     except Exception:
         return [], []
 
-def update_home(h):
+def render_home(articles):
     cards=[]
-    for x in reversed(h[-20:]):
-        slug=x.get("slug",""); title=html.escape(x.get("title","Bản tin"))
+    for x in articles:
+        title=html.escape(x.get("title","Bản tin"))
         image=x.get("image_url","")
-        thumb=f'<img src="{html.escape(image,quote=True)}" loading="lazy">' if image else ""
-        cards.append(f'<article><a href="bai-{slug}.html">{thumb}<h2>{title}</h2><span>{x.get("created_at","")[:16].replace("T"," ")}</span></a></article>')
-    css="body{margin:0;background:#f5f7fb;font-family:Inter,system-ui,sans-serif;color:#172033}.wrap{max-width:1000px;margin:auto;padding:20px}.mast{background:linear-gradient(135deg,#111827,#4338ca,#7c3aed);color:#fff;border-radius:26px;padding:32px;margin-bottom:24px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}article{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px #11182710}article a{color:inherit;text-decoration:none}article img{width:100%;height:170px;object-fit:cover}article h2{font-size:19px;line-height:1.35;padding:0 16px}article span{display:block;color:#64748b;font-size:12px;padding:0 16px 18px}"
-    html_page=f'<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tờ Báo AI</title><style>{css}</style></head><body><main class="wrap"><header class="mast"><h1>📰 Tờ Báo AI</h1><p>Độc lập • an toàn • 3 số mỗi ngày • có ChatBoss</p></header><section class="grid">{"".join(cards)}</section></main></body></html>'
-    Path("index.html").write_text(html_page,encoding="utf-8")
-    (DOCS_DIR/"index.html").write_text(html_page,encoding="utf-8")
+        body=x.get("body","")
+        paras="".join("<p>"+html.escape(p.strip())+"</p>" for p in re.split(r"\\n\\s*\\n",body) if p.strip())
+        img=f'<img src="{html.escape(image,quote=True)}" alt="{title}" loading="lazy">' if image else ""
+        source=html.escape(x.get("source_url",""),quote=True)
+        cards.append(f'<article><div class="kicker">Bản tin AI</div><h2>{title}</h2><div class="meta">📅 {x.get("created_at","")}</div>{img}<div class="body">{paras}</div><p class="source">Nguồn tham khảo: <a href="{source}" rel="nofollow noopener">{source}</a></p></article>')
+    css="""*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#172033;font-family:Inter,system-ui,sans-serif}.wrap{max-width:1000px;margin:auto;padding:18px}.mast{background:linear-gradient(135deg,#111827,#4338ca,#7c3aed);color:#fff;border-radius:26px;padding:30px;margin-bottom:20px}.mast h1{margin:0;font-size:30px}.mast p{margin-bottom:0;opacity:.85}.grid{display:grid;gap:20px}.article{background:#fff;border-radius:24px;padding:26px;box-shadow:0 12px 40px #11182712}.kicker{color:#4f46e5;font-weight:800;text-transform:uppercase;font-size:12px}.article h2{font-size:30px;line-height:1.2;margin:8px 0}.meta,.source{color:#64748b;font-size:13px}.hero{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:18px;margin:18px 0}.body{font-size:17px;line-height:1.8}.body p{margin:0 0 16px}.source a{color:#4338ca;word-break:break-all}@media(max-width:600px){.wrap{padding:10px}.article{padding:18px}.article h2{font-size:25px}}"""
+    page=f'<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tờ Báo AI</title><style>{css}</style></head><body><main class="wrap"><header class="mast"><h1>📰 Tờ Báo AI</h1><p>Mỗi ngày 3 bài • bài mới nhất thay thế bài cũ • không lưu lịch sử nội dung</p></header><section class="grid">{"".join(cards)}</section></main></body></html>'
+    DOCS_DIR.mkdir(parents=True,exist_ok=True)
+    (DOCS_DIR/"index.html").write_text(page,encoding="utf-8")
 
 def main():
     campaigns, promos = sync_accesstrade()
-    h=history(); used={x.get("source_url") for x in h}; titles={x.get("title","").lower() for x in h}
-    items=[x for x in fetch_items() if x["url"] not in used and x["title"].lower() not in titles]
-    if not items:return
+    h=history()
+    used_sources={x.get("source_hash") for x in h}
+    used_titles={x.get("title_hash") for x in h}
+    used_topics={x.get("topic") for x in h}
+    items=[]
+    for item in fetch_items():
+        sh=_fingerprint(item["url"]); th=_fingerprint(item["title"]); topic=_topic_key(item["title"])
+        if sh in used_sources or th in used_titles or (topic and topic in used_topics):
+            continue
+        items.append((item,sh,th,topic))
+    if not items:
+        logger.info("Không có nguồn/chủ đề mới đủ khác biệt hôm nay.")
+        return
     products=sorted(load_products(),key=score_product,reverse=True); product=products[0] if products else {}
     context=product.get("name","")+" | "+(product.get("affiliate_url") or product.get("link",""))+" | Campaigns="+", ".join(str(x.get("name","")) for x in campaigns[:10])+" | Promos="+", ".join(str(x.get("title","")) for x in promos[:10])
-    for item in items:
-        if blocked(item["title"]+" "+item["description"]):continue
-        text=ai_write(item,context)
-        if text=="BLOCKED" or blocked(text):continue
-        lines=[x.strip() for x in text.splitlines() if x.strip()]; title=lines[0].lstrip("#* ").strip(); body="\n\n".join(lines[1:])
-        if title.lower() in titles:continue
-        now=datetime.now(timezone(timedelta(hours=7))); slug=now.strftime("%Y-%m-%d-%H%M"); image=article_image(item["url"])
-        page=render(title,body,item["url"],image,product,now.strftime("%d/%m/%Y %H:%M"),slug)
-        for target in [DOCS_DIR/f"bai-{slug}.html",Path(f"bai-{slug}.html")]:
-            target.parent.mkdir(parents=True,exist_ok=True);target.write_text(page,encoding="utf-8")
-        h.append({"slug":slug,"title":title,"source_url":item["url"],"image_url":image,"created_at":now.isoformat()});titles.add(title.lower());break
+    # Chỉ xuất bản 1 bài mỗi lần chạy; workflow chạy 3 lần/ngày.
+    item,sh,th,topic=items[0]
+    text=ai_write(item,context)
+    if text=="BLOCKED" or blocked(text):
+        logger.warning("Bài bị chặn bởi bộ lọc an toàn.")
+        return
+    lines=[x.strip() for x in text.splitlines() if x.strip()]; title=lines[0].lstrip("#* ").strip(); body="\\n\\n".join(lines[1:])
+    title_hash=_fingerprint(title)
+    if title_hash in used_titles:
+        logger.warning("AI tạo tiêu đề trùng; bỏ bài để tránh lặp.")
+        return
+    now=datetime.now(timezone(timedelta(hours=7)))
+    image=article_image(item["url"])
+    # Không tạo bai-*.html và không ghi bài vào data. Chỉ giữ đúng 3 bài hiện tại trong docs/index.html.
+    current=[{
+        "title":title,
+        "body":body,
+        "source_url":item["url"],
+        "image_url":image,
+        "created_at":now.strftime("%d/%m/%Y %H:%M")
+    }]
+    render_home(current)
+    h.append({"source_hash":sh,"title_hash":title_hash,"topic":topic,"created_at":now.isoformat()})
     save_history(h)
-    update_home(h)
+    logger.info("Đã xuất bản bài mới vào docs/index.html; không tạo file bài riêng và không lưu nội dung lịch sử.")
 
-if __name__=="__main__":main()
+if __name__=="__main__":
+    try:
+        main()
+        logger.info("🎉 Hoàn thành! Tờ báo đã cập nhật bài mới.")
+    except Exception as e:
+        logger.error(f"Lỗi hệ thống: {e}")
+        raise
