@@ -385,7 +385,7 @@
                style="animation-delay:${Math.min(index * 35, 350)}ms">
         <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
           <span class="absolute inset-0 grid place-items-center text-6xl opacity-80">${d.emo || '🛍️'}</span>
-          <img src="${d.img ? 'https://images.weserv.nl/?url=' + encodeURIComponent(d.img) + '&w=800&h=800&fit=cover&output=webp' : 'https://tse1.mm.bing.net/th?q=' + encodeURIComponent(d.title) + '&w=800&h=800&c=7&rs=1&p=0'}"
+          <img src="${(d.img && !/susercontent\\.com\\/file\\/vn-11134207-7r98o-lvmhwp0f8n2j64/i.test(d.img)) ? 'https://images.weserv.nl/?url=' + encodeURIComponent(d.img) + '&w=800&h=800&fit=cover&output=webp' : 'https://tse1.mm.bing.net/th?q=' + encodeURIComponent(d.title) + '&w=800&h=800&c=7&rs=1&p=0'}"
                data-direct="${d.img || ''}" data-search="https://tse1.mm.bing.net/th?q=${encodeURIComponent(d.title)}&w=800&h=800&c=7&rs=1&p=0"
                data-stage="proxy"
                alt="${d.title}" loading="lazy"
