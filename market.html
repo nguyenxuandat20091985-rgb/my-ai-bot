@@ -203,7 +203,7 @@
   let DEALS = [];
 
   async function loadDealsFromSecureAPI() {
-    const response = await fetch('/api/market', {
+    const response = await fetch('https://my-ai-bot-cyan.vercel.app/api/market', {
       method: 'GET',
       headers: { 'Accept': 'application/json' },
       cache: 'no-store'
