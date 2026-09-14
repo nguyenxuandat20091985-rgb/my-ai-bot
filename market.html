@@ -202,6 +202,32 @@
 
   let DEALS = [];
 
+  async function loadDealsFromSecureAPI() {
+    const response = await fetch('/api/market', {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      cache: 'no-store'
+    });
+    if (!response.ok) throw new Error('Market API HTTP ' + response.status);
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.products)) throw new Error('Invalid Market API response');
+
+    DEALS = payload.products.map(p => ({
+      id: p.id,
+      title: p.title || 'Sản phẩm',
+      price: Number(p.price) || 0,
+      old: Number(p.price) || 0,
+      img: p.image_url || '',
+      link: p.affiliate_url || '',
+      platform: p.platform || 'Affiliate',
+      cat: p.category || 'all',
+      rating: 5,
+      sold: 0,
+      hot: false,
+      emo: '🛒'
+    }));
+  }
+
   async function loadDealsFromSupabase() {
     const [{ data: products, error: productsError }, { data: links, error: linksError }] = await Promise.all([
       supabaseClient.from('products').select('id,title,price,image_url').order('id', { ascending: false }),
@@ -431,21 +457,20 @@
 
   // Tải dữ liệu trực tiếp từ bảng Supabase khi khởi chạy
   async function bootstrap() {
+    bindEvents();
     showScreen("loading");
-    try {
-      await loadDealsFromSupabase();
-    } catch (err) {
-      console.error("Market Deal catalog error:", err);
-      showToast("Chưa thể tải catalog từ Market-Deal", "fa-triangle-exclamation");
-      DEALS = [];
-    }
-
-    showScreen("app");
-    requestAnimationFrame(() => {
+    loadDealsFromSecureAPI().then(() => {
+      showScreen("app");
       renderCategories();
       renderDeals();
       startCountdown();
-      bindEvents();
+    }).catch((err) => {
+      console.error("[DealHub] Secure catalog error:", err);
+      showToast("Không thể tải catalog Market-Deal", "fa-circle-exclamation");
+      DEALS = [];
+      showScreen("app");
+      renderCategories();
+      renderDeals();
     });
   }
 
