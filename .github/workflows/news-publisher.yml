@@ -42,10 +42,16 @@ jobs:
           NEWS_PER_RUN: "1"
         run: python news_bot.py
 
+      - name: Keep only the current newspaper and anti-duplicate fingerprints
+        run: |
+          find docs -maxdepth 1 -type f -name 'bai-*.html' -delete
+          find . -maxdepth 1 -type f -name 'bai-*.html' -delete
+          rm -f data/news_history.json
+
       - name: Commit generated newspaper
         run: |
           git config user.name "my-ai-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/ data/ index.html bai-*.html
+          git add docs/index.html data/news_fingerprints.json docs/
           git diff --cached --quiet || git commit -m "chore: publish AI newspaper"
           git push
