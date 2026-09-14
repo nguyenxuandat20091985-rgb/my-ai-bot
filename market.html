@@ -7,6 +7,7 @@
 <title>DealHub — Chợ Deal Tổng Hợp</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,14 +67,17 @@
     <span class="absolute -inset-2 rounded-[28px] border-2 border-brand-200 border-t-brand-500 animate-spin"></span>
   </div>
   <p class="mt-6 font-extrabold text-xl tracking-tight text-slate-800">Deal<span class="text-brand-500">Hub</span></p>
-  <p class="mt-1 text-sm text-slate-400">Đang tải siêu deal...</p>
+  <p class="mt-1 text-sm text-slate-400">Đang tải siêu deal từ Supabase...</p>
 </div>
 
 <!-- 3. GIAO DIỆN CHÍNH -->
 <div id="screen-app" class="hidden min-h-screen bg-slate-100">
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/70">
-    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
       <h1 class="text-xl font-extrabold tracking-tight text-slate-800">Market <span class="text-brand-500">Deal</span></h1>
+      <div class="w-64 max-w-[50%]">
+        <input id="search-input" type="text" placeholder="Tìm kiếm deal..." class="w-full h-9 px-3 bg-slate-100 rounded-xl text-xs outline-none border border-slate-200 focus:border-brand-500">
+      </div>
     </div>
   </header>
   <main class="max-w-5xl mx-auto px-4 pt-4 pb-28 md:pb-10">
@@ -124,63 +128,60 @@
       <p class="mt-1 text-sm text-slate-400">Thử từ khoá khác hoặc chọn danh mục khác nhé!</p>
     </div>
 
-
     <section id="ai-deal" class="mt-10 overflow-hidden rounded-[36px] border border-slate-200 bg-white shadow-2xl">
-  <div class="relative overflow-hidden bg-slate-950 px-5 py-6 sm:px-8 sm:py-8 text-white">
-    <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-brand-500/25 blur-3xl"></div>
-    <div class="absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-accent-500/20 blur-3xl"></div>
-    <div class="relative flex items-center gap-4">
-      <div class="relative grid h-16 w-16 shrink-0 place-items-center rounded-[22px] bg-gradient-to-br from-brand-400 to-accent-500 shadow-lg shadow-brand-500/30">
-        <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
-        <span class="absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-slate-950 bg-emerald-400"></span>
-      </div>
-      <div class="min-w-0">
-        <div class="flex flex-wrap items-center gap-2">
-          <h3 class="text-2xl font-black tracking-tight sm:text-3xl">Market Deal AI</h3>
-          <span class="rounded-full border border-emerald-300/30 bg-emerald-400/15 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">Online</span>
-        </div>
-        <p class="mt-1 text-sm text-slate-300 sm:text-base">Trợ lý mua hàng thông minh · tìm đúng deal, đúng nhu cầu.</p>
-      </div>
-    </div>
-  </div>
-  <div class="bg-gradient-to-b from-slate-50 to-white p-4 sm:p-7">
-    <div class="mb-3 flex items-center justify-between px-1">
-      <span class="text-xs font-extrabold uppercase tracking-widest text-slate-400">Tư vấn mua hàng</span>
-      <span class="flex items-center gap-1.5 text-xs font-semibold text-slate-400"><i class="fa-solid fa-shield-halved text-emerald-500"></i>Không cần đăng nhập</span>
-    </div>
-    <div id="ai-chat" class="min-h-[180px] max-h-[430px] space-y-4 overflow-y-auto rounded-[28px] border border-slate-200 bg-white p-4 shadow-inner sm:p-5">
-      <div class="flex items-start gap-3">
-        <div class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-400 to-accent-500 text-white shadow-md"><i class="fa-solid fa-robot"></i></div>
-        <div class="max-w-[88%] rounded-2xl rounded-tl-md bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm">
-          <div class="mb-1 font-extrabold text-slate-900">Market Deal AI</div>
-          Chào anh 👋 Em có thể tìm deal theo <b>nhu cầu + ngân sách + ưu tiên</b>. Anh cứ nói tự nhiên nhé.
+      <div class="relative overflow-hidden bg-slate-950 px-5 py-6 sm:px-8 sm:py-8 text-white">
+        <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-brand-500/25 blur-3xl"></div>
+        <div class="absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-accent-500/20 blur-3xl"></div>
+        <div class="relative flex items-center gap-4">
+          <div class="relative grid h-16 w-16 shrink-0 place-items-center rounded-[22px] bg-gradient-to-br from-brand-400 to-accent-500 shadow-lg shadow-brand-500/30">
+            <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
+            <span class="absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-slate-950 bg-emerald-400"></span>
+          </div>
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-2xl font-black tracking-tight sm:text-3xl">Market Deal AI</h3>
+              <span class="rounded-full border border-emerald-300/30 bg-emerald-400/15 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">Online</span>
+            </div>
+            <p class="mt-1 text-sm text-slate-300 sm:text-base">Trợ lý mua hàng thông minh · tìm đúng deal, đúng nhu cầu.</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mt-4 rounded-[26px] border border-slate-200 bg-white p-2 shadow-lg shadow-slate-200/60">
-      <div class="flex items-center gap-2">
-        <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-500"><i class="fa-solid fa-message"></i></div>
-        <input id="ai-input" type="text" placeholder="Ví dụ: đồ hữu ích cho tài xế dưới 500k..." class="h-12 min-w-0 flex-1 bg-transparent px-1 text-[15px] outline-none placeholder:text-slate-400">
-        <button id="ai-ask" aria-label="Gửi câu hỏi" class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-md transition hover:scale-105 active:scale-95"><i class="fa-solid fa-arrow-up"></i></button>
+      <div class="bg-gradient-to-b from-slate-50 to-white p-4 sm:p-7">
+        <div class="mb-3 flex items-center justify-between px-1">
+          <span class="text-xs font-extrabold uppercase tracking-widest text-slate-400">Tư vấn mua hàng</span>
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-slate-400"><i class="fa-solid fa-shield-halved text-emerald-500"></i>Không cần đăng nhập</span>
+        </div>
+        <div id="ai-chat" class="min-h-[180px] max-h-[430px] space-y-4 overflow-y-auto rounded-[28px] border border-slate-200 bg-white p-4 shadow-inner sm:p-5">
+          <div class="flex items-start gap-3">
+            <div class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-400 to-accent-500 text-white shadow-md"><i class="fa-solid fa-robot"></i></div>
+            <div class="max-w-[88%] rounded-2xl rounded-tl-md bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm">
+              <div class="mb-1 font-extrabold text-slate-900">Market Deal AI</div>
+              Chào anh 👋 Em có thể tìm deal theo <b>nhu cầu + ngân sách + ưu tiên</b> từ cơ sở dữ liệu Supabase. Anh cứ nói tự nhiên nhé.
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 rounded-[26px] border border-slate-200 bg-white p-2 shadow-lg shadow-slate-200/60">
+          <div class="flex items-center gap-2">
+            <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-500"><i class="fa-solid fa-message"></i></div>
+            <input id="ai-input" type="text" placeholder="Ví dụ: đồ hữu ích cho tài xế dưới 500k..." class="h-12 min-w-0 flex-1 bg-transparent px-1 text-[15px] outline-none placeholder:text-slate-400">
+            <button id="ai-ask" aria-label="Gửi câu hỏi" class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-md transition hover:scale-105 active:scale-95"><i class="fa-solid fa-arrow-up"></i></button>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="mb-2 px-1 text-xs font-bold text-slate-400">Gợi ý cho anh</div>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="đồ hữu ích cho tài xế dưới 500000"><span class="text-lg">🚕</span><span class="ml-1 text-xs font-extrabold text-slate-700">Cho tài xế</span></button>
+            <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="điện tử tốt giá hợp lý"><span class="text-lg">📱</span><span class="ml-1 text-xs font-extrabold text-slate-700">Điện tử</span></button>
+            <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="đồ gia dụng cho gia đình"><span class="text-lg">🏠</span><span class="ml-1 text-xs font-extrabold text-slate-700">Gia đình</span></button>
+            <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="deal tiết kiệm đáng mua"><span class="text-lg">🔥</span><span class="ml-1 text-xs font-extrabold text-slate-700">Tiết kiệm</span></button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="mt-4">
-      <div class="mb-2 px-1 text-xs font-bold text-slate-400">Gợi ý cho anh</div>
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="đồ hữu ích cho tài xế dưới 500000"><span class="text-lg">🚕</span><span class="ml-1 text-xs font-extrabold text-slate-700">Cho tài xế</span></button>
-        <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="điện tử tốt giá hợp lý"><span class="text-lg">📱</span><span class="ml-1 text-xs font-extrabold text-slate-700">Điện tử</span></button>
-        <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="đồ gia dụng cho gia đình"><span class="text-lg">🏠</span><span class="ml-1 text-xs font-extrabold text-slate-700">Gia đình</span></button>
-        <button type="button" class="ai-suggestion group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300" data-query="deal tiết kiệm đáng mua"><span class="text-lg">🔥</span><span class="ml-1 text-xs font-extrabold text-slate-700">Tiết kiệm</span></button>
-      </div>
-    </div>
-    <div id="ai-result" class="hidden mt-4 rounded-3xl bg-slate-900 p-5 text-white text-sm leading-relaxed shadow-xl"></div>
-  </div>
-</section>
-
+    </section>
   </main>
 
   <footer class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
-    <p class="font-semibold text-slate-500">DealHub — Chợ Deal</p>
+    <p class="font-semibold text-slate-500">DealHub — Chợ Deal (Supabase Connected)</p>
     <p class="mt-1">Mua sắm thông minh • Không cần tài khoản</p>
   </footer>
 </div>
@@ -192,256 +193,204 @@
 </div>
 
 <script>
+  // Cấu hình kết nối Supabase của anh
+  const SUPABASE_URL = 'https://pkyaoclgzyejlfozkbiw.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_uR0WKMOakw9L2G...'; // Anh thay key đầy đủ vào đây nhé
+  
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const DEALS = [
-  {id:1,title:"Nồi Chiên Không Dầu",audience:"gia đình thích nấu ăn",highlights:"chiên nướng tiện lợi, phù hợp bếp gia đình",cat:"Gia dụng",price:null,old:null,emo:"🍳",hot:true,sold:0,rating:null,img:"https://product.hstatic.net/200000700229/product/5880-01_2bba5e093cd14c0bb2722f083918ab87_master.png",link:"https://shorten.asia/epmrd8Bx"},
-  {id:2,title:"Máy Ép Hoa Quả",audience:"gia đình thích làm nước ép tại nhà",highlights:"ép nhiều loại rau củ quả, công suất mạnh, dễ tháo lắp, vệ sinh nhanh",cat:"Gia dụng",price:null,old:null,emo:"🍹",hot:true,sold:0,rating:null,img:"https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/KNMS/thiet-ke-sang-trong%281%29.jpg",link:"https://shorten.asia/wkSRMcmS"},
-  {id:3,title:"Mở Tài Khoản MB Bank",audience:"người cần tài khoản ngân hàng",highlights:"đăng ký tài khoản ngân hàng thuận tiện",cat:"Tài chính",price:null,old:null,emo:"🏦",hot:false,sold:0,rating:null,img:"https://media.thuonghieucongluan.vn/uploads/2020/08/19/mb-dinh-danh-truc-tuyen-1597805390.jpg",link:"https://shorten.asia/UngWPa85"},
-  {id:4,title:"Máy Ép Đa Năng",audience:"gia đình thích làm nước ép tại nhà",highlights:"ép nhiều loại rau củ quả, công suất mạnh, dễ tháo lắp, vệ sinh nhanh",cat:"Gia dụng",price:null,old:null,emo:"🥤",hot:true,sold:0,rating:null,img:"https://bizweb.dktcdn.net/thumb/1024x1024/100/192/001/products/gl-8002.jpg?v=1749798952357",link:"https://shorten.asia/Ru9YGqZ6"},
-  {id:5,title:"Bơm Ô Tô Xe Máy",audience:"tài xế, người đi xe máy thường xuyên",highlights:"bơm nhanh, dùng pin hoặc điện 12V, màn hình hiện áp suất, gọn nhẹ",cat:"Phụ kiện xe",price:null,old:null,emo:"🚗",hot:false,sold:0,rating:null,img:"https://down-my.img.susercontent.com/file/sg-11134202-7rdy0-lygc513oarye06",link:"https://shorten.asia/UH5cYcwc"},
-  {id:6,title:"Máy Tính Bền",audience:"học sinh sinh viên, nhân viên văn phòng",highlights:"cấu hình ổn định, dùng lâu, phù hợp học tập văn phòng",cat:"Điện tử",price:null,old:null,emo:"💻",hot:true,sold:0,rating:null,img:"https://cdn2.fptshop.com.vn/unsafe/800x0/danh_gia_dell_pro_15_essential_pv15250_4_46aa2cd9ff.png",link:"https://shorten.asia/uvMfrBGM"},
-  {id:7,title:"Vay Siêu Tốc",audience:"người cần vốn gấp, hộ kinh doanh nhỏ",highlights:"duyệt nhanh, giải ngân nhanh, thủ tục đơn giản",cat:"Tài chính",price:null,old:null,emo:"💳",hot:false,sold:0,rating:null,img:"https://static.fastmoneyevnfc.com/img.profile/0/0/0/-1745461661.jpg",link:"https://shorten.asia/261nhWpK"},
-  {id:8,title:"Nước Khử Mùi",audience:"gia đình, người quan tâm không gian sạch",highlights:"khử mùi hiệu quả, an toàn, dùng cho tủ lạnh phòng tắm",cat:"Gia dụng",price:null,old:null,emo:"🧴",hot:false,sold:0,rating:null,img:"https://product.hstatic.net/200000267673/product/hop-khu-mui-tu-lanh-renewll-6_dbf2517a003646bdbbe12a8ce03a7a3d.jpg",link:"https://shorten.asia/Tc8MAZnS"},
-  {id:9,title:"Kem Đánh Răng",audience:"cả gia đình",highlights:"bảo vệ răng miệng, hơi thở thơm, dùng hàng ngày",cat:"Làm đẹp",price:null,old:null,emo:"🪥",hot:false,sold:0,rating:null,img:"https://image.hsv-tech.io/1987x0/bbx/ps-toothpaste-123-green-tea_1479ec0db06c43629f28628d968f4771.jpg",link:"https://shorten.asia/eZqcGeTc"},
-  {id:10,title:"Viên Tinh Bột Nghệ Mật Ong",audience:"người quan tâm sức khỏe, làm đẹp",highlights:"hỗ trợ tiêu hóa, đẹp da, tiện dùng hàng ngày",cat:"Sức khỏe",price:null,old:null,emo:"🍯",hot:false,sold:0,rating:null,img:"https://imgcdn.thitruongsi.com/tts/rs%3Afill%3A400%3A400%3A1%3A1/g%3Ace/plain/file%3A/product/2019/09/02/b75cab20-cd67-11e9-941e-772b2616df23.jpg",link:"https://shorten.asia/nsgTXs8M"},
-  {id:11,title:"Cafe Hòa Tan",audience:"nhân viên văn phòng, người bận rộn",highlights:"tiện lợi, hương vị đậm đà, pha nhanh",cat:"Đồ ăn",price:null,old:null,emo:"☕",hot:false,sold:0,rating:null,img:"https://down-tw.img.susercontent.com/file/tw-11134207-7r98o-ll1wzi9tctyx80",link:"https://shorten.asia/8WStEGpF"},
-  {id:12,title:"Bột Protein Thực Vật",audience:"người tập gym, ăn chay, quan tâm dinh dưỡng",highlights:"bổ sung đạm thực vật, hỗ trợ tập luyện, dễ hấp thu",cat:"Sức khỏe",price:null,old:null,emo:"🥤",hot:true,sold:0,rating:null,img:"https://vn-live-01.slatic.net/p/c5e07d2352931fd23e0770b1c1b43768.jpg",link:"https://shorten.asia/yTGusxpS"},
-  {id:13,title:"Xịt Dưỡng Tóc Tinh Dầu",audience:"chị em chăm sóc tóc",highlights:"dưỡng tóc mềm mượt, giảm xơ rối, hương tinh dầu",cat:"Làm đẹp",price:null,old:null,emo:"💇",hot:false,sold:0,rating:null,img:"https://file.hstatic.net/200000657283/article/58_3dfbab9ea83e4720adc34329ae288a72.png",link:"https://shorten.asia/9MYJTU55"},
-  {id:14,title:"Gối Đầu Công Thái Học",audience:"người làm việc văn phòng, cần hỗ trợ tư thế",highlights:"thiết kế công thái học, hỗ trợ tư thế nghỉ ngơi",cat:"Gia dụng",price:null,old:null,emo:"🛏️",hot:false,sold:0,rating:null,img:"https://salt.tikicdn.com/ts/product/0a/20/9d/4c683a936e262b8802cc3b0fe9790db3.jpg",link:"https://shorten.asia/J5sZMPty"},
-  {id:15,title:"Điện Thoại iPhone 17",audience:"người dùng cần smartphone cao cấp",highlights:"thiết kế hiện đại, hiệu năng mạnh, phù hợp nhu cầu công nghệ",cat:"Điện tử",price:null,old:null,emo:"📱",hot:true,sold:0,rating:null,img:"https://home.abenson.com/media/catalog/product/o/_/o_199419_2025.jpg",link:"https://shorten.asia/bRBAyMNe"},
-  {id:16,title:"Điện Thoại Samsung S25 Ultra 5G",audience:"người dùng Android cao cấp",highlights:"màn hình lớn, camera zoom mạnh, pin trâu, 5G",cat:"Điện tử",price:null,old:null,emo:"📱",hot:true,sold:0,rating:null,img:"https://www.wilsoncomm.com.hk/image/cache/catalog/product-3276/64a6cee4929226d559782c7d55e9c0c8-850x850.jpg",link:"https://shorten.asia/KYb2FZeR"},
-  {id:17,title:"Trà Sữa Matcha",audience:"giới trẻ, fan đồ uống",highlights:"vị matcha thơm, tiện pha, thưởng thức tại nhà",cat:"Đồ ăn",price:null,old:null,emo:"🧋",hot:false,sold:0,rating:null,img:"https://bizweb.dktcdn.net/100/237/115/products/match-latte.png?v=1504678996467",link:"https://shorten.asia/FvUQRUXP"},
-  {id:18,title:"Chảo Nấu Ăn Bằng Thép",audience:"mẹ nội trợ, người thích nấu ăn",highlights:"bền, chịu nhiệt tốt, phù hợp bếp gia đình",cat:"Gia dụng",price:null,old:null,emo:"🍳",hot:false,sold:0,rating:null,img:"https://images.thdstatic.com/productImages/abdd040c5aed4738b1c8008bc4720305/svn/silver-woks-er9p063-64_1000.jpg",link:"https://shorten.asia/zy5pcNqb"},
-  {id:19,title:"Flycam GT50",audience:"người thích công nghệ, quay clip",highlights:"bay ổn định, camera rõ, phù hợp giải trí",cat:"Điện tử",price:null,old:null,emo:"🚁",hot:true,sold:0,rating:null,img:"https://s.alicdn.com/%40sc04/kf/Hb86ff46c6ebc4c94abcefd6e26c7fec9P.jpg",link:"https://s.shopee.vn/2gAMdhIbRj"},
-  {id:20,title:"Flycam E88 Cho Người Mới",audience:"người mới chơi flycam",highlights:"dễ bay, giá mềm, phù hợp người mới bắt đầu",cat:"Điện tử",price:null,old:null,emo:"🚁",hot:false,sold:0,rating:null,img:"https://img.joomcdn.net/6950d6f31307d6cfec2eb630e0661e5175b7597c_original.jpeg",link:"https://shorten.asia/BXXFHZ5S"},
-  {id:21,title:"Tinh Dầu Treo Xe Ô Tô",audience:"tài xế, chủ xe hơi",highlights:"thơm xe, khử mùi, treo tiện lợi",cat:"Phụ kiện xe",price:null,old:null,emo:"🚘",hot:false,sold:0,rating:null,img:"https://chus.vn/images/detailed/221/10558_06_F1.jpg",link:"https://shorten.asia/Ytn73XpA"},
-  {id:22,title:"Camera IMOU Độ Phân Giải Cao",audience:"gia đình cần giám sát nhà cửa",highlights:"camera độ phân giải cao, phù hợp quan sát trong nhà",cat:"Điện tử",price:null,old:null,emo:"📷",hot:true,sold:0,rating:null,img:"https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mghfaucz1atnee",link:"https://shorten.asia/GFG9GggH"},
-  {id:23,title:"Đèn Năng Lượng Mặt Trời",audience:"gia đình, sân vườn",highlights:"chiếu sáng tiện lợi, phù hợp khu vực ngoài trời",cat:"Nhà cửa",price:null,old:null,emo:"☀️",hot:false,sold:0,rating:null,img:"https://lumazlife.com/cdn/shop/files/4pcs-outdoor-solar-landscape-pathway-lights-with-motion-sens-m46-14.webp?v=1759837004&width=600",link:"https://shorten.asia/S5rNJSME"},
-  {id:24,title:"Đèn Năng Lượng Mặt Trời Solar Light",audience:"gia đình cần chiếu sáng ngoài trời",highlights:"giải pháp chiếu sáng năng lượng mặt trời tiện lợi",cat:"Nhà cửa",price:null,old:null,emo:"💡",hot:false,sold:0,rating:null,img:"https://kingeco.vn/data/Product/F6D91848-E2F9-4B98-B3C1-32AFE49A17D5/den-pha-nang-luong-mat-troi-30w.jpg",link:"https://shorten.asia/tVkhNDYe"},
-  {id:25,title:"Ổ Khóa Vân Tay",audience:"gia đình, người cần bảo vệ tài sản",highlights:"mở khóa bằng vân tay, tiện lợi và nhanh",cat:"Nhà cửa",price:null,old:null,emo:"🔐",hot:true,sold:0,rating:null,img:"https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmd1tcytnw8x13",link:"https://shorten.asia/H46vVu4a"},
-  {id:26,title:"Đèn Pin Siêu Sáng 300M",audience:"đi phượt, sửa chữa, mất điện",highlights:"chiếu xa 300m, pin khỏe, dùng dã ngoại",cat:"Thể thao",price:null,old:null,emo:"🔦",hot:false,sold:0,rating:null,img:"https://litb-cgis.rightinthebox.com/images/500x500/202209/bps/product/inc/qzpjfj1663826923960.jpg",link:"https://shorten.asia/AhVdZdbm"},
-  {id:27,title:"Lồng Bàn Thép Đựng Thức Ăn",audience:"gia đình, quán ăn nhỏ",highlights:"chống ruồi kiến, thép bền, giữ thức ăn sạch",cat:"Gia dụng",price:null,old:null,emo:"🍱",hot:false,sold:0,rating:null,img:"https://sieuthiem.com/cdn/shop/files/495375515_1278529400947983_288794707920037534_n.jpg?v=1746950394",link:"https://shorten.asia/RTwthgBH"},
-  {id:28,title:"Áo Điều Hòa Nhật Bản",audience:"công nhân, shipper, làm đồng",highlights:"mát khi làm việc ngoài trời, pin quạt tích hợp",cat:"Thời trang",price:null,old:null,emo:"🦺",hot:true,sold:0,rating:null,img:"https://thumbnail.image.rakuten.co.jp/%400_mall/pc2b/cabinet/11986583/ek3731t_01c.jpg",link:"https://shorten.asia/DE3JcS9H"},
-  {id:29,title:"Ghế Học Sinh Chống Gù Lưng",audience:"phụ huynh có con học sinh",highlights:"chống gù, điều chỉnh độ cao, bảo vệ cột sống",cat:"Mẹ & Bé",price:null,old:null,emo:"🪑",hot:false,sold:0,rating:null,img:"https://duongkhi.vn/Uploads/images/products/B%C3%A0n%20h%E1%BB%8Dc%20ch%E1%BB%91ng%20g%C3%B9/DK03/ghe-hoc-chong-gu-dk03-duongkhi_vn-18.jpg",link:"https://shorten.asia/2UwF23Hj"},
-  {id:30,title:"Máy Lọc Khử Mùi Bếp",audience:"gia đình nấu ăn nhiều",highlights:"khử mùi nấu nướng, không khí bếp sạch hơn",cat:"Gia dụng",price:null,old:null,emo:"🌬️",hot:false,sold:0,rating:null,img:"https://cdnv2.tgdd.vn/mwg-static/common/Product/4645/340247/340247-200x200.jpg",link:"https://shorten.asia/SmQk81A2"},
-  {id:31,title:"Máy Rửa Xe Kinh Tế",audience:"chủ xe máy, ô tô",highlights:"áp lực mạnh, tiết kiệm nước, rửa xe tại nhà",cat:"Phụ kiện xe",price:null,old:null,emo:"🚿",hot:false,sold:0,rating:null,img:"https://fujihomevn.com/image/catalog/san-pham/may-rua-xe/pw02a/5.jpg",link:"https://shorten.asia/tPs5dMPH"},
-  {id:32,title:"Máy Làm Đá Mini",audience:"gia đình, quán nước",highlights:"làm đá nhanh, gọn, dùng gia đình quán nhỏ",cat:"Gia dụng",price:null,old:null,emo:"🧊",hot:true,sold:0,rating:null,img:"https://meta.vn/Data/Image/2025/07/12/may-lam-da-vien-mini-fujihome-im1218-1.jpg",link:"https://shorten.asia/1vh3TYA4"},
-  {id:33,title:"Robot Lau Nhà Tự Lập Trình",audience:"gia đình bận rộn",highlights:"tự động lau hút, lập trình giờ, tiết kiệm công sức",cat:"Nhà cửa",price:null,old:null,emo:"🤖",hot:true,sold:0,rating:null,img:"https://media.loveitopcdn.com/41230/kcfinder/upload/images/robot-hut-bui-lau-va-nha-rapido-r8s.jpg",link:"https://shorten.asia/72Md8Cx2"},
-  {id:34,title:"Ghế Mây Thư Giãn",audience:"gia đình, quán cafe",highlights:"ngồi êm, phong cách, trang trí ban công phòng khách",cat:"Nhà cửa",price:null,old:null,emo:"🪑",hot:false,sold:0,rating:null,img:"https://dantra.vn/uploads/san-pham/bap_benh/ghe-may-bap-benh-truyen-thong-song-may-tre/ghe-may-bap-benh-thu-gian-ban-cong-12.jpg",link:"https://shorten.asia/HYWPvYKK"},
-  {id:35,title:"Túi Du Lịch Cỡ Đại",audience:"người đi du lịch, công tác",highlights:"dung tích lớn, chắc chắn, đi xa nhiều ngày",cat:"Thời trang",price:null,old:null,emo:"🧳",hot:false,sold:0,rating:null,img:"https://hidola.com/upload/sanpham/68187345.jpg",link:"https://shorten.asia/3RPgCddf"},
-  {id:36,title:"Bộ Bàn Ăn Cao Cấp",audience:"gia đình, nhà mới",highlights:"thiết kế đẹp, bền, nâng cấp không gian bếp",cat:"Nhà cửa",price:null,old:null,emo:"🍽️",hot:false,sold:0,rating:null,img:"https://cdn.hstatic.net/products/200000860493/bo-ban-an-hak37-mat-da-inox-ghe-an-rex-hag16-laviehome_15f2a1f07630411f8bbae857b6de6efd.jpg",link:"https://shorten.asia/1b4ZHDsC"}
-];
+  let DEALS = [];
 
-const CATEGORIES = [
-  {key:"all",label:"Tất cả",icon:"fa-solid fa-border-all"},
-  {key:"Điện tử",label:"Điện tử",icon:"fa-solid fa-mobile-screen"},
-  {key:"Gia dụng",label:"Gia dụng",icon:"fa-solid fa-blender"},
-  {key:"Thời trang",label:"Thời trang",icon:"fa-solid fa-shirt"},
-  {key:"Làm đẹp",label:"Làm đẹp",icon:"fa-solid fa-spray-can-sparkles"},
-  {key:"Nhà cửa",label:"Nhà cửa",icon:"fa-solid fa-house"},
-  {key:"Phụ kiện xe",label:"Phụ kiện xe",icon:"fa-solid fa-car"},
-  {key:"Mẹ & Bé",label:"Mẹ & Bé",icon:"fa-solid fa-baby"},
-  {key:"Sức khỏe",label:"Sức khỏe",icon:"fa-solid fa-heart-pulse"},
-  {key:"Đồ ăn",label:"Đồ ăn",icon:"fa-solid fa-utensils"},
-  {key:"Thể thao",label:"Thể thao",icon:"fa-solid fa-futbol"},
-  {key:"Tài chính",label:"Tài chính",icon:"fa-solid fa-wallet"}
-];
+  const CATEGORIES = [
+    {key:"all",label:"Tất cả",icon:"fa-solid fa-border-all"},
+    {key:"Điện tử",label:"Điện tử",icon:"fa-solid fa-mobile-screen"},
+    {key:"Gia dụng",label:"Gia dụng",icon:"fa-solid fa-blender"},
+    {key:"Thời trang",label:"Thời trang",icon:"fa-solid fa-shirt"},
+    {key:"Làm đẹp",label:"Làm đẹp",icon:"fa-solid fa-spray-can-sparkles"},
+    {key:"Nhà cửa",label:"Nhà cửa",icon:"fa-solid fa-house"},
+    {key:"Phụ kiện xe",label:"Phụ kiện xe",icon:"fa-solid fa-car"},
+    {key:"Mẹ & Bé",label:"Mẹ & Bé",icon:"fa-solid fa-baby"},
+    {key:"Sức khỏe",label:"Sức khỏe",icon:"fa-solid fa-heart-pulse"},
+    {key:"Đồ ăn",label:"Đồ ăn",icon:"fa-solid fa-utensils"},
+    {key:"Thể thao",label:"Thể thao",icon:"fa-solid fa-futbol"},
+    {key:"Tài chính",label:"Tài chính",icon:"fa-solid fa-wallet"}
+  ];
 
-const state = { user: null, category: "all", keyword: "", isDemo: false };
-const $ = (sel) => document.querySelector(sel);
-const vnd = (n) => n == null ? "Xem giá" : new Intl.NumberFormat("vi-VN").format(n) + "đ";
-const discountPct = (oldPrice, price) => oldPrice && price ? Math.round((1 - price / oldPrice) * 100) : 0;
+  const state = { category: "all", keyword: "" };
+  const $ = (sel) => document.querySelector(sel);
+  const vnd = (n) => n == null ? "Xem giá" : new Intl.NumberFormat("vi-VN").format(n) + "đ";
+  const discountPct = (oldPrice, price) => oldPrice && price ? Math.round((1 - price / oldPrice) * 100) : 0;
 
-let toastTimer = null;
-function showToast(message, icon = "fa-circle-check") {
-  const el = $("#toast");
-  el.innerHTML = `<i class="fa-solid ${icon} mr-2 text-brand-400"></i> ${message}`;
-  el.classList.remove("hidden");
-  el.style.animation = "none";
-  void el.offsetWidth;
-  el.style.animation = "";
-  el.classList.add("animate-toast-in");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.add("hidden"), 2600);
-}
-
-function showScreen(name) {
-  $("#screen-loading").classList.toggle("hidden", name !== "loading");
-  $("#screen-app").classList.toggle("hidden", name !== "app");
-  window.scrollTo({ top: 0 });
-}
-
-function makeLetterAvatar(name) {
-  const letter = (name || "U").trim().charAt(0).toUpperCase();
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">
-    <rect width="80" height="80" rx="40" fill="#ee4d2d"/>
-    <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
-          font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#ffffff">${letter}</text>
-  </svg>`;
-  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-}
-
-function renderCategories() {
-  const bar = $("#category-bar");
-  bar.innerHTML = CATEGORIES.map((c) => {
-    const active = state.category === c.key;
-    return `
-      <button data-cat="${c.key}"
-        class="shrink-0 h-9 px-4 rounded-full text-[13px] font-semibold whitespace-nowrap
-               flex items-center gap-1.5 transition active:scale-95
-               ${active
-                 ? "bg-brand-500 text-white shadow-md shadow-brand-500/30"
-                 : "bg-white text-slate-600 border border-slate-200 hover:border-brand-300 hover:text-brand-500"}">
-        <i class="${c.icon} text-[11px]"></i>
-        ${c.label}
-      </button>`;
-  }).join("");
-  bar.querySelectorAll("[data-cat]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      state.category = btn.dataset.cat;
-      renderCategories();
-      renderDeals();
-    });
-  });
-}
-
-function renderDeals() {
-  const grid       = $("#deal-grid");
-  const emptyState = $("#empty-state");
-  const countEl    = $("#result-count");
-  const titleEl    = $("#feed-title");
-  const kw = state.keyword.trim().toLowerCase();
-  const list = DEALS.filter((d) => {
-    const okCat = state.category === "all" || d.cat === state.category;
-    const okKw  = !kw || d.title.toLowerCase().includes(kw) || d.cat.toLowerCase().includes(kw);
-    return okCat && okKw;
-  });
-  titleEl.textContent = state.category === "all" ? "Deal hot hôm nay" : `Danh mục: ${state.category}`;
-  countEl.textContent = `${list.length} deal`;
-  if (list.length === 0) {
-    grid.innerHTML = "";
-    emptyState.classList.remove("hidden");
-    return;
+  let toastTimer = null;
+  function showToast(message, icon = "fa-circle-check") {
+    const el = $("#toast");
+    el.innerHTML = `<i class="fa-solid ${icon} mr-2 text-brand-400"></i> ${message}`;
+    el.classList.remove("hidden");
+    el.style.animation = "none";
+    void el.offsetWidth;
+    el.style.animation = "";
+    el.classList.add("animate-toast-in");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.add("hidden"), 2600);
   }
-  emptyState.classList.add("hidden");
-  grid.innerHTML = list.map((d, index) => {
-    const pct = discountPct(d.old, d.price);
-    return `
-    <article class="animate-fade-up group bg-white rounded-2xl overflow-hidden
-                    shadow-sm hover:shadow-xl hover:-translate-y-1
-                    transition-all duration-300 flex flex-col"
-             style="animation-delay:${Math.min(index * 35, 350)}ms">
-      <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
-        <span class="absolute inset-0 grid place-items-center text-5xl">${d.emo}</span>
-        <img src="${d.img}" alt="${d.title}" loading="lazy"
-             onerror="this.remove()"
-             class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-        ${pct ? `<span class="absolute top-2 left-2 bg-brand-500 text-white text-[11px] font-extrabold px-2 py-1 rounded-lg shadow-md leading-none">-${pct}%</span>` : ""}
-        ${d.hot ? `<span class="absolute top-2 right-2 bg-gradient-to-r from-accent-500 to-brand-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg flex items-center gap-1 shadow-md animate-pulse-soft leading-none"><i class="fa-solid fa-fire"></i>HOT</span>` : ``}
-      </div>
-      <div class="p-2.5 flex flex-col flex-1">
-        <h4 class="text-[13px] font-semibold text-slate-700 leading-snug line-clamp-2 min-h-[34px]">${d.title}</h4>
-        <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
-          <span class="text-brand-500 font-extrabold text-[15px] leading-none">${vnd(d.price)}</span>
-          ${d.old ? `<span class="text-slate-400 text-[11px] line-through leading-none">${vnd(d.old)}</span>` : ""}
-        </div>
-        <div class="mt-1.5 flex items-center gap-2 text-[10.5px] text-slate-400">
-          ${d.rating ? `<span class="flex items-center gap-0.5 text-accent-500 font-semibold"><i class="fa-solid fa-star text-[9px]"></i>${d.rating}</span>` : ""}
-          <span class="w-px h-2.5 bg-slate-200"></span>
-          <span>Đã bán ${d.sold >= 1000 ? (d.sold / 1000).toFixed(1) + "k" : d.sold}</span>
-        </div>
-        <a href="${d.link}" target="_blank" rel="noopener sponsored"
-           class="mt-2.5 h-9 rounded-xl bg-brand-50 hover:bg-brand-500 text-brand-600 hover:text-white
-                  font-bold text-[12.5px] flex items-center justify-center gap-1.5 active:scale-95 transition-all duration-200">
-          <i class="fa-solid fa-bolt text-[11px]"></i> Săn Deal Ngay
-        </a>
-      </div>
-    </article>`;
-  }).join("");
-}
 
-let countdownInterval = null;
-function startCountdown() {
-  if (countdownInterval) clearInterval(countdownInterval);
-  const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999);
-  const pad = (n) => String(n).padStart(2, "0");
-  const tick = () => {
-    const diff = endOfDay - new Date();
-    if (diff <= 0) {
-      clearInterval(countdownInterval);
-      $("#cd-h").textContent = $("#cd-m").textContent = $("#cd-s").textContent = "00";
+  function showScreen(name) {
+    $("#screen-loading").classList.toggle("hidden", name !== "loading");
+    $("#screen-app").classList.toggle("hidden", name !== "app");
+    window.scrollTo({ top: 0 });
+  }
+
+  function renderCategories() {
+    const bar = $("#category-bar");
+    bar.innerHTML = CATEGORIES.map((c) => {
+      const active = state.category === c.key;
+      return `
+        <button data-cat="${c.key}"
+          class="shrink-0 h-9 px-4 rounded-full text-[13px] font-semibold whitespace-nowrap
+                 flex items-center gap-1.5 transition active:scale-95
+                 ${active
+                   ? "bg-brand-500 text-white shadow-md shadow-brand-500/30"
+                   : "bg-white text-slate-600 border border-slate-200 hover:border-brand-300 hover:text-brand-500"}">
+          <i class="${c.icon} text-[11px]"></i>
+          ${c.label}
+        </button>`;
+    }).join("");
+    bar.querySelectorAll("[data-cat]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.category = btn.dataset.cat;
+        renderCategories();
+        renderDeals();
+      });
+    });
+  }
+
+  function renderDeals() {
+    const grid       = $("#deal-grid");
+    const emptyState = $("#empty-state");
+    const countEl    = $("#result-count");
+    const titleEl    = $("#feed-title");
+    const kw = state.keyword.trim().toLowerCase();
+    
+    const list = DEALS.filter((d) => {
+      const okCat = state.category === "all" || d.cat === state.category;
+      const okKw  = !kw || (d.title && d.title.toLowerCase().includes(kw)) || (d.cat && d.cat.toLowerCase().includes(kw));
+      return okCat && okKw;
+    });
+
+    titleEl.textContent = state.category === "all" ? "Deal hot hôm nay" : `Danh mục: ${state.category}`;
+    countEl.textContent = `${list.length} deal`;
+    
+    if (list.length === 0) {
+      grid.innerHTML = "";
+      emptyState.classList.remove("hidden");
       return;
     }
-    const h = Math.floor(diff / 3_600_000);
-    const m = Math.floor((diff % 3_600_000) / 60_000);
-    const s = Math.floor((diff % 60_000) / 1000);
-    $("#cd-h").textContent = pad(h);
-    $("#cd-m").textContent = pad(m);
-    $("#cd-s").textContent = pad(s);
-  };
-  tick();
-  countdownInterval = setInterval(tick, 1000);
-}
+    
+    emptyState.classList.add("hidden");
+    grid.innerHTML = list.map((d, index) => {
+      const pct = discountPct(d.old, d.price);
+      return `
+      <article class="animate-fade-up group bg-white rounded-2xl overflow-hidden
+                      shadow-sm hover:shadow-xl hover:-translate-y-1
+                      transition-all duration-300 flex flex-col"
+               style="animation-delay:${Math.min(index * 35, 350)}ms">
+        <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
+          <span class="absolute inset-0 grid place-items-center text-5xl">${d.emo || '📦'}</span>
+          <img src="${d.img}" alt="${d.title}" loading="lazy"
+               onerror="this.remove()"
+               class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          ${pct ? `<span class="absolute top-2 left-2 bg-brand-500 text-white text-[11px] font-extrabold px-2 py-1 rounded-lg shadow-md leading-none">-${pct}%</span>` : ""}
+          ${d.hot ? `<span class="absolute top-2 right-2 bg-gradient-to-r from-accent-500 to-brand-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg flex items-center gap-1 shadow-md animate-pulse-soft leading-none"><i class="fa-solid fa-fire"></i>HOT</span>` : ``}
+        </div>
+        <div class="p-2.5 flex flex-col flex-1">
+          <h4 class="text-[13px] font-semibold text-slate-700 leading-snug line-clamp-2 min-h-[34px]">${d.title}</h4>
+          <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
+            <span class="text-brand-500 font-extrabold text-[15px] leading-none">${vnd(d.price)}</span>
+            ${d.old ? `<span class="text-slate-400 text-[11px] line-through leading-none">${vnd(d.old)}</span>` : ""}
+          </div>
+          <div class="mt-1.5 flex items-center gap-2 text-[10.5px] text-slate-400">
+            ${d.rating ? `<span class="flex items-center gap-0.5 text-accent-500 font-semibold"><i class="fa-solid fa-star text-[9px]"></i>${d.rating}</span>` : ""}
+            <span class="w-px h-2.5 bg-slate-200"></span>
+            <span>Đã bán ${d.sold >= 1000 ? (d.sold / 1000).toFixed(1) + "k" : (d.sold || 0)}</span>
+          </div>
+          <a href="${d.link}" target="_blank" rel="noopener sponsored"
+             class="mt-2.5 h-9 rounded-xl bg-brand-50 hover:bg-brand-500 text-brand-600 hover:text-white
+                    font-bold text-[12.5px] flex items-center justify-center gap-1.5 active:scale-95 transition-all duration-200">
+            <i class="fa-solid fa-bolt text-[11px]"></i> Săn Deal Ngay
+          </a>
+        </div>
+      </article>`;
+    }).join("");
+  }
 
-function bindEvents() {
-  let searchTimer = null;
-  $("#search-input").addEventListener("input", (e) => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-      state.keyword = e.target.value;
-      renderDeals();
-    }, 180);
-  });
-  document.querySelectorAll("[data-soon]").forEach((btn) => {
-    btn.addEventListener("click", () => showToast("Tính năng đang được phát triển 🚧", "fa-screwdriver-wrench"));
-  });
-}
+  let countdownInterval = null;
+  function startCountdown() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+    const pad = (n) => String(n).padStart(2, "0");
+    const tick = () => {
+      const diff = endOfDay - new Date();
+      if (diff <= 0) {
+        clearInterval(countdownInterval);
+        $("#cd-h").textContent = $("#cd-m").textContent = $("#cd-s").textContent = "00";
+        return;
+      }
+      const h = Math.floor(diff / 3_600_000);
+      const m = Math.floor((diff % 3_600_000) / 60_000);
+      const s = Math.floor((diff % 60_000) / 1000);
+      $("#cd-h").textContent = pad(h);
+      $("#cd-m").textContent = pad(m);
+      $("#cd-s").textContent = pad(s);
+    };
+    tick();
+    countdownInterval = setInterval(tick, 1000);
+  }
 
+  function bindEvents() {
+    let searchTimer = null;
+    $("#search-input").addEventListener("input", (e) => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        state.keyword = e.target.value;
+        renderDeals();
+      }, 180);
+    });
+  }
 
-  const aiHistory = [];
+  // Xử lý AI Chat tìm kiếm deal thông minh
   const aiAsk = () => {
     const input = document.querySelector("#ai-input");
     const chat = document.querySelector("#ai-chat");
     const qRaw = input.value.trim();
     if (!qRaw) return;
     const q = qRaw.toLowerCase();
-    aiHistory.push(qRaw);
+    
     chat.insertAdjacentHTML("beforeend", '<div class="flex justify-end"><div class="max-w-[85%] bg-brand-500 text-white rounded-2xl rounded-tr-md px-3 py-2 text-sm">' + qRaw.replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])) + '</div></div>');
+    
     let items = DEALS.slice();
     const categories = [...new Set(DEALS.map(d => d.cat))];
     const cat = categories.find(c => q.includes(c.toLowerCase()));
     if (cat) items = items.filter(d => d.cat === cat);
+    
     const money = q.match(/(?:dưới|<=?|ngân sách(?: là)?|budget)\s*([\d.,]+)\s*(k|nghìn|tr|triệu|đ|dong)?/i);
     if (money) {
       let n = Number(money[1].replace(/\./g,"").replace(/,/g,""));
       const unit = (money[2] || "").toLowerCase();
       if (unit === "k" || unit === "nghìn") n *= 1000;
       if (unit === "tr" || unit === "triệu") n *= 1000000;
-      items = items.filter(d => d.price <= n);
+      items = items.filter(d => d.price && d.price <= n);
     }
-    const wantsDiscount = /giảm|rẻ|tiết kiệm|discount/.test(q);
-    const terms = q.split(/[^\\p{L}\\p{N}]+/u).filter(t => t.length >= 2);
-    items = items.filter(d => {
-      const hay = (d.title+" "+d.cat+" "+(d.audience||"")+" "+(d.highlights||"")).toLowerCase();
-      return terms.length === 0 || terms.some(t => hay.includes(t));
-    });
-    if (!items.length) items = DEALS.slice();
-    const wantsRating = /đánh giá|rating|tốt|uy tín/.test(q);
-    const wantsPopular = /bán chạy|nhiều người|phổ biến/.test(q);
-    items.sort((a,b) => {
-      if (wantsDiscount) return discountPct(b.old,b.price)-discountPct(a.old,a.price);
-      if (wantsRating) return b.rating-a.rating;
-      if (wantsPopular) return b.sold-a.sold;
-      return (b.rating*0.5 + discountPct(b.old,b.price)*0.03 + Math.min(b.sold,5000)/5000*0.5) - (a.rating*0.5 + discountPct(a.old,a.price)*0.03 + Math.min(a.sold,5000)/5000*0.5);
-    });
-    const top = items.slice(0,3);
-    const safe = x => x.replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-    const reply = top.length ? 'Anh có ' + top.length + ' lựa chọn phù hợp. Em ưu tiên theo nhu cầu và điểm nổi bật:' : 'Em chưa tìm thấy deal phù hợp với điều kiện này. Anh thử tăng ngân sách hoặc đổi danh mục nhé.';
-    chat.insertAdjacentHTML("beforeend", '<div class="flex gap-2"><div class="w-8 h-8 rounded-full bg-brand-100 text-brand-500 grid place-items-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-50 rounded-2xl rounded-tl-md px-3 py-2 text-sm text-slate-600 w-full"><div class="mb-2">'+reply+'</div>'+top.map((d,i)=>'<div class="border-t border-slate-200 pt-2 mt-2"><div class="font-bold text-slate-700">'+(i+1)+'. '+safe(d.title)+'</div><div class="text-xs text-slate-500 mt-1"><b>Phù hợp:</b> '+safe(d.audience||'')+'<br><b>Điểm nổi bật:</b> '+safe(d.highlights||'')+'</div><div class="mt-1"><span class="font-extrabold text-brand-500">'+vnd(d.price)+'</span> <span class="line-through text-slate-400 text-xs">'+vnd(d.old)+'</span> <span class="text-xs font-bold text-emerald-600">-'+discountPct(d.old,d.price)+'%</span></div><div class="text-xs text-slate-400 mt-1">⭐ '+d.rating+' • Đã bán '+d.sold+'</div><a href="'+d.link+'" target="_blank" rel="noopener sponsored" class="inline-flex mt-2 px-3 py-1.5 rounded-lg bg-brand-500 text-white text-xs font-bold">Xem deal →</a></div>').join('')+'</div></div>');
+    
+    const top = items.slice(0, 3);
+    const safe = x => (x || '').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+    const reply = top.length ? `Em tìm thấy ${top.length} lựa chọn phù hợp từ Supabase cho anh:` : 'Em chưa tìm thấy deal phù hợp với yêu cầu này trong hệ thống.';
+    
+    chat.insertAdjacentHTML("beforeend", '<div class="flex gap-2"><div class="w-8 h-8 rounded-full bg-brand-100 text-brand-500 grid place-items-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-50 rounded-2xl rounded-tl-md px-3 py-2 text-sm text-slate-600 w-full"><div class="mb-2">'+reply+'</div>'+top.map((d,i)=>'<div class="border-t border-slate-200 pt-2 mt-2"><div class="font-bold text-slate-700">'+(i+1)+'. '+safe(d.title)+'</div><div class="text-xs text-slate-500 mt-1"><b>Phù hợp:</b> '+safe(d.audience||'')+'<br><b>Điểm nổi bật:</b> '+safe(d.highlights||'')+'</div><div class="mt-1"><span class="font-extrabold text-brand-500">'+vnd(d.price)+'</span> <span class="line-through text-slate-400 text-xs">'+vnd(d.old)+'</span></div><a href="'+d.link+'" target="_blank" rel="noopener sponsored" class="inline-flex mt-2 px-3 py-1.5 rounded-lg bg-brand-500 text-white text-xs font-bold">Xem deal →</a></div>').join('')+'</div></div>');
     input.value = "";
     chat.scrollTop = chat.scrollHeight;
   };
+
   document.querySelector("#ai-ask").addEventListener("click", aiAsk);
   document.querySelector("#ai-input").addEventListener("keydown", e => { if (e.key === "Enter") aiAsk(); });
   document.querySelectorAll(".ai-suggestion").forEach(btn => btn.addEventListener("click", () => {
@@ -449,16 +398,33 @@ function bindEvents() {
     aiAsk();
   }));
 
-(function bootstrap() {
-  const guest = { displayName: "Khách", email: "", photoURL: "" };
-  state.user = guest;
-  showScreen("app");
-  requestAnimationFrame(() => {
-    renderCategories();
-    renderDeals();
-    startCountdown();
-  });
-})();
+  // Tải dữ liệu trực tiếp từ bảng Supabase khi khởi chạy
+  async function bootstrap() {
+    try {
+      // Giả sử bảng lưu deal trong Supabase tên là "deals". 
+      // Nếu tên bảng của anh khác (ví dụ: products), anh chỉ cần sửa lại tên trong .from('...')
+      const { data, error } = await supabaseClient.from('deals').select('*');
+      
+      if (error) {
+        console.warn("Lỗi tải từ Supabase, dùng dữ liệu dự phòng:", error.message);
+        showToast("Không kết nối được bảng Supabase, đang hiển thị bản offline", "fa-triangle-exclamation");
+      } else if (data && data.length > 0) {
+        DEALS = data;
+      }
+    } catch (err) {
+      console.error("Lỗi kết nối:", err);
+    }
+
+    showScreen("app");
+    requestAnimationFrame(() => {
+      renderCategories();
+      renderDeals();
+      startCountdown();
+      bindEvents();
+    });
+  }
+
+  bootstrap();
 </script>
 </body>
 </html>
