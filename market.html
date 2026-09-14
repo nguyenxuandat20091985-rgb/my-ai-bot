@@ -494,13 +494,15 @@
   async function bootstrap() {
     bindEvents();
     showScreen("loading");
-    loadDealsFromSecureAPI()
-      .catch(async (apiErr) => {
-        console.warn("[DealHub] API unavailable, falling back to Supabase:", apiErr);
+    // GitHub Pages is the public storefront: read the live Market-Deal Supabase catalog first.
+    // Vercel API remains a fallback so the store does not depend on a GitHub/Vercel project link.
+    loadDealsFromSupabase()
+      .catch(async (supabaseErr) => {
+        console.warn("[DealHub] Supabase unavailable/empty, falling back to Vercel API:", supabaseErr);
         try {
-          await loadDealsFromSupabase();
-        } catch (supabaseErr) {
-          console.warn("[DealHub] Supabase unavailable/empty, falling back to products.json:", supabaseErr);
+          await loadDealsFromSecureAPI();
+        } catch (apiErr) {
+          console.warn("[DealHub] Vercel API unavailable, falling back to products.json:", apiErr);
           await loadDealsFromProductsJson();
         }
       })
