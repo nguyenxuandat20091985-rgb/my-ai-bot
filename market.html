@@ -11,104 +11,324 @@
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style type="text/tailwindcss">
 @theme {
-  --color-brand-50:#fff5f2;--color-brand-100:#ffe8e1;--color-brand-200:#ffd0c3;--color-brand-300:#ffab94;
-  --color-brand-400:#ff7d5c;--color-brand-500:#ee4d2d;--color-brand-600:#d93b1c;--color-brand-700:#b52e14;
+  --color-brand-50:#fff5f2;--color-brand-100:#ffe8e1;--color-brand-200:#ffd0c3;
+  --color-brand-400:#ff7d5c;--color-brand-500:#ee4d2d;--color-brand-600:#d93b1c;
   --color-accent-400:#ffc93c;--color-accent-500:#ffb020;
   --font-sans:'Be Vietnam Pro',ui-sans-serif,system-ui,sans-serif;
 }
-.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.animate-fade-up{animation:fadeUp .38s cubic-bezier(.2,.8,.3,1) both}
+.no-scrollbar::-webkit-scrollbar{display:none}
+.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-fade-up{animation:fadeUp .35s ease both}
 </style>
-<style>body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:#f6f7f9}</style>
+<style>
+  body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:#f6f7f9}
+  .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+</style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
+
 <div id="screen-loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
-  <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-lg"><i class="fa-solid fa-bolt text-white text-3xl"></i></div>
-  <p class="mt-6 font-extrabold text-xl">Deal<span class="text-brand-500">Hub</span></p>
+  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 grid place-items-center shadow-lg">
+    <i class="fa-solid fa-bolt text-white text-2xl"></i>
+  </div>
+  <p class="mt-5 font-extrabold text-lg">Deal<span class="text-brand-500">Hub</span></p>
   <p class="mt-1 text-sm text-slate-400">Đang tải deal từ Supabase...</p>
 </div>
-<div id="screen-app" class="hidden min-h-screen">
+
+<div id="screen-app" class="hidden min-h-screen pb-8">
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-      <h1 class="text-lg font-extrabold">Market <span class="text-brand-500">Deal</span></h1>
-      <input id="search-input" type="text" placeholder="Tìm deal..." class="w-48 h-9 px-3 bg-slate-100 rounded-xl text-xs outline-none">
+    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
+      <h1 class="text-lg font-extrabold shrink-0">Market <span class="text-brand-500">Deal</span></h1>
+      <input id="search-input" type="search" placeholder="Tìm deal, sản phẩm..."
+        class="flex-1 h-9 px-3 bg-slate-100 rounded-xl text-sm outline-none border border-transparent focus:border-brand-400 focus:bg-white">
     </div>
   </header>
-  <main class="max-w-5xl mx-auto px-4 pt-4 pb-20">
-    <section class="rounded-3xl bg-gradient-to-r from-brand-500 to-accent-500 p-5 mb-4 text-white shadow-lg">
+
+  <main class="max-w-5xl mx-auto px-4 pt-4">
+    <section class="rounded-3xl bg-gradient-to-r from-brand-500 to-accent-500 p-4 sm:p-5 mb-4 text-white shadow-lg shadow-brand-500/20">
       <div class="flex items-center justify-between flex-wrap gap-3">
-        <div><h2 class="font-extrabold text-lg"><i class="fa-solid fa-bolt text-accent-400 mr-1"></i>Flash Sale Hôm Nay</h2><p class="text-white/85 text-xs mt-1">Giảm sốc — số lượng có hạn!</p></div>
-        <div class="flex items-center gap-1 text-sm font-bold tabular-nums"><span id="cd-h" class="w-8 h-8 rounded-lg bg-black/25 grid place-items-center">00</span>:<span id="cd-m" class="w-8 h-8 rounded-lg bg-black/25 grid place-items-center">00</span>:<span id="cd-s" class="w-8 h-8 rounded-lg bg-black/25 grid place-items-center">00</span></div>
+        <div>
+          <h2 class="font-extrabold text-base sm:text-lg"><i class="fa-solid fa-bolt text-accent-400 mr-1"></i>Flash Sale Hôm Nay</h2>
+          <p class="text-white/85 text-xs mt-0.5">Deal thật · link affiliate sẵn · không cần đăng nhập</p>
+        </div>
+        <div class="flex items-center gap-1 text-sm font-bold tabular-nums">
+          <span id="cd-h" class="w-8 h-8 rounded-lg bg-black/25 grid place-items-center">00</span>
+          <span>:</span>
+          <span id="cd-m" class="w-8 h-8 rounded-lg bg-black/25 grid place-items-center">00</span>
+          <span>:</span>
+          <span id="cd-s" class="w-8 h-8 rounded-lg bg-black/25 grid place-items-center">00</span>
+        </div>
       </div>
     </section>
+
+    <div id="category-bar" class="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-3 -mx-1 px-1"></div>
+
     <div class="flex items-center justify-between mb-3">
-      <h3 class="font-extrabold"><i class="fa-solid fa-fire text-brand-500 mr-1"></i><span id="feed-title">Deal hot hôm nay</span></h3>
-      <span id="result-count" class="text-xs text-slate-400"></span>
+      <h3 class="font-extrabold text-slate-800">
+        <i class="fa-solid fa-fire text-brand-500 mr-1"></i>
+        <span id="feed-title">Deal hot hôm nay</span>
+      </h3>
+      <span id="result-count" class="text-xs text-slate-400 font-medium"></span>
     </div>
+
     <section id="deal-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></section>
-    <div id="empty-state" class="hidden text-center py-16 text-slate-500">Không tìm thấy deal</div>
-  </main>
-  <footer class="text-center text-xs text-slate-400 py-6">DealHub — Chợ Deal (Supabase Connected)</footer>
-</div>
-<script>
-const SUPABASE_URL='https://pkyaoclgzyejlfozkbiw.supabase.co';
-const SUPABASE_KEY='sb_publishable_uR0WKMOakw9L2Gq1dz4suA_7NNgUKKd';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let DEALS=[];
-function isBad(u){return !u||typeof u!=='string'||!u.startsWith('http')||u.includes('lvmhwp0f8n2j64');}
-function proxy(u){return 'https://images.weserv.nl/?url='+encodeURIComponent(u)+'&w=800&h=800&fit=cover&output=webp';}
-function bing(t){return 'https://tse1.mm.bing.net/th?q='+encodeURIComponent(t||'deal')+'&w=800&h=800&c=7&rs=1&p=0';}
-function pick(d){return (!isBad(d.img))?proxy(d.img):bing(d.title);}
-const vnd=n=>n==null?'Xem giá':new Intl.NumberFormat('vi-VN').format(n)+'đ';
-const $=s=>document.querySelector(s);
-function show(name){$('#screen-loading').classList.toggle('hidden',name!=='loading');$('#screen-app').classList.toggle('hidden',name!=='app');}
-function render(){
-  const kw=($('#search-input').value||'').trim().toLowerCase();
-  const list=DEALS.filter(d=>!kw||(d.title||'').toLowerCase().includes(kw));
-  $('#result-count').textContent=list.length+' deal';
-  if(!list.length){$('#deal-grid').innerHTML='';$('#empty-state').classList.remove('hidden');return;}
-  $('#empty-state').classList.add('hidden');
-  $('#deal-grid').innerHTML=list.map((d,i)=>`<article class="animate-fade-up bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col" style="animation-delay:${Math.min(i*30,300)}ms">
-    <div class="relative aspect-square bg-brand-50">
-      <img src="${pick(d)}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover"
-        onerror="this.onerror=null;this.src='${bing(d.title)}'">
+    <div id="empty-state" class="hidden text-center py-16">
+      <i class="fa-solid fa-box-open text-4xl text-slate-300"></i>
+      <p class="mt-3 font-semibold text-slate-600">Không tìm thấy deal</p>
+      <p class="text-sm text-slate-400 mt-1">Thử từ khóa hoặc danh mục khác</p>
     </div>
-    <div class="p-2.5 flex flex-col flex-1">
-      <h4 class="text-[13px] font-semibold line-clamp-2 min-h-[34px]">${(d.title||'').replace(/</g,'<')}</h4>
-      <div class="mt-1 text-brand-500 font-extrabold text-[15px]">${vnd(d.price)}</div>
-      <a href="${d.link||'#'}" target="_blank" rel="noopener sponsored" class="mt-2 h-9 rounded-xl bg-brand-50 hover:bg-brand-500 text-brand-600 hover:text-white font-bold text-xs flex items-center justify-center gap-1 transition"><i class="fa-solid fa-bolt"></i> Săn Deal Ngay</a>
-    </div></article>`).join('');
+
+    <section class="mt-10 rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+      <div class="bg-slate-950 text-white px-5 py-5">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-400 to-accent-500 grid place-items-center"><i class="fa-solid fa-robot"></i></div>
+          <div>
+            <h3 class="font-extrabold text-lg">Market Deal AI</h3>
+            <p class="text-slate-300 text-xs">Gõ nhu cầu · em gợi ý deal trong catalog</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-4">
+        <div id="ai-chat" class="max-h-56 overflow-y-auto space-y-3 mb-3 text-sm"></div>
+        <div class="flex gap-2">
+          <input id="ai-input" type="text" placeholder="VD: robot lau nhà, máy ép..."
+            class="flex-1 h-11 px-3 rounded-xl bg-slate-100 text-sm outline-none focus:ring-2 focus:ring-brand-300">
+          <button id="ai-ask" class="h-11 px-4 rounded-xl bg-brand-500 text-white font-bold text-sm shrink-0"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <button type="button" class="ai-chip text-xs px-3 py-1.5 rounded-full bg-slate-100 hover:bg-brand-50 border border-slate-200" data-q="robot">Robot</button>
+          <button type="button" class="ai-chip text-xs px-3 py-1.5 rounded-full bg-slate-100 hover:bg-brand-50 border border-slate-200" data-q="máy ép">Máy ép</button>
+          <button type="button" class="ai-chip text-xs px-3 py-1.5 rounded-full bg-slate-100 hover:bg-brand-50 border border-slate-200" data-q="đèn">Đèn</button>
+          <button type="button" class="ai-chip text-xs px-3 py-1.5 rounded-full bg-slate-100 hover:bg-brand-50 border border-slate-200" data-q="ghế">Ghế</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-5xl mx-auto px-4 py-8 text-center text-xs text-slate-400">
+    <p class="font-semibold text-slate-500">DealHub — Chợ Deal · Supabase</p>
+    <p class="mt-1">Không cần tài khoản · Link affiliate sẵn</p>
+  </footer>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://pkyaoclgzyejlfozkbiw.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_uR0WKMOakw9L2Gq1dz4suA_7NNgUKKd';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let DEALS = [];
+const state = { cat: 'all', kw: '' };
+const $ = (s) => document.querySelector(s);
+
+const CAT_RULES = [
+  { key: 'Điện tử', re: /iphone|samsung|điện thoại|flycam|camera|máy tính/i },
+  { key: 'Gia dụng', re: /nồi|máy ép|robot|chảo|lồng bàn|máy lọc|máy làm đá|máy rửa/i },
+  { key: 'Nhà cửa', re: /ghế|bàn|đèn|ổ khóa|áo điều hòa|túi du lịch/i },
+  { key: 'Sức khỏe', re: /nghệ|protein|kem đánh|xịt dưỡng|gối/i },
+  { key: 'Đồ ăn', re: /cafe|trà sữa|matcha/i },
+  { key: 'Tài chính', re: /mb bank|vay|tài khoản/i },
+  { key: 'Phụ kiện xe', re: /bơm|tinh dầu treo|ô tô|xe máy/i }
+];
+
+function cleanTitle(t) {
+  return String(t || '')
+    .replace(/\s*[-–—]\s*ĐIỂM NHẤN.*$/i, '')
+    .replace(/\s*[-–—]\s*VIÊN BỔ SUNG.*$/i, '')
+    .trim() || 'Sản phẩm';
 }
-function startCD(){
-  const end=new Date();end.setHours(23,59,59,999);
-  const pad=n=>String(n).padStart(2,'0');
-  const tick=()=>{const d=end-new Date();if(d<=0){$('#cd-h').textContent=$('#cd-m').textContent=$('#cd-s').textContent='00';return;}
-    $('#cd-h').textContent=pad(Math.floor(d/36e5));$('#cd-m').textContent=pad(Math.floor(d%36e5/6e4));$('#cd-s').textContent=pad(Math.floor(d%6e4/1e3));};
-  tick();setInterval(tick,1000);
+
+function isBadImg(u) {
+  if (!u || typeof u !== 'string') return true;
+  const s = u.trim().toLowerCase();
+  if (!s.startsWith('http')) return true;
+  if (s.includes('lvmhwp0f8n2j64')) return true;
+  return false;
 }
-(async()=>{
-  show('loading');
-  try{
-    const [{data:products,error:e1},{data:links,error:e2}]=await Promise.all([
-      sb.from('products').select('id,title,price,image_url').order('id',{ascending:false}),
-      sb.from('affiliate_links').select('product_id,short_url,platform')
-    ]);
-    if(e1)throw e1;if(e2)throw e2;
-    if(!products||!products.length)throw new Error('empty');
-    const map=new Map();
-    (links||[]).forEach(l=>{if(l.product_id!=null&&l.short_url&&!map.has(String(l.product_id)))map.set(String(l.product_id),l);});
-    DEALS=products.map(p=>{const l=map.get(String(p.id));return{id:p.id,title:p.title||'SP',price:p.price,img:p.image_url||'',link:l?l.short_url:''};});
-  }catch(err){
-    console.warn(err);
-    try{
-      const r=await fetch('./products.json');const j=await r.json();
-      DEALS=(j.products||[]).map(p=>({id:p.id,title:p.name,price:null,img:p.image_url||'',link:p.link||''}));
-    }catch(e2){DEALS=[];}
+
+function bing(t) {
+  return 'https://tse1.mm.bing.net/th?q=' + encodeURIComponent((t || 'sản phẩm') + ' sản phẩm') + '&w=600&h=600&c=7&rs=1&p=0';
+}
+
+function proxy(u) {
+  return 'https://images.weserv.nl/?url=' + encodeURIComponent(u.replace(/^https?:\/\//, '')) + '&w=600&h=600&fit=cover&output=webp&n=-1';
+}
+
+function inferCat(title) {
+  for (const c of CAT_RULES) if (c.re.test(title)) return c.key;
+  return 'Khác';
+}
+
+function vnd(n) {
+  if (n == null || n === '' || Number.isNaN(Number(n))) return 'Xem giá';
+  return new Intl.NumberFormat('vi-VN').format(Number(n)) + 'đ';
+}
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function show(name) {
+  $('#screen-loading').classList.toggle('hidden', name !== 'loading');
+  $('#screen-app').classList.toggle('hidden', name !== 'app');
+}
+
+function imgTag(d) {
+  const title = d.title;
+  const direct = !isBadImg(d.img) ? d.img : '';
+  const src = direct || bing(title);
+  return `<img src="${esc(src)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
+    data-direct="${esc(direct)}" data-proxy="${direct ? esc(proxy(direct)) : ''}" data-bing="${esc(bing(title))}" data-stage="0"
+    class="absolute inset-0 w-full h-full object-cover"
+    onerror="(function(el){var s=+el.dataset.stage||0;if(s===0&&el.dataset.proxy){el.dataset.stage=1;el.src=el.dataset.proxy;}else if(s<2){el.dataset.stage=2;el.src=el.dataset.bing;}else{el.onerror=null;el.style.opacity='.3';}})(this)">`;
+}
+
+function renderCats() {
+  const keys = ['all', ...CAT_RULES.map(c => c.key), 'Khác'];
+  const labels = { all: 'Tất cả' };
+  $('#category-bar').innerHTML = keys.map(k => {
+    const active = state.cat === k;
+    const label = labels[k] || k;
+    return `<button data-cat="${esc(k)}" class="shrink-0 h-8 px-3 rounded-full text-xs font-semibold ${active ? 'bg-brand-500 text-white' : 'bg-white text-slate-600 border border-slate-200'}">${esc(label)}</button>`;
+  }).join('');
+  $('#category-bar').querySelectorAll('[data-cat]').forEach(btn => {
+    btn.onclick = () => { state.cat = btn.dataset.cat; renderCats(); renderDeals(); };
+  });
+}
+
+function renderDeals() {
+  const kw = state.kw.trim().toLowerCase();
+  const list = DEALS.filter(d => {
+    const okCat = state.cat === 'all' || d.cat === state.cat;
+    const okKw = !kw || d.title.toLowerCase().includes(kw) || d.raw.toLowerCase().includes(kw);
+    return okCat && okKw;
+  });
+  $('#feed-title').textContent = state.cat === 'all' ? 'Deal hot hôm nay' : state.cat;
+  $('#result-count').textContent = list.length + ' deal';
+  if (!list.length) {
+    $('#deal-grid').innerHTML = '';
+    $('#empty-state').classList.remove('hidden');
+    return;
   }
-  show('app');render();startCD();
-  $('#search-input').addEventListener('input',()=>render());
-})();
+  $('#empty-state').classList.add('hidden');
+  $('#deal-grid').innerHTML = list.map((d, i) => `
+    <article class="animate-fade-up bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col" style="animation-delay:${Math.min(i*25,250)}ms">
+      <div class="relative aspect-square bg-slate-100">${imgTag(d)}</div>
+      <div class="p-2.5 flex flex-col flex-1">
+        <h4 class="text-[13px] font-semibold text-slate-700 line-clamp-2 min-h-[34px]">${esc(d.title)}</h4>
+        <div class="mt-1.5 text-brand-500 font-extrabold text-[15px]">${vnd(d.price)}</div>
+        <a href="${esc(d.link || '#')}" target="_blank" rel="noopener sponsored"
+           class="mt-2 h-9 rounded-xl bg-brand-50 hover:bg-brand-500 text-brand-600 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+          <i class="fa-solid fa-bolt"></i> Săn Deal Ngay
+        </a>
+      </div>
+    </article>`).join('');
+}
+
+function startCountdown() {
+  const end = new Date(); end.setHours(23, 59, 59, 999);
+  const pad = n => String(n).padStart(2, '0');
+  const tick = () => {
+    const d = end - new Date();
+    if (d <= 0) { $('#cd-h').textContent = $('#cd-m').textContent = $('#cd-s').textContent = '00'; return; }
+    $('#cd-h').textContent = pad(Math.floor(d / 36e5));
+    $('#cd-m').textContent = pad(Math.floor(d % 36e5 / 6e4));
+    $('#cd-s').textContent = pad(Math.floor(d % 6e4 / 1e3));
+  };
+  tick(); setInterval(tick, 1000);
+}
+
+function aiAsk() {
+  const input = $('#ai-input');
+  const q = (input.value || '').trim();
+  if (!q) return;
+  const chat = $('#ai-chat');
+  chat.insertAdjacentHTML('beforeend', `<div class="text-right"><span class="inline-block bg-brand-500 text-white px-3 py-1.5 rounded-2xl rounded-tr-md">${esc(q)}</span></div>`);
+  const ql = q.toLowerCase();
+  const hits = DEALS.filter(d => d.title.toLowerCase().includes(ql) || d.raw.toLowerCase().includes(ql)).slice(0, 4);
+  let body = hits.length
+    ? hits.map((d, i) => `${i + 1}. <b>${esc(d.title)}</b> — <a class="text-brand-500 font-bold" href="${esc(d.link)}" target="_blank" rel="noopener">Xem deal</a>`).join('<br>')
+    : 'Em chưa thấy deal khớp. Anh thử từ khóa ngắn hơn nhé.';
+  chat.insertAdjacentHTML('beforeend', `<div class="flex gap-2"><div class="w-7 h-7 rounded-full bg-brand-100 text-brand-500 grid place-items-center shrink-0 text-xs"><i class="fa-solid fa-robot"></i></div><div class="bg-slate-100 rounded-2xl rounded-tl-md px-3 py-2 text-slate-700">${body}</div></div>`);
+  input.value = '';
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function loadSupabase() {
+  const [{ data: products, error: e1 }, { data: links, error: e2 }] = await Promise.all([
+    sb.from('products').select('id,title,price,image_url').order('id', { ascending: false }),
+    sb.from('affiliate_links').select('product_id,short_url,platform')
+  ]);
+  if (e1) throw e1;
+  if (e2) throw e2;
+  if (!products || !products.length) throw new Error('empty products');
+  const map = new Map();
+  (links || []).forEach(l => {
+    if (l.product_id != null && l.short_url && !map.has(String(l.product_id))) map.set(String(l.product_id), l);
+  });
+  DEALS = products.map(p => {
+    const raw = p.title || 'Sản phẩm';
+    const title = cleanTitle(raw);
+    const link = map.get(String(p.id));
+    return {
+      id: p.id,
+      raw,
+      title,
+      price: p.price,
+      img: p.image_url || '',
+      link: link ? link.short_url : '',
+      cat: inferCat(raw)
+    };
+  });
+}
+
+async function loadJsonFallback() {
+  const r = await fetch('./products.json?v=1', { cache: 'no-store' });
+  if (!r.ok) throw new Error('json ' + r.status);
+  const j = await r.json();
+  const list = j.products || j;
+  DEALS = (list || []).map(p => {
+    const raw = p.name || p.title || 'Sản phẩm';
+    return {
+      id: p.id,
+      raw,
+      title: cleanTitle(raw),
+      price: p.price ?? null,
+      img: p.image_url || '',
+      link: p.link || '',
+      cat: inferCat(raw)
+    };
+  });
+}
+
+async function boot() {
+  show('loading');
+  try {
+    await loadSupabase();
+  } catch (e) {
+    console.warn('[DealHub] Supabase fail, fallback products.json', e);
+    try { await loadJsonFallback(); } catch (e2) {
+      console.error(e2);
+      DEALS = [];
+    }
+  }
+  show('app');
+  renderCats();
+  renderDeals();
+  startCountdown();
+  let t;
+  $('#search-input').addEventListener('input', e => {
+    clearTimeout(t);
+    t = setTimeout(() => { state.kw = e.target.value; renderDeals(); }, 150);
+  });
+  $('#ai-ask').onclick = aiAsk;
+  $('#ai-input').addEventListener('keydown', e => { if (e.key === 'Enter') aiAsk(); });
+  document.querySelectorAll('.ai-chip').forEach(b => b.onclick = () => {
+    $('#ai-input').value = b.dataset.q;
+    aiAsk();
+  });
+}
+boot();
 </script>
 </body>
 </html>
