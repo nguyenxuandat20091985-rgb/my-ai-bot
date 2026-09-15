@@ -1,2 +1,40 @@
 <!DOCTYPE html>
-<!-- PLACEHOLDER - will replace -->
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealHub — Chợ Deal</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800">
+<div id="app" class="max-w-5xl mx-auto p-4">
+  <h1 class="text-2xl font-extrabold mb-4">Market <span class="text-red-500">Deal</span></h1>
+  <p id="status" class="text-sm text-slate-500 mb-4">Đang tải từ Supabase...</p>
+  <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+</div>
+<script>
+const SUPABASE_URL = 'https://pkyaoclgzyejlfozkbiw.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_uR0WKMOakw9L2Gq1dz4suA_7NNgUKKd';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function isBad(u){return !u||u.includes('lvmhwp0f8n2j64');}
+function proxy(u){return 'https://images.weserv.nl/?url='+encodeURIComponent(u)+'&w=800&h=800&fit=cover&output=webp';}
+(async()=>{
+  const [{data:products,error:e1},{data:links,error:e2}]=await Promise.all([
+    sb.from('products').select('id,title,price,image_url').order('id',{ascending:false}),
+    sb.from('affiliate_links').select('product_id,short_url,platform')
+  ]);
+  if(e1||e2){document.getElementById('status').textContent='Lỗi: '+(e1||e2).message;return;}
+  const map=new Map();(links||[]).forEach(l=>{if(l.product_id!=null&&l.short_url&&!map.has(String(l.product_id)))map.set(String(l.product_id),l);});
+  const deals=(products||[]).map(p=>{const l=map.get(String(p.id));return{id:p.id,title:p.title||'SP',price:p.price,img:p.image_url||'',link:l?.short_url||''};});
+  document.getElementById('status').textContent=deals.length+' deal từ Supabase';
+  const vnd=n=>n==null?'Xem giá':new Intl.NumberFormat('vi-VN').format(n)+'đ';
+  document.getElementById('grid').innerHTML=deals.map(d=>{
+    const src=isBad(d.img)?'https://tse1.mm.bing.net/th?q='+encodeURIComponent(d.title)+'&w=400&h=400&c=7':proxy(d.img);
+    return `<article class="bg-white rounded-2xl overflow-hidden shadow-sm"><div class="aspect-square bg-slate-100"><img src="${src}" alt="" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://tse1.mm.bing.net/th?q='+encodeURIComponent('${(d.title||'').replace(/'/g,'')}')+'&w=400&h=400&c=7'"></div><div class="p-2"><h4 class="text-xs font-semibold line-clamp-2 min-h-[32px]">${(d.title||'').replace(/</g,'<')}</h4><div class="text-red-500 font-extrabold text-sm mt-1">${vnd(d.price)}</div><a href="${d.link}" target="_blank" rel="noopener sponsored" class="mt-2 block text-center text-xs font-bold bg-red-50 text-red-600 rounded-lg py-2">Săn Deal</a></div></article>`;
+  }).join('');
+})();
+</script>
+</body>
+</html>
