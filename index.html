@@ -18,7 +18,7 @@
 <div class="paper">
 <div class="top"><span>THỨ BẢY, 12 THÁNG 9, 2026</span><span>ẤN BẢN ĐIỆN TỬ • TÒA SOẠN AI</span></div>
 <header class="mast"><div class="eyebrow">Góc Bếp Thông Minh</div><h1>TỜ BÁO AI</h1><div class="motto">Tin đáng đọc · lựa chọn đáng tiền · thông tin có trách nhiệm</div></header>
-<nav class="nav"><a href="#">Trang nhất</a><a href="#tieu-dung">Tiêu dùng</a><a href="#san-pham">Sản phẩm</a><a href="#so-sanh">So sánh</a><a href="https://market.vercel.app/">🛒 Chợ Deal</a><a href="#chatboss">ChatBoss</a></nav>
+<nav class="nav"><a href="#">Trang nhất</a><a href="#tieu-dung">Tiêu dùng</a><a href="#san-pham">Sản phẩm</a><a href="#so-sanh">So sánh</a><a href="./market.html">🛒 Chợ Deal</a><a href="#chatboss">ChatBoss</a></nav>
 <div class="breaking"><b>TIN MỚI</b><span>Ba lựa chọn gia dụng nổi bật đang được người tiêu dùng quan tâm</span></div>
 <div class="layout">
 <main class="main">
@@ -57,7 +57,7 @@
 </div>
 <script>
 const body=document.getElementById("chatbody"),input=document.getElementById("input");
-function ask(q){if(!q.trim())return;let a="Tôi có thể giúp bạn hiểu bài báo, so sánh ba nhóm sản phẩm và cân nhắc theo nhu cầu.";if(/sản phẩm|mua|tư vấn/i.test(q))a="Nếu ưu tiên nấu ăn: Nồi chiên 5.5L. Nếu ưu tiên nước ép: Máy ép chậm. Nếu ưu tiên tự động hóa: Robot lau nhà. Hãy kiểm tra giá và chính sách bảo hành trước khi mua.";if(/so sánh/i.test(q))a="Nồi chiên mạnh về nấu ăn; máy ép mạnh về đồ uống; robot mạnh về tự động hóa vệ sinh. Lựa chọn phụ thuộc nhu cầu thực tế.";body.insertAdjacentHTML("beforeend","<div class='msg' style='background:#ead6d2;margin-left:auto'>"+q.replace(/</g,"&lt;")+"</div><div class='msg'>"+a+"</div>");body.scrollTop=body.scrollHeight}
+function ask(q){if(!q.trim())return;let a="Tôi có thể giúp bạn hiểu bài báo, so sánh ba nhóm sản phẩm và cân nhắc theo nhu cầu.";if(/sản phẩm|mua|tư vấn/i.test(q))a="Nếu ưu tiên nấu ăn: Nồi chiên 5.5L. Nếu ưu tiên nước ép: Máy ép chậm. Nếu ưu tiên tự động hóa: Robot lau nhà. Hãy kiểm tra giá và chính sách bảo hành trước khi mua.";if(/so sánh/i.test(q))a="Nồi chiên mạnh về nấu ăn; máy ép mạnh về đồ uống; robot mạnh về tự động hóa vệ sinh. Lựa chọn phụ thuộc nhu cầu thực tế.";body.insertAdjacentHTML("beforeend","<div class='msg' style='background:#ead6d2;margin-left:auto'>"+q.replace(/</g,"<")+"</div><div class='msg'>"+a+"</div>");body.scrollTop=body.scrollHeight}
 document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>ask(b.dataset.q));document.getElementById("form").onsubmit=e=>{e.preventDefault();ask(input.value);input.value=""};
 </script>
 </body>
