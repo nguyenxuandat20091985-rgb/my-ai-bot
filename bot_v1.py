@@ -129,6 +129,27 @@ def write_social_outputs(
     logger.info("Social outputs saved → result.txt + data/social.json + docs/social.json")
 
 
+def _publish_html(html: str, slug: str) -> list[str]:
+    """Ghi bài ra docs/ và root (GitHub Pages deploy từ root)."""
+    targets = [
+        DOCS_DIR / f"bai-{slug}.html",
+        Path(f"bai-{slug}.html"),
+    ]
+    for target in targets:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with open(target, "w", encoding="utf-8") as f:
+            f.write(html)
+        logger.info(f"Wrote {target}")
+    posts = sorted(
+        [p.name for p in DOCS_DIR.glob("bai-*.html")] +
+        [p.name for p in Path(".").glob("bai-*.html")],
+        reverse=True,
+    )
+    # Chỉ cập nhật docs/index.html – giữ nguyên newspaper index.html ở root
+    update_index(list(dict.fromkeys(posts)), DOCS_DIR / "index.html")
+    return posts
+
+
 def run_original_core_flow(product: dict, today, date_str: str, slug: str) -> None:
     logger.info(">>> Running ORIGINAL CORE flow (fallback)")
 
@@ -152,15 +173,7 @@ def run_original_core_flow(product: dict, today, date_str: str, slug: str) -> No
         "keywords": product["name"],
     }
     html = render_html_page(title, body, product, meta, date_str, slug)
-
-    for target in [DOCS_DIR / f"bai-{slug}.html", Path(f"bai-{slug}.html")]:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with open(target, "w", encoding="utf-8") as f:
-            f.write(html)
-
-    posts = sorted([p.name for p in DOCS_DIR.glob("bai-*.html")], reverse=True)
-    update_index(posts, DOCS_DIR / "index.html")
-    update_index(posts, Path("index.html"))
+    _publish_html(html, slug)
 
     social = original_ai(
         f"Dựa trên sản phẩm {product['name']} (điểm mạnh: {product.get('highlights', '')}), "
@@ -204,15 +217,7 @@ def run_extended_pipeline(product: dict, today, date_str: str, slug: str) -> boo
 
     body_html = "".join(f"<p>{p}</p>" for p in body.split("\n\n") if p.strip())
     html = render_html_page(title, body_html, product, meta, date_str, slug)
-
-    for target in [DOCS_DIR / f"bai-{slug}.html"]:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with open(target, "w", encoding="utf-8") as f:
-            f.write(html)
-
-    posts = sorted([p.name for p in DOCS_DIR.glob("bai-*.html")], reverse=True)
-    update_index(posts, DOCS_DIR / "index.html")
-    update_index(posts, Path("index.html"))
+    _publish_html(html, slug)
 
     social = generate_social_posts(product)
     write_social_outputs(product, title, slug, social, mode="v1")
