@@ -1,11 +1,9 @@
-name: AI News Boss
+name: AI Product Review Bot
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 1 * * *'
-    - cron: '0 9 * * *'
-    - cron: '0 17 * * *'
+    - cron: '0 0 * * *'   # 07:00 sáng giờ Việt Nam
 
 permissions:
   contents: write
@@ -22,7 +20,7 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Run News Boss
+      - name: Run AI Product Review Bot
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ACCESSTRADE_API_TOKEN: ${{ secrets.ACCESSTRADE_API_TOKEN }}
@@ -30,12 +28,13 @@ jobs:
           ACCESSTRADE_CAMPAIGN_ID: ${{ secrets.ACCESSTRADE_CAMPAIGN_ID }}
           SAFE_MODE: "true"
           AUTO_PUBLISH: "true"
-          NEWS_PER_RUN: "1"
-        run: python news_bot.py
-      - name: Commit generated newspaper
+        run: python bot_v1.py
+      - name: Commit & Push result
         run: |
-          git config user.name "my-ai-bot"
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/ data/ index.html bai-*.html 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "chore: publish AI newspaper"
-          git push
+          git add docs/ result.txt data/ bai-*.html index.html 2>/dev/null || true
+          git diff --cached --quiet || (
+            git commit -m "Auto update AI product review $(date -u +%Y-%m-%d)" &&
+            git push
+          )
