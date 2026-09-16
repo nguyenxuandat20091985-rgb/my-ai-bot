@@ -78,3 +78,24 @@ ENABLE_SOCIAL_PUBLISH = os.getenv("ENABLE_SOCIAL_PUBLISH", "false").lower() in (
 # LOGGING
 # ============================================================
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+
+# ============================================================
+# NEWS ENGINE
+# ============================================================
+NEWS_SOURCES = [
+    "https://vnexpress.net/rss/tin-moi-nhat.rss",
+    "https://vnexpress.net/rss/thoi-su.rss",
+    "https://vnexpress.net/rss/kinh-doanh.rss",
+    "https://vnexpress.net/rss/doi-song.rss",
+    "https://tuoitre.vn/rss/tin-moi-nhat.rss",
+    "https://thanhnien.vn/rss/home.rss",
+]
+
+NEWS_SAFETY_BLOCKLIST = [
+    "súng", "vũ khí", "súng đạn", "bom", "mìn", "khủng bố",
+    "ma túy", "heroin", "cocaine", "cần sa",
+    "lừa đảo", "lừa đảo online", "hack", "mã độc", "virus máy tính",
+    "tự tử", "tự sát", "giết người", "ám sát",
+    "xâm nhập trái phép", "tấn công mạng", "ransomware",
+    "sex", "porn", "khiêu dâm", "ấu dâm",
+]
