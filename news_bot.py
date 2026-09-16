@@ -3,6 +3,7 @@ Independent News Engine: safe, unique daily articles with source images and Chat
 """
 from __future__ import annotations
 import html, json, re
+import logging
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
@@ -11,6 +12,9 @@ from litellm import completion
 from modules.config import BLOG_URL, DOCS_DIR, DATA_DIR, MODEL, TEMPERATURE, MAX_TOKENS, NEWS_SOURCES, NEWS_SAFETY_BLOCKLIST
 from modules.product_manager import load_products, score_product
 from modules.accesstrade import client
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 HEADERS={"User-Agent":"Mozilla/5.0 (compatible; MyAIBot/2.0)"}
 
