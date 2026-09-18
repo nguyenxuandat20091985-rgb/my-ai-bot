@@ -96,12 +96,29 @@ def save_history(h):
 def chatboss(product):
     purl=product.get("affiliate_url") or product.get("link") or "#"
     name=html.escape(product.get("name",""))
-    return f"""<section class="chatboss"><div class="chatboss-head"><b>🤖 ChatBoss</b><span>Tư vấn bài báo</span></div><div class="chatboss-body"><div class="msg bot">Xin chào! Tôi có thể giải thích bài báo và tư vấn sản phẩm phù hợp.</div></div><div class="quick"><button data-q="Tóm tắt bài này">Tóm tắt</button><button data-q="Điểm chính là gì?">Điểm chính</button><button data-q="Tư vấn sản phẩm">Tư vấn sản phẩm</button></div><div class="input"><input placeholder="Hỏi ChatBoss..."><button>Gửi</button></div></section>
-<script>
-(()=>document.querySelectorAll('.chatboss').forEach(box=>{const body=box.querySelector('.chatboss-body');const input=box.querySelector('input');
-function ask(q){{let a='Tôi có thể giải thích nội dung bài báo dựa trên thông tin đang hiển thị.';if(/sản phẩm|mua|giá/i.test(q))a='Gợi ý: <b>{name}</b><br><a href="{purl}" target="_blank" rel="nofollow sponsored">Xem sản phẩm/ưu đãi →</a>';body.insertAdjacentHTML('beforeend','<div class="msg user">'+q+'</div><div class="msg bot">'+a+'</div>');}}
-box.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>ask(b.dataset.q));box.querySelector('.input button').onclick=()=>{{if(input.value.trim())ask(input.value.trim());input.value=''}};input.addEventListener('keydown',e=>{{if(e.key==='Enter')box.querySelector('.input button').click()}})}))();
+    # Không dùng f-string cho JavaScript để tránh Python hiểu nhầm { } của JS.
+    js = """<script>
+(()=>document.querySelectorAll('.chatboss').forEach(box=>{
+  const body=box.querySelector('.chatboss-body');
+  const input=box.querySelector('input');
+  function ask(q){
+    let a='Tôi có thể giải thích nội dung bài báo dựa trên thông tin đang hiển thị.';
+    if(/sản phẩm|mua|giá/i.test(q)){
+      a='Gợi ý: <b>__PRODUCT_NAME__</b><br><a href="__PRODUCT_URL__" target="_blank" rel="nofollow sponsored">Xem sản phẩm/ưu đãi →</a>';
+    }
+    body.insertAdjacentHTML('beforeend','<div class="msg user">'+q+'</div><div class="msg bot">'+a+'</div>');
+  }
+  box.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>ask(b.dataset.q));
+  box.querySelector('.input button').onclick=()=>{
+    if(input.value.trim()) ask(input.value.trim());
+    input.value='';
+  };
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Enter') box.querySelector('.input button').click();
+  });
+}));
 </script>"""
+    return """<section class="chatboss"><div class="chatboss-head"><b>🤖 ChatBoss</b><span>Tư vấn bài báo</span></div><div class="chatboss-body"><div class="msg bot">Xin chào! Tôi có thể giải thích bài báo và tư vấn sản phẩm phù hợp.</div></div><div class="quick"><button data-q="Tóm tắt bài này">Tóm tắt</button><button data-q="Điểm chính là gì?">Điểm chính</button><button data-q="Tư vấn sản phẩm">Tư vấn sản phẩm</button></div><div class="input"><input placeholder="Hỏi ChatBoss..."><button>Gửi</button></div></section>""" + js.replace("__PRODUCT_NAME__", name).replace("__PRODUCT_URL__", html.escape(purl,quote=True))
 
 def render(title,body,source,image,product,date,slug):
     img=f'<img class="hero-image" src="{html.escape(image,quote=True)}" alt="{html.escape(title,quote=True)}">' if image else ""
