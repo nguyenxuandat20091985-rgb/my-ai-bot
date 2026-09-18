@@ -52,22 +52,24 @@ def article_image(url):
         pass
     return ""
 
-def ai_write(item,context):
-    prompt=f"""Bạn là tổng biên tập một tờ báo số độc lập tiếng Việt.
-Viết bài mới dựa trên nguồn bên dưới, không sao chép nguyên văn và không bịa dữ kiện.
-TUYỆT ĐỐI không hướng dẫn/cổ súy hành vi vi phạm pháp luật, vũ khí, ma túy, lừa đảo,
-xâm nhập trái phép, mã độc, khủng bố hoặc né tránh cơ quan chức năng.
-Nếu chủ đề thuộc nhóm nguy hiểm, trả về đúng: BLOCKED.
+def ai_write(product):
+    name=product.get("name","")
+    highlights=product.get("highlights","")
+    audience=product.get("audience","")
+    prompt=f"""Bạn là biên tập viên của Tờ Báo AI chuyên viết bài tiêu dùng và review sản phẩm.
+Bài báo phải xoay quanh đúng sản phẩm bên dưới. Không viết tin thời sự chung và không biến thành trang Chợ Deal.
+Không bịa thông số, giá, giảm giá, thương hiệu, công dụng hoặc trải nghiệm chưa được cung cấp.
+Chỉ sử dụng các dữ kiện trong tên, điểm nổi bật và đối tượng phù hợp.
+Không đưa ra cam kết sức khỏe, tài chính hoặc hiệu quả tuyệt đối.
+Sản phẩm:
+- Tên: {name}
+- Điểm nổi bật được cung cấp: {highlights}
+- Đối tượng phù hợp: {audience}
 
-Tiêu đề nguồn: {item['title']}
-Mô tả nguồn: {item['description']}
-URL nguồn: {item['url']}
-Sản phẩm có thể giới thiệu cuối bài: {context}
-
-Viết 700-1000 từ tiếng Việt. Dòng đầu là tiêu đề, sau đó các đoạn rõ ràng.
-Có: Mở đầu; Điều đáng chú ý; Phân tích/ý nghĩa; Người đọc cần biết; Kết luận.
-Cuối bài ghi: Nguồn tham khảo: {item['url']}
-Không dùng markdown #."""
+Viết 700-1000 từ tiếng Việt theo phong cách một bài báo tiêu dùng dễ đọc.
+Cấu trúc: tiêu đề hấp dẫn nhưng trung thực; mở bài; sản phẩm giải quyết nhu cầu nào; các điểm đáng chú ý; ai phù hợp; điều cần kiểm tra trước khi mua; kết luận.
+Không dùng markdown #, không chèn link và không tự tạo thông tin ngoài dữ liệu trên.
+"""
     r=completion(model=MODEL,messages=[{"role":"user","content":prompt}],temperature=TEMPERATURE,max_tokens=MAX_TOKENS)
     return r.choices[0].message.content.strip()
 
@@ -154,47 +156,50 @@ def render_home(articles):
     (DOCS_DIR/"index.html").write_text(page,encoding="utf-8")
 
 def main():
-    campaigns, promos = sync_accesstrade()
-    h=history()
-    used_sources={x.get("source_hash") for x in h}
-    used_titles={x.get("title_hash") for x in h}
-    used_topics={x.get("topic") for x in h}
-    items=[]
-    for item in fetch_items():
-        sh=_fingerprint(item["url"]); th=_fingerprint(item["title"]); topic=_topic_key(item["title"])
-        if sh in used_sources or th in used_titles or (topic and topic in used_topics):
-            continue
-        items.append((item,sh,th,topic))
-    if not items:
-        logger.info("Không có nguồn/chủ đề mới đủ khác biệt hôm nay.")
+    # Tờ Báo và Chợ Deal là hai khu riêng:
+    # Tờ Báo chỉ xuất bản bài viết chuyên sâu về sản phẩm và gắn link sản phẩm.
+    # Chợ Deal vẫn dùng market.html và không được trộn vào nội dung báo.
+    products=sorted(load_products(),key=score_product,reverse=True)
+    safe_products=[p for p in products if not blocked(p.get("name","")+" "+p.get("highlights","")) and not any(k in (p.get("name","")+" "+p.get("highlights","")).lower() for k in ["vay ","tín dụng","protein","tinh bột nghệ","viên bổ sung"])]
+    if not safe_products:
+        logger.info("Không có sản phẩm an toàn để viết báo.")
         return
-    products=sorted(load_products(),key=score_product,reverse=True); product=products[0] if products else {}
-    context=product.get("name","")+" | "+(product.get("affiliate_url") or product.get("link",""))+" | Campaigns="+", ".join(str(x.get("name","")) for x in campaigns[:10])+" | Promos="+", ".join(str(x.get("title","")) for x in promos[:10])
-    # Chỉ xuất bản 1 bài mỗi lần chạy; workflow chạy 3 lần/ngày.
-    item,sh,th,topic=items[0]
-    text=ai_write(item,context)
+
+    h=history()
+    used_products={x.get("product_id") for x in h}
+    product=next((p for p in safe_products if p.get("id") not in used_products),safe_products[0])
+    text=ai_write(product)
     if text=="BLOCKED" or blocked(text):
         logger.warning("Bài bị chặn bởi bộ lọc an toàn.")
         return
-    lines=[x.strip() for x in text.splitlines() if x.strip()]; title=lines[0].lstrip("#* ").strip(); body="\\n\\n".join(lines[1:])
+
+    lines=[x.strip() for x in text.splitlines() if x.strip()]
+    title=lines[0].lstrip("#* ").strip()
+    body="\n\n".join(lines[1:])
     title_hash=_fingerprint(title)
-    if title_hash in used_titles:
+    if title_hash in {x.get("title_hash") for x in h}:
         logger.warning("AI tạo tiêu đề trùng; bỏ bài để tránh lặp.")
         return
+
     now=datetime.now(timezone(timedelta(hours=7)))
-    image=article_image(item["url"])
-    # Không tạo bai-*.html và không ghi bài vào data. Chỉ giữ đúng 3 bài hiện tại trong docs/index.html.
-    current=[{
+    image=product.get("image_url","")
+    article={
         "title":title,
         "body":body,
-        "source_url":item["url"],
+        "source_url":product.get("link",""),
         "image_url":image,
-        "created_at":now.strftime("%d/%m/%Y %H:%M")
-    }]
-    render_home(current)
-    h.append({"source_hash":sh,"title_hash":title_hash,"topic":topic,"created_at":now.isoformat()})
+        "created_at":now.strftime("%d/%m/%Y %H:%M"),
+        "product_name":product.get("name",""),
+        "product_url":product.get("link","")
+    }
+    render_home([article])
+    h.append({
+        "product_id":product.get("id"),
+        "title_hash":title_hash,
+        "created_at":now.isoformat()
+    })
     save_history(h)
-    logger.info("Đã xuất bản bài mới vào docs/index.html; không tạo file bài riêng và không lưu nội dung lịch sử.")
+    logger.info("Đã xuất bản bài báo sản phẩm vào docs/index.html; link sản phẩm lấy trực tiếp từ products.json. Chợ Deal không được trộn vào báo.")
 
 if __name__=="__main__":
     try:
