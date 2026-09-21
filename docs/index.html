@@ -1,45 +1,159 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tờ Báo AI</title><style>*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#172033;font-family:Inter,system-ui,sans-serif}.wrap{max-width:1000px;margin:auto;padding:18px}.mast{background:linear-gradient(135deg,#111827,#4338ca,#7c3aed);color:#fff;border-radius:26px;padding:30px;margin-bottom:20px}.mast h1{margin:0;font-size:30px}.mast p{margin-bottom:0;opacity:.85}.grid{display:grid;gap:20px}.article{background:#fff;border-radius:24px;padding:26px;box-shadow:0 12px 40px #11182712}.kicker{color:#4f46e5;font-weight:800;text-transform:uppercase;font-size:12px}.article h2{font-size:30px;line-height:1.2;margin:8px 0}.meta,.source{color:#64748b;font-size:13px}.hero{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:18px;margin:18px 0}.body{font-size:17px;line-height:1.8}.body p{margin:0 0 16px}.source a{color:#4338ca;word-break:break-all}.product-box{margin-top:20px;padding:16px;border:1px solid #fed7aa;border-radius:16px;background:#fff7ed}.product-box a{display:inline-block;margin-top:8px;color:#c2410c;font-weight:800;text-decoration:none}@media(max-width:600px){.wrap{padding:10px}.article{padding:18px}.article h2{font-size:25px}}</style></head><body><main class="wrap"><header class="mast"><h1>📰 Tờ Báo AI</h1><p>Báo chuyên sản phẩm • mỗi số tập trung một sản phẩm • Chợ Deal hoạt động riêng tại market.html</p></header><section class="grid"><article><div class="kicker">Báo sản phẩm</div><h2>Kem đánh răng – Lựa chọn đơn giản cho nụ cười tươi sáng của cả gia đình**</h2><div class="meta">📅 20/09/2026 20:29</div><img src="https://cdn.thegioididong.com/Products/Images/2446/181750/kdr-p-s-bao-ve-123-190g-2-1.jpg" alt="Kem đánh răng – Lựa chọn đơn giản cho nụ cười tươi sáng của cả gia đình**" loading="lazy"><div class="body"><p>Trong nhịp sống hiện đại, việc chăm sóc răng miệng đã trở thành một phần không thể thiếu trong thói quen hằng ngày của mỗi người. Tuy nhiên, không phải ai cũng dám đầu tư vào những sản phẩm phức tạp, đắt tiền hay phải tuân thủ những quy trình khó nhằn. Đối với những gia đình muốn tìm một giải pháp vừa hiệu quả, vừa tiện lợi, “Kem đánh răng” – một sản phẩm cơ bản nhưng được thiết kế để đáp ứng nhu cầu thiết yếu của mọi thành viên – có thể là câu trả lời.
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Góc Bếp Thông Minh – Săn Deal</title>
+  <meta name="description" content="Review đồ gia dụng & deal thật lòng mỗi ngày">
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f8fafc; color: #1e293b; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 16px 16px 32px;
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+}
+.container { max-width: 820px; width: 100%; margin: 0 auto; }
+.magazine-header {
+  background: linear-gradient(145deg, #4f46e5 0%, #7c3aed 45%, #ec4899 100%);
+  border-radius: 28px; padding: 40px 28px 32px; margin-bottom: 32px;
+  box-shadow: 0 16px 40px -8px rgba(79, 70, 229, 0.30);
+  text-align: center; color: #ffffff; position: relative; overflow: hidden;
+}
+.magazine-header h1 { font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; }
+.magazine-header .slogan {
+  font-size: 0.95rem; opacity: 0.92; background: rgba(255,255,255,0.12);
+  display: inline-block; padding: 4px 18px; border-radius: 40px;
+}
+.article-card {
+  background: #ffffff; border-radius: 24px; padding: 24px 24px 28px;
+  margin-bottom: 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.04);
+  border-left: 6px solid transparent;
+  border-image: linear-gradient(180deg, #4f46e5, #ec4899) 1;
+}
+.featured-badge {
+  display: inline-block; background: #fce7f3; color: #be185d;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; padding: 4px 14px; border-radius: 40px; margin-bottom: 16px;
+}
+.article-card h1 { font-size: 1.7rem; font-weight: 700; line-height: 1.3; margin-bottom: 12px; }
+.article-meta { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
+.article-body { font-size: 1.05rem; line-height: 1.75; color: #334155; }
+.article-body p { margin-bottom: 16px; }
+.product-img {
+  width: 100%; max-height: 320px; object-fit: contain; border-radius: 16px;
+  margin: 8px 0 20px; background: #f1f5f9;
+}
+.btn-buy {
+  display: block; text-align: center;
+  background: linear-gradient(135deg, #e11d48, #be185d);
+  color: #fff; padding: 14px 24px; border-radius: 14px;
+  text-decoration: none; font-weight: 700; font-size: 1.05rem;
+  margin: 28px 0 16px; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.25);
+}
+.disclosure {
+  font-size: 0.8rem; color: #64748b; margin-top: 24px;
+  padding-top: 16px; border-top: 1px solid #e2e8f0;
+}
+.section-label {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.6px; color: #94a3b8; margin-bottom: 18px;
+}
+.section-label::before, .section-label::after {
+  content: ""; flex: 1; height: 1px; background: #e2e8f0;
+}
+.archive-list { display: flex; flex-direction: column; gap: 12px; }
+.archive-item {
+  background: #ffffff; border-radius: 18px; padding: 16px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;
+  display: flex; justify-content: space-between; align-items: center;
+  text-decoration: none; color: inherit;
+}
+.archive-item .info h3 { font-size: 1.05rem; font-weight: 600; color: #1e293b; }
+.archive-item .info .date { font-size: 0.8rem; color: #94a3b8; }
+.archive-item .arrow { color: #4f46e5; font-size: 1.25rem; }
+.footer {
+  text-align: center; padding: 32px 0 8px; margin-top: 40px;
+  border-top: 1px solid #e9eef3; color: #94a3b8; font-size: 0.8rem;
+}
+.footer span { color: #4f46e5; font-weight: 500; }
+@media (max-width: 600px) {
+  .magazine-header h1 { font-size: 1.6rem; }
+  .article-card h1 { font-size: 1.35rem; }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="magazine-header">
+      <h1>Góc Bếp Thông Minh</h1>
+      <span class="slogan">Review thật lòng &amp; săn deal chính hãng mỗi ngày</span>
+    </header>
+    
+    <article class="article-card">
+      <span class="featured-badge">🔥 Mới nhất</span>
+      <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:12px;">
+        <a href="bai-2026-09-21.html" style="color:#1e293b;text-decoration:none;">Review săn deal ngày 21/09/2026</a>
+      </h2>
+      <p style="color:#475569;font-size:0.98rem;margin-bottom:20px;line-height:1.6;">
+        Đánh giá chi tiết, phân tích ưu nhược điểm và chia sẻ kinh nghiệm săn deal giá hời cho thiết bị nhà bếp đáng mua nhất hôm nay.
+      </p>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f1f5f9;padding-top:18px;font-size:0.85rem;color:#64748b;flex-wrap:wrap;gap:12px;">
+        <span>📅 21/09/2026</span>
+        <a href="bai-2026-09-21.html" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:10px 22px;border-radius:40px;text-decoration:none;font-weight:600;font-size:0.85rem;">
+          Đọc bài viết →
+        </a>
+      </div>
+    </article>
 
-**Nhu cầu nào mà kem đánh răng đang giải quyết?**
+    
+    <div class="section-label">Các số báo trước</div>
+    <div class="archive-list">
+      <a href="bai-2026-09-20.html" class="archive-item">
+        <div class="info">
+          <h3>Review thiết bị gia dụng ngày 20/09/2026</h3>
+          <span class="date">📅 20/09/2026</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
 
-Mỗi ngày, chúng ta tiếp xúc với thực phẩm, đồ uống, và môi trường có thể gây bám bẩn, mảng bám trên bề mặt răng. Nếu không được làm sạch kịp thời, những tác nhân này có thể dẫn đến mùi hôi miệng, cảm giác không thoải mái và thậm chí ảnh hưởng đến sức khỏe răng miệng lâu dài. Người tiêu dùng ngày nay không chỉ muốn răng sạch mà còn mong muốn hơi thở thơm mát, cảm giác sảng khoái sau mỗi lần đánh răng. “Kem đánh răng” được giới thiệu với ba điểm nổi bật: bảo vệ răng miệng, mang lại hơi thở thơm và thích hợp cho việc dùng hàng ngày. Những tính năng này đáp ứng trực tiếp nhu cầu cơ bản của mọi gia đình: giữ cho răng luôn sạch sẽ, giảm thiểu mùi hôi và duy trì thói quen vệ sinh răng miệng một cách dễ dàng.
+      <a href="bai-2026-09-19.html" class="archive-item">
+        <div class="info">
+          <h3>Review thiết bị gia dụng ngày 19/09/2026</h3>
+          <span class="date">📅 19/09/2026</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
 
-**Các điểm đáng chú ý của sản phẩm**
+      <a href="bai-2026-09-18.html" class="archive-item">
+        <div class="info">
+          <h3>Review thiết bị gia dụng ngày 18/09/2026</h3>
+          <span class="date">📅 18/09/2026</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
 
-- **Bảo vệ răng miệng**: Công thức của kem đánh răng được thiết kế để làm sạch bề mặt răng, loại bỏ mảng bám và ngăn ngừa sự hình thành mảng bám mới. Nhờ vào việc sử dụng thường xuyên, sản phẩm hỗ trợ duy trì một môi trường miệng khỏe mạnh, giảm thiểu nguy cơ các vấn đề răng miệng cơ bản.
+      <a href="bai-2026-09-17.html" class="archive-item">
+        <div class="info">
+          <h3>Review thiết bị gia dụng ngày 17/09/2026</h3>
+          <span class="date">📅 17/09/2026</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
 
-- **Hơi thở thơm**: Một trong những yếu tố khiến người dùng cảm thấy tự tin là hơi thở thơm mát. Kem đánh răng mang lại cảm giác sảng khoái ngay sau khi sử dụng, giúp người dùng cảm thấy thoải mái trong giao tiếp hàng ngày.
+      <a href="bai-2026-09-16.html" class="archive-item">
+        <div class="info">
+          <h3>Review thiết bị gia dụng ngày 16/09/2026</h3>
+          <span class="date">📅 16/09/2026</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+</div>
 
-- **Dùng hàng ngày**: Sản phẩm được khuyến nghị dùng hàng ngày, phù hợp với thói quen đánh răng hai lần mỗi ngày – buổi sáng và buổi tối. Độ nhạy cảm và độ nhẹ nhàng của kem cho phép mọi thành viên trong gia đình, kể cả trẻ em, có thể sử dụng mà không lo gây kích ứng.
-
-- **Đối tượng phù hợp – cả gia đình**: Thiết kế không chứa các thành phần gây kích ứng mạnh, kem đánh răng phù hợp với mọi độ tuổi, từ trẻ em cho tới người lớn. Điều này giúp các bậc cha mẹ có thể yên tâm mua một sản phẩm duy nhất cho cả nhà, tránh việc phải mua nhiều loại kem cho các thành viên khác nhau.
-
-**Ai nên cân nhắc sử dụng kem đánh răng này?**
-
-- **Gia đình có trẻ em**: Khi trẻ mới bắt đầu học cách tự chăm sóc răng miệng, việc lựa chọn một loại kem nhẹ nhàng, không gây kích ứng là rất quan trọng. “Kem đánh răng” đáp ứng tiêu chí này, giúp trẻ hình thành thói quen đánh răng đúng cách.
-
-- **Người bận rộn**: Với lịch trình dày đặc, việc tìm một sản phẩm đa năng, không cần phải thay đổi theo thời gian hoặc hoàn cảnh là một lợi thế lớn. Sản phẩm này cho phép người dùng duy trì vệ sinh răng miệng một cách nhanh chóng, không tốn thêm thời gian cho các bước phụ trợ.
-
-- **Người quan tâm đến hơi thở thơm mát**: Đối với những ai thường xuyên giao tiếp, làm việc trong môi trường yêu cầu giao tiếp gần gũi, một hơi thở thơm mát sẽ góp phần tạo ấn tượng tốt. Kem đánh răng mang lại cảm giác tươi mát, giúp người dùng tự tin hơn trong các buổi gặp gỡ.
-
-- **Người muốn duy trì thói quen hàng ngày**: Việc sử dụng một sản phẩm không gây khó chịu, không có vị đắng hay mùi lạ sẽ giúp người dùng duy trì thói quen đánh răng đều đặn, giảm thiểu khả năng bỏ qua hoặc trì hoãn việc chăm sóc răng miệng.
-
-**Điều cần kiểm tra trước khi mua**
-
-Mặc dù “Kem đánh răng” được mô tả là phù hợp cho cả gia đình, người tiêu dùng vẫn nên cân nhắc một số yếu tố để đảm bảo lựa chọn phù hợp nhất:
-
-1. **Thành phần an toàn**: Đối với trẻ em và người có da nhạy cảm, việc kiểm tra danh sách thành phần để chắc chắn không có các chất gây kích ứng là cần thiết. Nếu có bất kỳ dấu hiệu nào của dị ứng, nên ngừng sử dụng và tham khảo ý kiến chuyên gia.
-
-2. **Độ mịn và cảm giác khi chải**: Một số người có thể thích cảm giác kem mịn nhẹ, trong khi người khác có thể muốn cảm giác hơi thô để làm sạch sâu hơn. Trước khi mua số lượng lớn, nên thử một mẫu nhỏ để cảm nhận độ nhám và độ bọt của kem.
-
-3. **Mùi hương**: Hơi thở thơm mát là một trong những điểm mạnh của sản phẩm, tuy nhiên mùi hương có thể gây cảm giác khó chịu đối với một số người. Nếu bạn nhạy cảm với mùi, hãy thử mùi hương của kem trước khi quyết định mua.
-
-4. **Kích thước và đóng gói**: Đối với gia đình có nhiều thành viên, việc chọn kích thước đóng gói phù hợp sẽ giúp tiết kiệm chi phí và giảm thiểu lãng phí. Kiểm tra xem sản phẩm có được đóng gói trong ống nhựa, thủy tinh hay bao bì nào để phù hợp với không gian lưu trữ trong nhà.
-
-5. **Hướng dẫn sử dụng**: Đọc kỹ hướng dẫn trên bao bì để biết liều lượng và thời gian chải răng đề xuất. Việc tuân thủ đúng hướng dẫn sẽ giúp tối ưu hiệu quả bảo vệ răng miệng và duy trì hơi thở thơm.
-
-**Kết luận**
-
-“Kem đánh răng” không chỉ là một sản phẩm vệ sinh đơn thuần, mà còn là một phần quan trọng trong việc duy trì sức khỏe răng miệng và sự tự tin trong giao tiếp hằng ngày. Với ba điểm nổi bật – bảo vệ răng miệng, mang lại hơi thở thơm và thích hợp cho việc dùng hàng ngày – sản phẩm đáp ứng nhu cầu cơ bản của mọi gia đình mà không đòi hỏi những bước phức tạp hay chi phí cao. Khi lựa chọn, người tiêu dùng nên chú ý tới thành phần, cảm giác khi sử dụng và mùi hương để đảm bảo phù hợp với từng thành viên trong gia đình.
-
-Nếu bạn đang tìm kiếm một giải pháp đơn giản, an toàn và hiệu quả để duy trì thói quen đánh răng cho cả nhà, “Kem đánh răng” là một lựa chọn đáng cân nhắc. Đầu tư vào một sản phẩm cơ bản nhưng đáp ứng đầy đủ các tiêu chí thiết yếu sẽ giúp cả gia đình bạn có được nụ cười tươi sáng và hơi thở thơm mát mỗi ngày.</p></div><div class="product-box"><b>🛍️ Sản phẩm trong bài</b><br>Kem đánh răng<br><a href="https://shorten.asia/eZqcGeTc" target="_blank" rel="nofollow sponsored">XEM SẢN PHẨM →</a></div><p class="source">Tờ Báo AI viết độc lập dựa trên thông tin sản phẩm đã cung cấp.</p></article></section></main></body></html>
+    <footer class="footer">
+      <p>© 2026 <span>Góc Bếp Thông Minh</span> – All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
