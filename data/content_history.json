@@ -418,5 +418,17 @@
       "slug": "2026-09-21",
       "score": 15.0
     }
+  },
+  {
+    "product_id": "bom-xe-001",
+    "title": "Bạn còn lo lắng khi lốp xe máy bị xẹp giữa đường?",
+    "content_hash": "4ebf854e63d15309",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-09-22T11:06:38.696076+07:00",
+    "extra": {
+      "slug": "2026-09-22",
+      "score": 15.0
+    }
   }
 ]
