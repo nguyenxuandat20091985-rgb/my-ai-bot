@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Facebook ad - quản lý chiến dịch kết nối Facebook có kiểm soát">
+<link rel="manifest" href="./manifest.json">
+<title>Facebook ad</title>
+<style>
+:root{--bg:#070b16;--panel:#0e1527;--panel2:#131c31;--line:#24304a;--text:#eef3ff;--muted:#8f9bb4;--accent:#4f7cff;--good:#22c55e;--warn:#f59e0b;--danger:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#060914,#0b1020);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.app{display:flex;min-height:100vh}.side{width:245px;background:#091126;border-right:1px solid var(--line);padding:18px;position:fixed;inset:0 auto 0 0;z-index:10}.brand{font-weight:900;font-size:22px;margin:5px 8px 24px}.brand span{color:var(--accent)}.nav button{width:100%;text-align:left;background:transparent;color:#aab5cc;padding:12px 13px;border-radius:12px;margin:3px 0}.nav button.active,.nav button:hover{background:#18233e;color:#fff}.main{margin-left:245px;width:calc(100% - 245px);padding:24px;max-width:1400px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:22px}.top h1{margin:0;font-size:28px}.pill{padding:7px 11px;border-radius:999px;background:#12203c;color:#a9c0ff;font-size:12px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:rgba(14,21,39,.92);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px #0003}.stat .num{font-size:28px;font-weight:900;margin-top:8px}.muted{color:var(--muted)}.section{margin-top:18px}.section h2{font-size:18px;margin:0 0 12px}.two{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #1d2740}.row:last-child{border-bottom:0}.status{font-size:12px;padding:5px 9px;border-radius:999px;background:#13291d;color:#7ff0a5}.status.warn{background:#34250c;color:#ffd27b}.btn{background:var(--accent);color:white;padding:10px 14px;border-radius:11px;font-weight:700}.btn.ghost{background:#17213a}.btn.danger{background:#3a1820;color:#ff9eaa}.actions{display:flex;gap:8px;flex-wrap:wrap}.chart{height:150px;display:flex;align-items:end;gap:8px;padding-top:12px}.bar{flex:1;background:linear-gradient(#5e8cff,#2948a8);border-radius:8px 8px 3px 3px;min-height:18px}.bar small{display:block;text-align:center;margin-top:-20px;color:#dbe5ff;font-size:10px}.page{display:none}.page.active{display:block}.search{width:100%;background:#0a1121;border:1px solid var(--line);color:#fff;border-radius:11px;padding:11px}.bottom{display:none}.toast{position:fixed;right:20px;bottom:20px;background:#16223c;border:1px solid #314264;padding:12px 15px;border-radius:12px;display:none;z-index:20}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal .card{width:min(520px,100%)}label{display:block;color:#aab5cc;font-size:13px;margin:12px 0 6px}
+@media(max-width:850px){.side{display:none}.main{margin:0;width:100%;padding:16px 14px 90px}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.top h1{font-size:22px}.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#091126;border-top:1px solid var(--line);z-index:10;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}.bottom button{background:transparent;color:#8f9bb4;font-size:11px}.bottom button.active{color:#fff}.card{border-radius:15px;padding:15px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="brand">● <span>Facebook</span> ad</div><div class="nav" id="nav"></div><div class="card" style="margin-top:20px"><div class="muted">Safety Center</div><strong style="color:#7ff0a5">● Bình thường</strong><div class="muted" style="font-size:12px;margin-top:5px">Chỉ thực hiện thao tác được người dùng duyệt.</div></div></aside>
+<main class="main">
+<div class="top"><div><h1 id="title">Tổng quan</h1><div class="muted">Trung tâm quản lý kết nối Facebook</div></div><button class="btn" onclick="openModal()">＋ Chiến dịch</button></div>
+
+<section id="dashboard" class="page active">
+<div class="grid">
+<div class="card stat"><div class="muted">Kết nối mới</div><div class="num">43</div><div class="muted">+12 tuần này</div></div>
+<div class="card stat"><div class="muted">Lời mời đang chờ</div><div class="num">95</div><div class="muted">12 cần xử lý</div></div>
+<div class="card stat"><div class="muted">Chiến dịch</div><div class="num">4</div><div class="muted">2 đang hoạt động</div></div>
+<div class="card stat"><div class="muted">Cảnh báo</div><div class="num" style="color:#7ff0a5">0</div><div class="muted">Tài khoản bình thường</div></div>
+</div>
+<div class="two section">
+<div class="card"><h2>Tăng trưởng 7 ngày</h2><div class="chart"><div class="bar" style="height:38%"><small>1</small></div><div class="bar" style="height:52%"><small>2</small></div><div class="bar" style="height:44%"><small>3</small></div><div class="bar" style="height:68%"><small>4</small></div><div class="bar" style="height:61%"><small>5</small></div><div class="bar" style="height:82%"><small>6</small></div><div class="bar" style="height:95%"><small>7</small></div></div></div>
+<div class="card"><h2>Hoạt động gần đây</h2><div class="row"><span>Chiến dịch Taxi Lạng Sơn</span><span class="status">Đã duyệt</span></div><div class="row"><span>12 lời mời mới</span><span class="status">Đã đồng bộ</span></div><div class="row"><span>Kiểm tra an toàn</span><span class="status">Bình thường</span></div></div>
+</div>
+<div class="card section"><h2>Chiến dịch đang chạy</h2><div id="campaignRows"></div></div>
+</section>
+
+<section id="campaigns" class="page"><div class="card"><div class="actions"><input class="search" id="campSearch" placeholder="Tìm chiến dịch..." oninput="renderCampaigns()"></div><div id="campaignList"></div></div></section>
+<section id="connections" class="page"><div class="card"><h2>Danh sách kết nối</h2><div id="people"></div></div></section>
+<section id="invites" class="page"><div class="card"><h2>Lời mời</h2><div class="actions" style="margin-bottom:12px"><button class="btn ghost" onclick="showInv('all')">Tất cả</button><button class="btn ghost" onclick="showInv('received')">Đã nhận</button><button class="btn ghost" onclick="showInv('sent')">Đã gửi</button></div><div id="invList"></div></div></section>
+<section id="analytics" class="page"><div class="grid"><div class="card stat"><div class="muted">Tỷ lệ chấp nhận</div><div class="num">45%</div></div><div class="card stat"><div class="muted">Phản hồi</div><div class="num">31%</div></div><div class="card stat"><div class="muted">Mục tiêu</div><div class="num">286</div></div><div class="card stat"><div class="muted">Hiệu suất</div><div class="num">+18%</div></div></div><div class="card section"><h2>Xu hướng kết nối</h2><div class="chart"><div class="bar" style="height:35%"><small>1</small></div><div class="bar" style="height:42%"><small>2</small></div><div class="bar" style="height:50%"><small>3</small></div><div class="bar" style="height:47%"><small>4</small></div><div class="bar" style="height:63%"><small>5</small></div><div class="bar" style="height:72%"><small>6</small></div><div class="bar" style="height:90%"><small>7</small></div><div class="bar" style="height:84%"><small>8</small></div><div class="bar" style="height:100%"><small>9</small></div><div class="bar" style="height:92%"><small>10</small></div></div></div></section>
+<section id="logs" class="page"><div class="card"><h2>Nhật ký hệ thống</h2><div id="logsList"></div></div></section>
+<section id="settings" class="page"><div class="card"><h2>Cài đặt</h2><div class="row"><span>Thông báo</span><button class="btn ghost" onclick="toast('Đã bật thông báo')">Bật</button></div><div class="row"><span>Chế độ an toàn</span><span class="status">Đang bật</span></div><div class="row"><span>Tích hợp Meta</span><span class="status warn">Chưa kết nối</span></div><p class="muted">Phiên bản thử nghiệm dùng dữ liệu mẫu. Không lưu mật khẩu, cookie hoặc token Facebook.</p></div></section>
+</main></div>
+<div class="bottom" id="bottom"></div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="card"><h2>Tạo chiến dịch</h2><label>Tên chiến dịch</label><input class="search" id="newName" value="Chiến dịch mới"><label>Mục tiêu</label><input class="search" id="newGoal" value="Kết nối khách hàng phù hợp"><div class="actions" style="margin-top:16px"><button class="btn" onclick="createCampaign()">Tạo</button><button class="btn ghost" onclick="closeModal()">Hủy</button></div></div></div>
+<script>
+const menu=[['dashboard','⌂','Tổng quan'],['campaigns','🎯','Chiến dịch'],['connections','🤝','Kết nối'],['invites','📩','Lời mời'],['analytics','📊','Thống kê'],['logs','📝','Nhật ký'],['settings','⚙️','Cài đặt']];
+let campaigns=[
+{name:'Taxi Lạng Sơn',goal:'Kết nối khách hàng',status:'Đang chạy',count:128},
+{name:'Khách hàng dịch vụ',goal:'Tệp mục tiêu',status:'Đang chạy',count:74},
+{name:'Người đã tương tác',goal:'Theo dõi phản hồi',status:'Tạm dừng',count:51},
+{name:'Kết nối tuần này',goal:'Danh sách duyệt',status:'Hoàn tất',count:33}];
+const people=['Nguyễn Minh','Hoàng Anh','Trần Nam','Lê Hương','Phạm Duy','Đức Thành'];
+const invites=[['Nguyễn Minh','received'],['Hoàng Anh','received'],['Trần Nam','sent'],['Lê Hương','sent'],['Phạm Duy','received']];
+const logs=['Đồng bộ danh sách mục tiêu','Tạo chiến dịch Taxi Lạng Sơn','Người dùng duyệt 8 lời mời','Safety Center kiểm tra: bình thường'];
+function init(){document.getElementById('nav').innerHTML=menu.map(x=>'<button data-page="'+x[0]+'" onclick="go(\''+x[0]+'\')">'+x[1]+' &nbsp; '+x[2]+'</button>').join('');document.getElementById('bottom').innerHTML=menu.slice(0,5).map(x=>'<button data-page="'+x[0]+'" onclick="go(\''+x[0]+'\')">'+x[1]+'<br>'+x[2]+'</button>').join('');renderAll();go('dashboard')}
+function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));let m=menu.find(x=>x[0]===id);document.getElementById('title').textContent=m?m[2]:'Tổng quan';scrollTo(0,0)}
+function renderAll(){renderCampaigns();document.getElementById('campaignRows').innerHTML=campaigns.slice(0,3).map(c=>row(c.name,c.goal,'<span class="status">'+c.status+'</span>')).join('');document.getElementById('people').innerHTML=people.map((p,i)=>row('<strong>'+p+'</strong><div class="muted">Mục tiêu #'+(100+i)+'</div>','Đã kết nối','<button class="btn ghost" onclick="toast(\'Đã mở hồ sơ demo\')">Xem</button>')).join('');showInv('all');document.getElementById('logsList').innerHTML=logs.map((x,i)=>row('<span>'+x+'</span>','14:'+(32-i*3),'')).join('')}
+function row(a,b,c){return '<div class="row"><div>'+a+'</div><div style="text-align:right">'+b+(c?'<div style="margin-top:5px">'+c+'</div>':'')+'</div></div>'}
+function renderCampaigns(){let q=(document.getElementById('campSearch')?.value||'').toLowerCase();document.getElementById('campaignList').innerHTML=campaigns.filter(c=>c.name.toLowerCase().includes(q)).map(c=>row('<strong>'+c.name+'</strong><div class="muted">'+c.goal+' · '+c.count+' mục tiêu</div>','<span class="status '+(c.status==='Tạm dừng'?'warn':'')+'">'+c.status+'</span>')).join('')}
+function showInv(type){document.getElementById('invList').innerHTML=invites.filter(x=>type==='all'||x[1]===type).map(x=>row('<strong>'+x[0]+'</strong><div class="muted">'+(x[1]==='received'?'Lời mời đã nhận':'Lời mời đã gửi')+'</div>',x[1]==='received'?'Chờ xử lý':'Đang chờ','<button class="btn" onclick="toast(\'Đã cập nhật trạng thái demo\')">'+(x[1]==='received'?'Xử lý':'Chi tiết')+'</button>')).join('')}
+function openModal(){document.getElementById('modal').style.display='flex'}function closeModal(){document.getElementById('modal').style.display='none'}
+function createCampaign(){let name=document.getElementById('newName').value.trim()||'Chiến dịch mới';campaigns.unshift({name,goal:document.getElementById('newGoal').value||'Mục tiêu mới',status:'Đang chạy',count:0});closeModal();renderAll();go('campaigns');toast('Đã tạo chiến dịch demo')}
+function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',1800)}
+if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+init();
+</script>
+</body></html>
