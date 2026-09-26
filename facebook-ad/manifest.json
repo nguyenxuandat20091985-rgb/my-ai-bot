@@ -1,1 +1,1 @@
-{"name":"Facebook ad","short_name":"Facebook ad","start_url":"./","display":"standalone","background_color":"#070b16","theme_color":"#0b1020","description":"Trung tâm quản lý kết nối Facebook","icons":[]}
+{"name":"Facebook ad","short_name":"Facebook ad","start_url":"./","scope":"./","display":"standalone","background_color":"#f6f8fc","theme_color":"#2864df","description":"Nền tảng hỗ trợ tăng trưởng Facebook","icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
