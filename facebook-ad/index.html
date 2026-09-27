@@ -3,364 +3,650 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#2463df">
-<meta name="description" content="Facebook ad - Tăng người theo dõi, tương tác và lượt xem Video/Reels để bật kiếm tiền">
+<meta name="theme-color" content="#1d4ed8">
+<meta name="description" content="Facebook ad - Công cụ tăng trưởng Facebook cá nhân">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" href="./icon.svg">
-<title>Facebook ad — Tăng trưởng Facebook</title>
+<title>Facebook ad</title>
 <style>
-:root{--b:#2864df;--b2:#174fc7;--ink:#111827;--muted:#687386;--line:#e5eaf2;--bg:#f6f8fc;--card:#fff;--green:#19d98a;--orange:#f59e0b}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.wrap{width:min(1180px,calc(100% - 28px));margin:auto}
-header{height:74px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
-.head{height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px;color:#172033;text-decoration:none}
-.mark{width:39px;height:39px;border-radius:11px;background:linear-gradient(135deg,#57a2ff,#315be9);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:0 7px 18px #2764df35}
-.nav{display:flex;gap:24px}.nav a{color:#4b5563;text-decoration:none;font-weight:700}
-.actions{display:flex;gap:9px;align-items:center}
-.btn{border:0;border-radius:10px;padding:11px 17px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}
-.primary{background:var(--b);color:#fff;box-shadow:0 8px 20px #2764df2e}
-.light{background:#edf3ff;color:#2457c9}
-.outline{background:#fff;color:#2457c9;border:1px solid #d5e0f7}
-.combo-btn{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff}
-.hamb{display:none;background:#fff;border:1px solid var(--line);border-radius:10px;width:43px;height:43px;font-size:21px}
-.hero{margin-top:16px;background:linear-gradient(135deg,#2a68e8,#1e54ca);border-radius:16px;color:#fff;padding:48px 40px;box-shadow:0 16px 40px #17356b18;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;width:390px;height:390px;border-radius:50%;right:-170px;top:-190px;background:#fff1}
-.eyebrow{font-size:15px;font-weight:600;letter-spacing:.3px;color:#dbeafe;text-transform:uppercase}
-.hero h1{font-size:36px;line-height:1.15;letter-spacing:-.8px;max-width:720px;margin:12px 0 14px}
-.hero p{font-size:17px;max-width:680px;color:#edf4ff;margin:0 0 22px}
-.hero .btn{background:#fff;color:#2458c9;font-size:15px}
-.hero .btn.alt{background:#ffffff18;color:#fff;border:1px solid #ffffff40}
-.meta{display:flex;gap:32px;flex-wrap:wrap;margin-top:24px}
-.meta small{display:block;text-transform:uppercase;color:#d9e7ff;font-weight:800;font-size:12px}
-.meta strong{font-size:16px}
-.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);margin-right:7px}
-.section{padding:42px 0}
-.title{text-align:center;margin-bottom:28px}
-.title h2{font-size:28px;margin:0 0 6px}
-.title p{margin:0;color:var(--muted)}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 28px #17356b0a;transition:.2s}
-.card:hover{transform:translateY(-2px);box-shadow:0 12px 32px #17356b12}
-.card.combo{border:2px solid #f59e0b;background:linear-gradient(180deg,#fffbeb,#fff)}
-.ico{width:48px;height:48px;border-radius:14px;background:#edf3ff;color:var(--b);display:grid;place-items:center;font-size:24px;margin-bottom:14px}
-.card.combo .ico{background:#fef3c7;color:#d97706}
-.card h3{margin:0 0 8px;font-size:18px}
-.muted{color:var(--muted);font-size:14px;line-height:1.5}
-.price{font-size:18px;color:var(--b);font-weight:900;margin:14px 0 12px}
-.card.combo .price{color:#d97706}
-.badge-hot{display:inline-block;background:#f59e0b;color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;margin-left:6px;vertical-align:middle}
-.order{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+:root{
+  --b:#1d4ed8;
+  --b2:#1e40af;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --green:#10b981;
+  --orange:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  padding-bottom:70px;
+}
+.wrap{width:min(920px,calc(100% - 32px));margin:0 auto}
+
+/* Header */
+header{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:60px;
+}
+.head{
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  font-size:18px;
+  color:var(--ink);
+  text-decoration:none;
+}
+.mark{
+  width:34px;height:34px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+  color:#fff;
+  display:grid;place-items:center;
+  font-size:18px;
+  font-weight:800;
+}
+
+/* Hero */
+.hero{
+  margin-top:20px;
+  background:linear-gradient(135deg,#1d4ed8,#1e40af);
+  border-radius:20px;
+  color:#fff;
+  padding:36px 28px;
+  text-align:center;
+}
+.hero h1{
+  font-size:26px;
+  line-height:1.25;
+  margin-bottom:10px;
+  font-weight:800;
+}
+.hero p{
+  font-size:15px;
+  opacity:.9;
+  max-width:420px;
+  margin:0 auto 20px;
+}
+.hero-btns{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 20px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  transition:.15s;
+}
+.btn-white{
+  background:#fff;
+  color:#1d4ed8;
+}
+.btn-ghost{
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.3);
+}
+.btn-primary{
+  background:var(--b);
+  color:#fff;
+  width:100%;
+}
+.btn-primary:active{transform:scale(.98)}
+.btn-light{
+  background:#eff6ff;
+  color:#1d4ed8;
+  width:100%;
+}
+.btn-orange{
+  background:linear-gradient(135deg,#f59e0b,#d97706);
+  color:#fff;
+  width:100%;
+}
+
+/* Section */
+.section{padding:32px 0 8px}
+.section-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.section-desc{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:18px;
+}
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card.combo{
+  border:2px solid #f59e0b;
+  background:linear-gradient(180deg,#fffbeb 0%,#fff 100%);
+}
+.card-top{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+.ico{
+  width:44px;height:44px;
+  border-radius:12px;
+  background:#eff6ff;
+  color:var(--b);
+  display:grid;place-items:center;
+  font-size:22px;
+  flex-shrink:0;
+}
+.card.combo .ico{
+  background:#fef3c7;
+  color:#d97706;
+}
+.card h3{
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:2px;
+}
+.card p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+.badge{
+  display:inline-block;
+  background:#f59e0b;
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  padding:2px 7px;
+  border-radius:99px;
+  margin-left:6px;
+  vertical-align:middle;
+}
+
+/* Form */
+.form-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+}
 .field{margin-bottom:14px}
-.field label{display:block;font-weight:800;margin-bottom:6px;font-size:14px}
-.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1px solid #dce2ec;border-radius:10px;background:#fff;font:inherit}
-.sum{background:#f6f8fc;border-radius:12px;padding:16px}
-.sum div{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-.sum .total{border-top:1px solid #dde3ed;padding-top:12px;font-size:18px;font-weight:900}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
-.num{width:34px;height:34px;border-radius:50%;background:var(--b);color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:10px;font-size:14px}
-.step h3{font-size:15px;margin:0 0 4px}
-.dash{background:#0c1426;color:#fff;border-radius:18px;padding:24px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.stat{background:#141e34;border:1px solid #263550;border-radius:13px;padding:16px}
-.stat span{color:#95a4bf;font-size:13px}
-.stat strong{font-size:24px;display:block;margin-top:4px}
-.table{margin-top:16px;border:1px solid #263550;border-radius:13px;overflow:hidden}
-.tr{display:grid;grid-template-columns:1.5fr 1fr .9fr .6fr;padding:13px 15px;border-bottom:1px solid #24314b;gap:10px;font-size:14px}
+.field label{
+  display:block;
+  font-weight:700;
+  font-size:13px;
+  margin-bottom:6px;
+  color:var(--ink);
+}
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  font:inherit;
+  color:var(--ink);
+  outline:none;
+  transition:.15s;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--b);
+  box-shadow:0 0 0 3px rgba(29,78,216,.12);
+}
+.summary{
+  background:#f1f5f9;
+  border-radius:12px;
+  padding:14px 16px;
+  margin-top:8px;
+}
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin:6px 0;
+}
+.summary-row b{font-weight:700}
+
+/* Steps */
+.steps{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.step{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+}
+.step-num{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:var(--b);
+  color:#fff;
+  display:grid;place-items:center;
+  font-weight:800;
+  font-size:13px;
+  margin-bottom:10px;
+}
+.step h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.step p{font-size:12px;color:var(--muted)}
+
+/* Dashboard */
+.dash{
+  background:#0f172a;
+  color:#fff;
+  border-radius:18px;
+  padding:20px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+.stat{
+  background:#1e293b;
+  border-radius:12px;
+  padding:14px;
+}
+.stat span{
+  display:block;
+  font-size:12px;
+  color:#94a3b8;
+  margin-bottom:4px;
+}
+.stat strong{
+  font-size:22px;
+  font-weight:800;
+}
+.table{
+  border:1px solid #334155;
+  border-radius:12px;
+  overflow:hidden;
+}
+.tr{
+  display:grid;
+  grid-template-columns:1.4fr 1fr .7fr;
+  padding:12px 14px;
+  border-bottom:1px solid #334155;
+  font-size:13px;
+  align-items:center;
+}
 .tr:last-child{border:0}
-.tr.head{background:#141e34;font-weight:700;color:#94a3b8}
-.badge{font-style:normal;background:#173624;color:#76efab;border-radius:99px;padding:4px 9px;font-size:12px}
-.foot{background:#0b1324;color:#b8c4da;padding:40px 0 28px;margin-top:20px}
-.footgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:28px}
-.foot h3{color:#fff;margin:0 0 10px}
-.foot a{color:#b8c4da;text-decoration:none;display:block;margin:6px 0}
-.mobile{display:none}
-.toast{display:none;position:fixed;right:16px;bottom:20px;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;z-index:90;box-shadow:0 12px 30px #0003}
-.note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.5}
-@media(max-width:850px){
-.nav,.head .outline{display:none}.hamb{display:block}
-.hero{margin-top:10px;padding:36px 24px}.hero h1{font-size:28px}.hero p{font-size:15px}
-.meta{gap:18px}
-.cards{grid-template-columns:1fr}
-.order{grid-template-columns:1fr}
-.steps{grid-template-columns:1fr 1fr}
-.stats{grid-template-columns:1fr 1fr}
-.tr{grid-template-columns:1.4fr 1fr}.tr>:nth-child(3),.tr>:nth-child(4){display:none}
-.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:60;justify-content:space-around;padding:8px 3px calc(8px + env(safe-area-inset-bottom))}
-.mobile a{text-decoration:none;color:#657086;text-align:center;font-size:11px}
-.mobile b{display:block;font-size:19px;color:#245bcf;line-height:21px}
-.section{padding:32px 0}.footgrid{grid-template-columns:1fr}
+.tr.head{
+  background:#1e293b;
+  color:#94a3b8;
+  font-weight:600;
+  font-size:12px;
+}
+.status{
+  display:inline-block;
+  background:#064e3b;
+  color:#6ee7b7;
+  font-size:11px;
+  font-weight:700;
+  padding:3px 8px;
+  border-radius:99px;
+}
+
+/* Bottom nav */
+.mobile{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  background:#fff;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-around;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+  z-index:60;
+}
+.mobile a{
+  text-decoration:none;
+  color:#64748b;
+  text-align:center;
+  font-size:11px;
+  font-weight:600;
+  flex:1;
+}
+.mobile b{
+  display:block;
+  font-size:20px;
+  color:#1d4ed8;
+  line-height:1.2;
+  margin-bottom:2px;
+}
+
+/* Toast */
+.toast{
+  display:none;
+  position:fixed;
+  left:50%;
+  bottom:90px;
+  transform:translateX(-50%);
+  background:#0f172a;
+  color:#fff;
+  padding:12px 20px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:600;
+  z-index:90;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  white-space:nowrap;
+}
+
+@media(min-width:640px){
+  .cards{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:repeat(4,1fr)}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .hero{padding:48px 40px}
+  .hero h1{font-size:32px}
 }
 </style>
 </head>
 <body>
+
 <header>
   <div class="wrap head">
-    <button class="hamb" onclick="toast('Dịch vụ · Đặt đơn · Hướng dẫn · Quản lý')">☰</button>
-    <a class="logo" href="#home"><span class="mark">f</span>Facebook ad</a>
-    <nav class="nav">
-      <a href="#services">Dịch vụ</a>
-      <a href="#order">Đặt đơn</a>
-      <a href="#how">Hướng dẫn</a>
-      <a href="#dashboard">Quản lý</a>
-    </nav>
-    <div class="actions">
-      <button class="btn outline" onclick="toast('Đăng nhập sẽ được kết nối ở bản backend')">Đăng nhập</button>
-      <button class="btn primary" onclick="toast('Đăng ký sẽ được kết nối ở bản backend')">Đăng ký</button>
-    </div>
+    <a class="logo" href="#home">
+      <span class="mark">f</span>
+      Facebook ad
+    </a>
   </div>
 </header>
 
-<main id="home" class="wrap">
-  <!-- HERO -->
+<main class="wrap" id="home">
+
+  <!-- Hero -->
   <section class="hero">
-    <div class="eyebrow">Hỗ trợ tăng trưởng Facebook để bật kiếm tiền</div>
-    <h1>Tăng Người theo dõi · Tương tác · Lượt xem Video/Reels</h1>
-    <p>Chọn dịch vụ phù hợp, tạo chiến dịch và theo dõi tiến độ trên một nền tảng. Thiết kế mobile-first, dùng thuận tiện ngay trên điện thoại.</p>
-    <div class="actions">
-      <a class="btn" href="#order">Đặt dịch vụ ngay →</a>
-      <a class="btn alt" href="#services">Xem 3 nhóm dịch vụ</a>
-    </div>
-    <div class="meta">
-      <div><small>Trạng thái</small><strong><span class="dot"></span>Hoạt động</strong></div>
-      <div><small>Gói phổ biến</small><strong>Combo cả 3</strong></div>
-      <div><small>Đánh giá</small><strong>4.9 / 5 ★</strong></div>
+    <h1>Tăng trưởng Facebook<br>để bật kiếm tiền</h1>
+    <p>Chọn mục tiêu → nhập link → theo dõi tiến độ. Đơn giản và dễ dùng.</p>
+    <div class="hero-btns">
+      <a class="btn btn-white" href="#order">Tạo chiến dịch ngay</a>
+      <a class="btn btn-ghost" href="#services">Xem dịch vụ</a>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services" class="section">
-    <div class="title">
-      <h2>3 nhóm dịch vụ chính</h2>
-      <p>Chọn đúng mục tiêu tăng trưởng để hỗ trợ bật kiếm tiền trên Facebook</p>
-    </div>
+  <!-- Services -->
+  <section class="section" id="services">
+    <div class="section-title">Chọn mục tiêu tăng trưởng</div>
+    <div class="section-desc">Chạm vào dịch vụ anh muốn dùng</div>
+
     <div class="cards">
       <article class="card">
-        <div class="ico">👥</div>
-        <h3>Tăng Người theo dõi / Bạn bè</h3>
-        <p class="muted">Tăng số lượng người theo dõi hoặc bạn bè theo chiến dịch có kiểm soát, giúp tài khoản đạt ngưỡng mở monetization.</p>
-        <div class="price">Từ 49.000đ</div>
-        <button class="btn light" onclick="pick('Tăng Người theo dõi / Bạn bè')">Chọn dịch vụ →</button>
+        <div class="card-top">
+          <div class="ico">👥</div>
+          <div>
+            <h3>Tăng Người theo dõi / Bạn bè</h3>
+            <p>Tăng số lượng người theo dõi hoặc bạn bè theo chiến dịch.</p>
+          </div>
+        </div>
+        <button class="btn btn-light" onclick="pick('Tăng Người theo dõi / Bạn bè')">Chọn</button>
       </article>
 
       <article class="card">
-        <div class="ico">💬</div>
-        <h3>Tăng Tương tác</h3>
-        <p class="muted">Tăng Like + Comment + Share cho bài viết và Reels, giúp nội dung được phân phối mạnh hơn.</p>
-        <div class="price">Từ 39.000đ</div>
-        <button class="btn light" onclick="pick('Tăng Tương tác (Like + Comment + Share)')">Chọn dịch vụ →</button>
+        <div class="card-top">
+          <div class="ico">💬</div>
+          <div>
+            <h3>Tăng Tương tác</h3>
+            <p>Tăng Like + Comment + Share cho bài viết và Reels.</p>
+          </div>
+        </div>
+        <button class="btn btn-light" onclick="pick('Tăng Tương tác (Like + Comment + Share)')">Chọn</button>
       </article>
 
       <article class="card">
-        <div class="ico">🎬</div>
-        <h3>Tăng Lượt xem Video / Reels</h3>
-        <p class="muted">Tăng lượt xem video và Reels, hỗ trợ thuật toán đẩy nội dung và đủ điều kiện mở các công cụ kiếm tiền.</p>
-        <div class="price">Từ 45.000đ</div>
-        <button class="btn light" onclick="pick('Tăng Lượt xem Video / Reels')">Chọn dịch vụ →</button>
+        <div class="card-top">
+          <div class="ico">🎬</div>
+          <div>
+            <h3>Tăng Lượt xem Video / Reels</h3>
+            <p>Tăng lượt xem video và Reels, hỗ trợ thuật toán đẩy nội dung.</p>
+          </div>
+        </div>
+        <button class="btn btn-light" onclick="pick('Tăng Lượt xem Video / Reels')">Chọn</button>
       </article>
 
       <article class="card combo">
-        <div class="ico">🚀</div>
-        <h3>Combo Tăng Cả 3 <span class="badge-hot">HOT</span></h3>
-        <p class="muted">Gói kết hợp Người theo dõi + Tương tác + Lượt xem. Tối ưu nhất để hướng tới bật kiếm tiền nhanh hơn.</p>
-        <div class="price">Từ 119.000đ</div>
-        <button class="btn combo-btn" onclick="pick('Combo Tăng Cả 3')">Chọn gói Combo →</button>
+        <div class="card-top">
+          <div class="ico">🚀</div>
+          <div>
+            <h3>Combo Tăng Cả 3 <span class="badge">Khuyên dùng</span></h3>
+            <p>Kết hợp Người theo dõi + Tương tác + Lượt xem trong một chiến dịch.</p>
+          </div>
+        </div>
+        <button class="btn btn-orange" onclick="pick('Combo Tăng Cả 3')">Chọn Combo</button>
       </article>
     </div>
   </section>
 
-  <!-- ORDER -->
-  <section id="order" class="section">
-    <div class="title">
-      <h2>Tạo đơn / chiến dịch</h2>
-      <p>Điền thông tin, kiểm tra chi phí rồi xác nhận</p>
-    </div>
-    <div class="order">
-      <div class="card">
-        <h2 style="margin-top:0;font-size:20px">Thông tin đơn hàng</h2>
-        <div class="field">
-          <label>Dịch vụ</label>
-          <select id="service" onchange="calc()">
-            <option>Tăng Người theo dõi / Bạn bè</option>
-            <option>Tăng Tương tác (Like + Comment + Share)</option>
-            <option>Tăng Lượt xem Video / Reels</option>
-            <option>Combo Tăng Cả 3</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Link Facebook / trang công khai</label>
-          <input id="link" placeholder="https://facebook.com/... hoặc link bài / Reels">
-        </div>
-        <div class="field">
-          <label>Số lượng mục tiêu</label>
-          <input id="qty" type="number" min="10" value="100" oninput="calc()">
-        </div>
-        <div class="field">
-          <label>Ghi chú (tùy chọn)</label>
-          <textarea id="note" rows="3" placeholder="Ví dụ: ưu tiên tương tác thật, khu vực, tốc độ..."></textarea>
-        </div>
-        <button class="btn primary" style="width:100%" onclick="createOrder()">Xác nhận tạo đơn</button>
+  <!-- Order Form -->
+  <section class="section" id="order">
+    <div class="section-title">Tạo chiến dịch</div>
+    <div class="section-desc">Điền thông tin rồi bấm xác nhận</div>
+
+    <div class="form-card">
+      <div class="field">
+        <label>Dịch vụ</label>
+        <select id="service" onchange="updateSummary()">
+          <option>Tăng Người theo dõi / Bạn bè</option>
+          <option>Tăng Tương tác (Like + Comment + Share)</option>
+          <option>Tăng Lượt xem Video / Reels</option>
+          <option>Combo Tăng Cả 3</option>
+        </select>
       </div>
-      <div class="card">
-        <h2 style="margin-top:0;font-size:20px">Tóm tắt</h2>
-        <div class="sum">
-          <div><span>Dịch vụ</span><b id="ss">Tăng Người theo dõi / Bạn bè</b></div>
-          <div><span>Số lượng</span><b id="sq">100</b></div>
-          <div><span>Trạng thái</span><b style="color:#17a768">Sẵn sàng</b></div>
-          <div class="total"><span>Tạm tính</span><b id="total">49.000đ</b></div>
-        </div>
-        <p class="note">Bản hiện tại là prototype giao diện. Thanh toán và xử lý thực tế sẽ kết nối sau với backend + tích hợp Meta được phép.</p>
+
+      <div class="field">
+        <label>Link Facebook / bài viết / Reels</label>
+        <input id="link" type="url" placeholder="Dán link vào đây...">
       </div>
+
+      <div class="field">
+        <label>Số lượng mục tiêu</label>
+        <input id="qty" type="number" min="10" value="100" oninput="updateSummary()">
+      </div>
+
+      <div class="field">
+        <label>Ghi chú (không bắt buộc)</label>
+        <textarea id="note" rows="2" placeholder="Ví dụ: ưu tiên tốc độ, khu vực..."></textarea>
+      </div>
+
+      <div class="summary">
+        <div class="summary-row">
+          <span>Dịch vụ</span>
+          <b id="ss">Tăng Người theo dõi / Bạn bè</b>
+        </div>
+        <div class="summary-row">
+          <span>Số lượng</span>
+          <b id="sq">100</b>
+        </div>
+        <div class="summary-row">
+          <span>Trạng thái</span>
+          <b style="color:var(--green)">Sẵn sàng</b>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="margin-top:16px" onclick="createOrder()">
+        Xác nhận tạo chiến dịch
+      </button>
     </div>
   </section>
 
-  <!-- HOW -->
-  <section id="how" class="section">
-    <div class="title">
-      <h2>4 bước đơn giản</h2>
-      <p>Giao diện tối ưu cho điện thoại và máy tính</p>
-    </div>
+  <!-- How it works -->
+  <section class="section" id="how">
+    <div class="section-title">Cách dùng</div>
+    <div class="section-desc">Chỉ 4 bước đơn giản</div>
+
     <div class="steps">
       <div class="step">
-        <div class="num">1</div>
-        <h3>Chọn dịch vụ</h3>
-        <p class="muted">Chọn 1 trong 3 nhóm hoặc gói Combo.</p>
+        <div class="step-num">1</div>
+        <h4>Chọn dịch vụ</h4>
+        <p>Chọn 1 trong 3 nhóm hoặc Combo</p>
       </div>
       <div class="step">
-        <div class="num">2</div>
-        <h3>Nhập link</h3>
-        <p class="muted">Dán link Facebook / bài viết / Reels cần tăng.</p>
+        <div class="step-num">2</div>
+        <h4>Dán link</h4>
+        <p>Link Facebook, bài viết hoặc Reels</p>
       </div>
       <div class="step">
-        <div class="num">3</div>
-        <h3>Kiểm tra</h3>
-        <p class="muted">Xem số lượng và chi phí tạm tính.</p>
+        <div class="step-num">3</div>
+        <h4>Nhập số lượng</h4>
+        <p>Số lượng muốn tăng</p>
       </div>
       <div class="step">
-        <div class="num">4</div>
-        <h3>Theo dõi</h3>
-        <p class="muted">Xem tiến độ trên Dashboard.</p>
+        <div class="step-num">4</div>
+        <h4>Theo dõi</h4>
+        <p>Xem tiến độ ở Dashboard</p>
       </div>
     </div>
   </section>
 
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="section">
-    <div class="title">
-      <h2>Dashboard Facebook ad</h2>
-      <p>Theo dõi tiến độ tăng trưởng theo từng nhóm</p>
-    </div>
+  <!-- Dashboard -->
+  <section class="section" id="dashboard">
+    <div class="section-title">Dashboard</div>
+    <div class="section-desc">Theo dõi tiến độ chiến dịch</div>
+
     <div class="dash">
       <div class="stats">
-        <div class="stat"><span>Người theo dõi mới</span><strong>128</strong></div>
-        <div class="stat"><span>Tương tác mới</span><strong>356</strong></div>
-        <div class="stat"><span>Lượt xem mới</span><strong>2.4K</strong></div>
-        <div class="stat"><span>Chiến dịch</span><strong>5</strong></div>
+        <div class="stat">
+          <span>Người theo dõi mới</span>
+          <strong>128</strong>
+        </div>
+        <div class="stat">
+          <span>Tương tác mới</span>
+          <strong>356</strong>
+        </div>
+        <div class="stat">
+          <span>Lượt xem mới</span>
+          <strong>2.4K</strong>
+        </div>
+        <div class="stat">
+          <span>Chiến dịch</span>
+          <strong>5</strong>
+        </div>
       </div>
+
       <div class="table">
         <div class="tr head">
           <span>Chiến dịch</span>
           <span>Loại</span>
-          <span>Trạng thái</span>
           <span>Tiến độ</span>
         </div>
         <div class="tr">
           <span>Tăng người theo dõi</span>
           <span>Người theo dõi</span>
-          <span><i class="badge">Đang chạy</i></span>
-          <span>68%</span>
+          <span><span class="status">68%</span></span>
         </div>
         <div class="tr">
-          <span>Tăng tương tác bài mới</span>
+          <span>Tăng tương tác</span>
           <span>Like + Comment</span>
-          <span><i class="badge">Đang chạy</i></span>
-          <span>81%</span>
+          <span><span class="status">81%</span></span>
         </div>
         <div class="tr">
           <span>Tăng view Reels</span>
           <span>Lượt xem</span>
-          <span><i class="badge">Đã duyệt</i></span>
-          <span>100%</span>
+          <span><span class="status">100%</span></span>
         </div>
         <div class="tr">
           <span>Combo cả 3</span>
           <span>Combo</span>
-          <span><i class="badge">Đang chạy</i></span>
-          <span>45%</span>
+          <span><span class="status">45%</span></span>
         </div>
       </div>
     </div>
   </section>
+
 </main>
 
-<footer class="foot">
-  <div class="wrap footgrid">
-    <div>
-      <h3>Facebook ad</h3>
-      <div>Nền tảng hỗ trợ tăng trưởng Facebook theo 3 nhóm chính: Người theo dõi, Tương tác và Lượt xem Video/Reels.</div>
-    </div>
-    <div>
-      <h3>Sản phẩm</h3>
-      <a href="#services">3 nhóm dịch vụ</a>
-      <a href="#order">Tạo đơn</a>
-      <a href="#dashboard">Dashboard</a>
-    </div>
-    <div>
-      <h3>Hỗ trợ</h3>
-      <a href="#how">Hướng dẫn</a>
-      <a href="#home">An toàn</a>
-      <a href="javascript:void(0)" onclick="toast('Kênh hỗ trợ đang được hoàn thiện')">Liên hệ</a>
-    </div>
-  </div>
-  <div class="wrap" style="border-top:1px solid #24314b;margin-top:25px;padding-top:18px;font-size:13px">© 2026 Facebook ad · Bản thử nghiệm giao diện</div>
-</footer>
-
+<!-- Bottom nav -->
 <nav class="mobile">
   <a href="#home"><b>⌂</b>Trang chủ</a>
   <a href="#services"><b>▣</b>Dịch vụ</a>
-  <a href="#order"><b>＋</b>Đặt đơn</a>
+  <a href="#order"><b>＋</b>Tạo</a>
   <a href="#dashboard"><b>◫</b>Quản lý</a>
 </nav>
 
 <div class="toast" id="toast"></div>
 
 <script>
-function toast(t){
-  const e=document.getElementById('toast');
-  e.textContent=t;
-  e.style.display='block';
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
   clearTimeout(window.__t);
-  window.__t=setTimeout(()=>e.style.display='none',2200);
+  window.__t = setTimeout(() => el.style.display = 'none', 2200);
 }
-function pick(v){
-  document.getElementById('service').value=v;
+
+function pick(name){
+  document.getElementById('service').value = name;
+  updateSummary();
   document.getElementById('order').scrollIntoView({behavior:'smooth'});
-  calc();
 }
-function calc(){
-  const s=document.getElementById('service').value;
-  const q=Math.max(10,Number(document.getElementById('qty').value||10));
-  const base={
-    'Tăng Người theo dõi / Bạn bè':49,
-    'Tăng Tương tác (Like + Comment + Share)':39,
-    'Tăng Lượt xem Video / Reels':45,
-    'Combo Tăng Cả 3':119
-  }[s]||49;
-  document.getElementById('ss').textContent=s;
-  document.getElementById('sq').textContent=q.toLocaleString('vi-VN');
-  document.getElementById('total').textContent=Math.round(base*q/100).toLocaleString('vi-VN')+'.000đ';
+
+function updateSummary(){
+  const s = document.getElementById('service').value;
+  const q = Math.max(10, Number(document.getElementById('qty').value) || 10);
+  document.getElementById('ss').textContent = s;
+  document.getElementById('sq').textContent = q.toLocaleString('vi-VN');
 }
+
 function createOrder(){
-  if(!document.getElementById('link').value.trim()){
+  const link = document.getElementById('link').value.trim();
+  if(!link){
     toast('Anh nhập link Facebook trước nhé');
     return;
   }
-  toast('Đã tạo đơn thử nghiệm · FBAD-'+Math.floor(100000+Math.random()*899999));
+  const id = 'FBAD-' + Math.floor(100000 + Math.random()*899999);
+  toast('Đã tạo chiến dịch · ' + id);
 }
+
 if('serviceWorker' in navigator){
-  addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
 }
 </script>
 </body>
