@@ -526,5 +526,17 @@
       "slug": "2026-09-30",
       "score": 14.0
     }
+  },
+  {
+    "product_id": "iphone-17-001",
+    "title": "iPhone 17 – Đột phá khiến mọi “cái cũ” bỗng chợt lạc lõng",
+    "content_hash": "c3760ba3929ea044",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-10-01T12:02:55.957219+07:00",
+    "extra": {
+      "slug": "2026-10-01",
+      "score": 14.0
+    }
   }
 ]
