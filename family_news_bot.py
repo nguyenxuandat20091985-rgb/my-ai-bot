@@ -351,7 +351,7 @@ def render_home(articles: list) -> str:
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
 a{color:inherit;text-decoration:none}.page{max-width:1180px;margin:auto;padding:0 22px 50px}.topline{height:4px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
 .utility{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font:600 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.mast{text-align:center;padding:27px 0 17px}.kicker{font:700 11px Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:var(--red)}
+.mast{text-align:center;padding:27px 0 17px}.logo{width:58px;height:58px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;margin:9px auto;color:var(--red);font-size:25px;font-weight:700}.kicker{font:700 11px Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:var(--red)}
 .mast h1{margin:8px 0;font-size:clamp(42px,7vw,72px);line-height:.95;letter-spacing:-.04em}.mast p{max-width:720px;margin:auto;color:var(--muted);line-height:1.6}
 .nav{display:flex;justify-content:center;border-top:1px solid var(--line);border-bottom:3px double var(--line);overflow:auto;white-space:nowrap}.nav a{padding:12px 16px;font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
 .edition{margin-top:24px;background:#2b211b;color:#f9f0e3;padding:20px 25px;display:flex;justify-content:space-between;gap:20px;align-items:center}.edition strong{font-size:21px}.edition span{font:12px Arial,sans-serif;color:#d9cbbb}.times{font:700 11px Arial,sans-serif;color:#ead8b6}
@@ -367,7 +367,7 @@ a{color:inherit;text-decoration:none}.page{max-width:1180px;margin:auto;padding:
 <meta name="description" content="Gia Tộc Họ Nguyễn — tờ báo về đất nước, con người Việt Nam, văn hóa, gia đình và lịch sử.">
 <style>{css}</style></head><body><div class="page"><div class="topline"></div>
 <div class="utility"><span>Ấn phẩm điện tử · Việt Nam</span><span>Gia Tộc Họ Nguyễn</span></div>
-<header class="mast"><div class="kicker">Cội nguồn · Con người · Văn hóa · Lịch sử</div><h1>Gia Tộc Họ Nguyễn</h1>
+<header class="mast"><div class="kicker">Cội nguồn · Con người · Văn hóa · Lịch sử</div><div class="logo">N</div><h1>Gia Tộc Họ Nguyễn</h1>
 <p>Một tờ báo kể chuyện Việt Nam bằng góc nhìn về quê hương, gia đình, con người và những giá trị được trao truyền qua các thế hệ.</p></header>
 <nav class="nav"><a href="#moi">Mới nhất</a><a href="#que-huong">Quê hương</a><a href="#van-hoa">Văn hóa</a><a href="#gia-dinh">Gia đình</a><a href="#lich-su">Lịch sử</a></nav>
 <div class="edition"><div><strong>Bản tin Gia Tộc</strong><br><span>Những câu chuyện có giá trị lâu dài.</span></div><div class="times">07:00 · 15:00 · 23:00 GIỜ VIỆT NAM</div></div>
