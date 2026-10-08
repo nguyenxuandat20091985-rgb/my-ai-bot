@@ -305,69 +305,73 @@ def render_article_html(title: str, body: str, image: str, date: str, slug: str,
 
 
 def render_home(articles: list) -> str:
-    cards = []
-    for a in articles[:12]:
+    # Trang chủ động: bài mới nhất lên Trang nhất, các bài còn lại theo chuyên mục.
+    latest = articles[:7]
+
+    def card(a, featured=False):
         title = html.escape(a.get("title", "Bài viết"))
         slug = html.escape(a.get("slug", ""))
         date = html.escape(a.get("date", ""))
         image = a.get("image", "")
-        excerpt = html.escape((a.get("body", "")[:180] + "…") if a.get("body") else "")
-        img = (
-            f'<img src="{html.escape(image, quote=True)}" alt="{title}" loading="lazy">'
-            if image
-            else ""
-        )
-        cards.append(
-            f"""<a class="card" href="{slug}.html">
-  {img}
-  <div class="card-body">
-    <div class="kicker">Ấn bản gia tộc</div>
-    <h2>{title}</h2>
-    <div class="meta">📅 {date}</div>
-    <p>{excerpt}</p>
-  </div>
-</a>"""
-        )
+        body = re.sub(r"\s+", " ", a.get("body", "")).strip()
+        excerpt = html.escape((body[:220] + "…") if len(body) > 220 else body)
+        img = f'<img src="{html.escape(image, quote=True)}" alt="{title}" loading="{"eager" if featured else "lazy"}">' if image else ""
+        cls = "story featured" if featured else "story"
+        return f'''<a class="{cls}" href="{slug}.html">{img}<div class="story-body">
+          <div class="kicker">Gia Tộc Họ Nguyễn</div><h3>{title}</h3>
+          <div class="meta">{date}</div><p>{excerpt}</p></div></a>'''
+
+    featured = card(latest[0], True) if latest else ""
+    side = "".join(card(a) for a in latest[1:3])
+    remaining = latest[3:]
+    groups = {"Quê hương & Con người":[],"Văn hóa & Phong tục":[],"Gia đình & Cội nguồn":[],"Lịch sử":[]}
+    topic_map = {
+        "lang-nghe":"Văn hóa & Phong tục","phong-tuc":"Văn hóa & Phong tục","am-thuc":"Văn hóa & Phong tục",
+        "canh-dep":"Quê hương & Con người","con-nguoi":"Quê hương & Con người",
+        "gia-dinh":"Gia đình & Cội nguồn","ho-nguyen":"Lịch sử","nhan-vat":"Lịch sử"
+    }
+    for a in remaining:
+        groups[topic_map.get(a.get("topic_id"), "Quê hương & Con người")].append(a)
+
+    sections = []
+    for name, items in groups.items():
+        if items:
+            sections.append(f'<section class="section"><div class="section-head"><h2>{html.escape(name)}</h2><span>Chuyện Việt Nam</span></div><div class="grid">{"".join(card(a) for a in items)}</div></section>')
+
+    content = f'''
+    <section class="front">
+      <div class="front-main">{featured if featured else '<div class="empty"><div class="seal">N</div><h2>Ấn bản đầu tiên đang được chuẩn bị</h2><p>AI sẽ tự viết và xuất bản bài mới theo lịch.</p></div>'}</div>
+      <div class="front-side">{side if side else '<div class="side-note"><b>Bản tin Gia Tộc</b><p>07:00 · 15:00 · 23:00 giờ Việt Nam</p></div>'}</div>
+    </section>
+    {''.join(sections) if sections else '<section class="section"><div class="section-head"><h2>Mới nhất</h2><span>Đang cập nhật</span></div><div class="empty"><p>Bài báo đầu tiên sẽ xuất hiện tại đây ngay khi hệ thống xuất bản.</p></div></section>'}
+    '''
 
     css = """
-*{box-sizing:border-box}body{margin:0;background:#faf7f2;color:#1c1917;font-family:Georgia,"Times New Roman",serif}
-.wrap{max-width:1000px;margin:0 auto;padding:20px}
-.mast{background:linear-gradient(135deg,#7f1d1d,#b91c1c,#ca8a04);color:#fff;border-radius:22px;padding:32px;margin-bottom:24px;box-shadow:0 12px 40px #7f1d1d33}
-.mast h1{margin:0;font-size:32px}.mast p{margin:10px 0 0;opacity:.92}
-.grid{display:grid;gap:18px}
-.card{display:block;background:#fff;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;border:1px solid #f5e6d3;box-shadow:0 6px 24px #0000000a;transition:transform .15s ease}
-.card:hover{transform:translateY(-2px)}
-.card img{width:100%;height:220px;object-fit:cover;display:block}
-.card-body{padding:18px 20px}
-.kicker{color:#b91c1c;font-weight:700;text-transform:uppercase;font-size:11px;letter-spacing:.08em;font-family:system-ui,sans-serif}
-.card h2{font-size:22px;line-height:1.25;margin:8px 0}
-.meta{color:#78716c;font-size:13px;font-family:system-ui,sans-serif}
-.card p{color:#44403c;font-size:15px;line-height:1.6;margin:10px 0 0}
-.empty{padding:40px;text-align:center;color:#78716c}
-@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.wrap{padding:12px}.mast h1{font-size:26px}.card img{height:180px}}
+:root{--ink:#211a15;--muted:#74685d;--red:#8f1d22;--gold:#b8893b;--paper:#fbf7ef;--line:#d9cbb8;--card:#fffdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+a{color:inherit;text-decoration:none}.page{max-width:1180px;margin:auto;padding:0 22px 50px}.topline{height:4px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
+.utility{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font:600 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mast{text-align:center;padding:27px 0 17px}.kicker{font:700 11px Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:var(--red)}
+.mast h1{margin:8px 0;font-size:clamp(42px,7vw,72px);line-height:.95;letter-spacing:-.04em}.mast p{max-width:720px;margin:auto;color:var(--muted);line-height:1.6}
+.nav{display:flex;justify-content:center;border-top:1px solid var(--line);border-bottom:3px double var(--line);overflow:auto;white-space:nowrap}.nav a{padding:12px 16px;font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.edition{margin-top:24px;background:#2b211b;color:#f9f0e3;padding:20px 25px;display:flex;justify-content:space-between;gap:20px;align-items:center}.edition strong{font-size:21px}.edition span{font:12px Arial,sans-serif;color:#d9cbbb}.times{font:700 11px Arial,sans-serif;color:#ead8b6}
+.front{display:grid;grid-template-columns:1.7fr 1fr;margin-top:27px;border-bottom:1px solid var(--line);padding-bottom:25px}.front-main{padding-right:24px}.front-side{padding-left:24px;border-left:1px solid var(--line)}
+.story{display:block;background:var(--card);border:1px solid var(--line);overflow:hidden}.story img{width:100%;height:180px;object-fit:cover;display:block}.story-body{padding:16px 18px}.story h3{font-size:22px;line-height:1.2;margin:8px 0}.story p{color:var(--muted);line-height:1.6;margin:9px 0 0}.meta{font:12px Arial,sans-serif;color:#8a8178}.featured{border:0;background:transparent}.featured img{height:360px}.featured .story-body{padding:18px 0}.featured h3{font-size:39px;line-height:1.05;margin:9px 0}.front-side{display:grid;gap:16px}.front-side .story h3{font-size:19px}.side-note{background:#f4ecdf;border-top:4px solid var(--red);padding:20px;font-size:16px;line-height:1.6}.side-note b{font-size:22px}.side-note p{color:var(--muted)}
+.section{margin-top:32px}.section-head{display:flex;justify-content:space-between;align-items:end;border-bottom:3px double var(--line);padding-bottom:9px;margin-bottom:14px}.section-head h2{margin:0;font-size:28px}.section-head span{font:700 10px Arial,sans-serif;color:var(--red);letter-spacing:.1em;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.empty{text-align:center;padding:45px 20px;background:#fffaf1;border:1px dashed #cdbb9f}.seal{width:54px;height:54px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;color:var(--red);font-size:24px}
+.footer{margin-top:30px;border-top:3px double var(--line);padding-top:15px;display:flex;justify-content:space-between;font:11px Arial,sans-serif;color:var(--muted)}
+@media(max-width:760px){.page{padding:0 13px 35px}.utility{font-size:9px}.utility span:last-child{display:none}.nav{justify-content:flex-start;margin:0 -13px}.front{display:block}.front-main{padding:0 0 22px}.front-side{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.featured img{height:220px}.featured h3{font-size:29px}.grid{grid-template-columns:1fr}.edition{display:block}.times{margin-top:9px}.footer{display:block}.footer span{display:block;margin-top:7px}}
 """
-    body_cards = "".join(cards) if cards else '<div class="empty">Chưa có bài. Workflow sẽ xuất bản tự động.</div>'
-    return f"""<!doctype html>
-<html lang="vi">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gia Tộc Họ Nguyễn — Báo về đất nước & con người Việt Nam</title>
-<meta name="description" content="Tờ báo Gia Tộc Họ Nguyễn: 3 bài mỗi ngày về đất nước và con người Việt Nam.">
-<style>{css}</style>
-</head>
-<body>
-<main class="wrap">
-  <header class="mast">
-    <h1>Gia Tộc Họ Nguyễn</h1>
-    <p>Ấn phẩm độc lập về đất nước, con người và giá trị gia đình Việt Nam · 3 bài mỗi ngày</p>
-  </header>
-  <section class="grid">{body_cards}</section>
-</main>
-</body>
-</html>"""
-
+    return f'''<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gia Tộc Họ Nguyễn — Báo về đất nước, con người và cội nguồn</title>
+<meta name="description" content="Gia Tộc Họ Nguyễn — tờ báo về đất nước, con người Việt Nam, văn hóa, gia đình và lịch sử.">
+<style>{css}</style></head><body><div class="page"><div class="topline"></div>
+<div class="utility"><span>Ấn phẩm điện tử · Việt Nam</span><span>Gia Tộc Họ Nguyễn</span></div>
+<header class="mast"><div class="kicker">Cội nguồn · Con người · Văn hóa · Lịch sử</div><h1>Gia Tộc Họ Nguyễn</h1>
+<p>Một tờ báo kể chuyện Việt Nam bằng góc nhìn về quê hương, gia đình, con người và những giá trị được trao truyền qua các thế hệ.</p></header>
+<nav class="nav"><a href="#moi">Mới nhất</a><a href="#que-huong">Quê hương</a><a href="#van-hoa">Văn hóa</a><a href="#gia-dinh">Gia đình</a><a href="#lich-su">Lịch sử</a></nav>
+<div class="edition"><div><strong>Bản tin Gia Tộc</strong><br><span>Những câu chuyện có giá trị lâu dài.</span></div><div class="times">07:00 · 15:00 · 23:00 GIỜ VIỆT NAM</div></div>
+{content}<footer class="footer"><span>© Gia Tộc Họ Nguyễn</span><span>Đất nước · Con người · Cội nguồn</span></footer></div></body></html>'''
 
 def main() -> None:
     FAMILY_DIR.mkdir(parents=True, exist_ok=True)
