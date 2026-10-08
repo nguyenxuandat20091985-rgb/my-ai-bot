@@ -1,6 +1,7 @@
 """
 Gia Tộc Họ Nguyễn — Tờ báo độc lập về đất nước & con người Việt Nam.
 Chạy hoàn toàn riêng, KHÔNG đụng news_bot.py / Tờ Báo AI / Chợ Deal.
+# Publisher target: docs/gia-toc (GitHub Pages) + mirrored root gia-toc.
 Mỗi lần chạy xuất 1 bài; workflow chạy 3 lần/ngày → 3 bài/ngày.
 Mỗi bài luôn có một link sản phẩm lấy từ products.json ở một khối riêng, không chi phối nội dung bài.
 """
