@@ -46,8 +46,7 @@ jobs:
         run: |
           git config user.name "my-ai-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          mkdir -p docs/gia-toc gia-toc data
-          cp -R docs/gia-toc/. gia-toc/
-          git add family_news_bot.py docs/gia-toc/ gia-toc/ data/family_news_fingerprints.json data/family_articles.json || true
+          mkdir -p docs/gia-toc data
+          git add family_news_bot.py docs/gia-toc/ data/family_news_fingerprints.json data/family_articles.json || true
           git diff --cached --quiet || git commit -m "chore: publish Gia Toc Ho Nguyen newspaper"
           git push
