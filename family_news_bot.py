@@ -27,6 +27,8 @@ FAMILY_DIR = DOCS_DIR / "gia-toc"
 FINGERPRINT_FILE = DATA_DIR / "family_news_fingerprints.json"
 ARTICLES_FILE = DATA_DIR / "family_articles.json"
 FAMILY_BLOG = f"{BLOG_URL}/gia-toc"
+MARKET_URL = "https://nguyenxuandat20091985-rgb.github.io/my-ai-bot/market.html"
+LOGO_SVG = "<svg class=\"family-logo\" viewBox=\"0 0 220 220\" role=\"img\" aria-label=\"Logo Gia Phả Họ Nguyễn\" xmlns=\"http://www.w3.org/2000/svg\">\n<defs><radialGradient id=\"r\" cx=\"50%\" cy=\"45%\"><stop offset=\"0\" stop-color=\"#b51218\"/><stop offset=\"1\" stop-color=\"#65070b\"/></radialGradient></defs>\n<circle cx=\"110\" cy=\"110\" r=\"104\" fill=\"#f4c51f\" stroke=\"#9b5d08\" stroke-width=\"3\"/>\n<circle cx=\"110\" cy=\"110\" r=\"94\" fill=\"url(#r)\" stroke=\"#ffd84a\" stroke-width=\"4\"/>\n<path d=\"M38 64h144M47 74h126\" stroke=\"#ffd84a\" stroke-width=\"3\" opacity=\".9\"/>\n<path d=\"M65 68l8-9 8 9 8-9 8 9 8-9 8 9 8-9 8 9 8-9 8 9 8-9 8 9\" fill=\"none\" stroke=\"#ffd84a\" stroke-width=\"3\"/>\n<path d=\"M58 67h104l-10 13H68zM73 80h74v25H73zM66 105h88\" fill=\"none\" stroke=\"#ffd84a\" stroke-width=\"4\" stroke-linejoin=\"round\"/>\n<text x=\"110\" y=\"103\" text-anchor=\"middle\" font-size=\"31\" font-weight=\"700\" font-family=\"Georgia,serif\" fill=\"#ffe36b\">Nguyễn</text>\n<path d=\"M110 151c-2-23-2-30 0-41M110 144c-17-15-28-18-41-18M110 143c17-15 28-18 41-18M110 151c-11-5-20-5-31-1M110 151c11-5 20-5 31-1\" fill=\"none\" stroke=\"#ffe36b\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n<path d=\"M101 166c4-12 4-17 9-25 5 8 5 13 9 25\" fill=\"none\" stroke=\"#ffe36b\" stroke-width=\"4\"/>\n<text x=\"110\" y=\"185\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial,sans-serif\" fill=\"#ffe36b\">GIA PHẢ HỌ NGUYỄN</text>\n<text x=\"110\" y=\"201\" text-anchor=\"middle\" font-size=\"9\" font-family=\"Georgia,serif\" fill=\"#ffe36b\">UỐNG NƯỚC NHỚ NGUỒN</text>\n</svg>"
 
 # Chủ đề cố định — xoay vòng, chống lệch chủ đề
 TOPICS = [
@@ -298,7 +300,7 @@ def render_article_html(title: str, body: str, image: str, date: str, slug: str,
     <div class="body">{paras}</div>
     {product_box}
     <p class="footer-note">Bài do AI biên tập trong khuôn khổ tờ báo Gia Tộc Họ Nguyễn — chủ đề đất nước, con người Việt Nam.</p>
-    <p class="nav"><a href="index.html">← Về trang chủ tờ báo</a></p>
+    <p class="nav"><a href="index.html">← Về trang chủ tờ báo</a> · <a href="{MARKET_URL}" target="_blank" rel="noopener">Market Deal</a></p>
   </article>
 </main>
 </body>
@@ -352,10 +354,10 @@ def render_home(articles: list) -> str:
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
 a{color:inherit;text-decoration:none}.page{max-width:1180px;margin:auto;padding:0 22px 50px}.topline{height:4px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
 .utility{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font:600 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.mast{text-align:center;padding:27px 0 17px}.logo{width:58px;height:58px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;margin:9px auto;color:var(--red);font-size:25px;font-weight:700}.kicker{font:700 11px Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:var(--red)}
+.mast{text-align:center;padding:27px 0 17px}.logo{width:96px;height:96px;margin:8px auto}.family-logo{display:block;width:100%;height:100%}.kicker{font:700 11px Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:var(--red)}
 .mast h1{margin:8px 0;font-size:clamp(42px,7vw,72px);line-height:.95;letter-spacing:-.04em}.mast p{max-width:720px;margin:auto;color:var(--muted);line-height:1.6}
 .nav{display:flex;justify-content:center;border-top:1px solid var(--line);border-bottom:3px double var(--line);overflow:auto;white-space:nowrap}.nav a{padding:12px 16px;font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-.edition{margin-top:24px;background:#2b211b;color:#f9f0e3;padding:20px 25px;display:flex;justify-content:space-between;gap:20px;align-items:center}.edition strong{font-size:21px}.edition span{font:12px Arial,sans-serif;color:#d9cbbb}.times{font:700 11px Arial,sans-serif;color:#ead8b6}
+.market-btn{color:#fff!important;background:#8f1d22;border-radius:999px;margin:5px 8px;padding:8px 14px!important;letter-spacing:.04em!important}.market-btn:hover{background:#b8893b}.edition{margin-top:24px;background:#2b211b;color:#f9f0e3;padding:20px 25px;display:flex;justify-content:space-between;gap:20px;align-items:center}.edition strong{font-size:21px}.edition span{font:12px Arial,sans-serif;color:#d9cbbb}.times{font:700 11px Arial,sans-serif;color:#ead8b6}
 .front{display:grid;grid-template-columns:1.7fr 1fr;margin-top:27px;border-bottom:1px solid var(--line);padding-bottom:25px}.front-main{padding-right:24px}.front-side{padding-left:24px;border-left:1px solid var(--line)}
 .story{display:block;background:var(--card);border:1px solid var(--line);overflow:hidden}.story img{width:100%;height:180px;object-fit:cover;display:block}.story-body{padding:16px 18px}.story h3{font-size:22px;line-height:1.2;margin:8px 0}.story p{color:var(--muted);line-height:1.6;margin:9px 0 0}.meta{font:12px Arial,sans-serif;color:#8a8178}.featured{border:0;background:transparent}.featured img{height:360px}.featured .story-body{padding:18px 0}.featured h3{font-size:39px;line-height:1.05;margin:9px 0}.front-side{display:grid;gap:16px}.front-side .story h3{font-size:19px}.side-note{background:#f4ecdf;border-top:4px solid var(--red);padding:20px;font-size:16px;line-height:1.6}.side-note b{font-size:22px}.side-note p{color:var(--muted)}
 .section{margin-top:32px}.section-head{display:flex;justify-content:space-between;align-items:end;border-bottom:3px double var(--line);padding-bottom:9px;margin-bottom:14px}.section-head h2{margin:0;font-size:28px}.section-head span{font:700 10px Arial,sans-serif;color:var(--red);letter-spacing:.1em;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.empty{text-align:center;padding:45px 20px;background:#fffaf1;border:1px dashed #cdbb9f}.seal{width:54px;height:54px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;color:var(--red);font-size:24px}
@@ -368,9 +370,9 @@ a{color:inherit;text-decoration:none}.page{max-width:1180px;margin:auto;padding:
 <meta name="description" content="Gia Tộc Họ Nguyễn — tờ báo về đất nước, con người Việt Nam, văn hóa, gia đình và lịch sử.">
 <style>{css}</style></head><body><div class="page"><div class="topline"></div>
 <div class="utility"><span>Ấn phẩm điện tử · Việt Nam</span><span>Gia Tộc Họ Nguyễn</span></div>
-<header class="mast"><div class="kicker">Cội nguồn · Con người · Văn hóa · Lịch sử</div><div class="logo">N</div><h1>Gia Tộc Họ Nguyễn</h1>
+<header class="mast"><div class="kicker">Cội nguồn · Con người · Văn hóa · Lịch sử</div><div class="logo">{LOGO_SVG}</div><h1>Gia Tộc Họ Nguyễn</h1>
 <p>Một tờ báo kể chuyện Việt Nam bằng góc nhìn về quê hương, gia đình, con người và những giá trị được trao truyền qua các thế hệ.</p></header>
-<nav class="nav"><a href="#moi">Mới nhất</a><a href="#que-huong">Quê hương</a><a href="#van-hoa">Văn hóa</a><a href="#gia-dinh">Gia đình</a><a href="#lich-su">Lịch sử</a></nav>
+<nav class="nav"><a href="#moi">Mới nhất</a><a href="#que-huong">Quê hương</a><a href="#van-hoa">Văn hóa</a><a href="#gia-dinh">Gia đình</a><a href="#lich-su">Lịch sử</a><a class="market-btn" href="{MARKET_URL}" target="_blank" rel="noopener">Market Deal</a></nav>
 <div class="edition"><div><strong>Bản tin Gia Tộc</strong><br><span>Những câu chuyện có giá trị lâu dài.</span></div><div class="times">07:00 · 15:00 · 23:00 GIỜ VIỆT NAM</div></div>
 {content}<footer class="footer"><span>© Gia Tộc Họ Nguyễn</span><span>Đất nước · Con người · Cội nguồn</span></footer></div></body></html>'''
 
