@@ -2,7 +2,7 @@
 Gia Tộc Họ Nguyễn — Tờ báo độc lập về đất nước & con người Việt Nam.
 Chạy hoàn toàn riêng, KHÔNG đụng news_bot.py / Tờ Báo AI / Chợ Deal.
 Mỗi lần chạy xuất 1 bài; workflow chạy 3 lần/ngày → 3 bài/ngày.
-Có thể gắn nhẹ link sản phẩm từ products.json nếu phù hợp.
+Mỗi bài luôn có một link sản phẩm lấy từ products.json ở một khối riêng, không chi phối nội dung bài.
 """
 from __future__ import annotations
 
@@ -167,33 +167,31 @@ def pick_topic(used_ids: set) -> dict:
 
 
 def pick_image(topic: dict, seed: str) -> str:
+    # Ảnh minh họa lấy trực tiếp từ Internet; ưu tiên bộ ảnh theo chủ đề, có fallback.
     images = topic.get("images") or []
     if images:
-        return images[hash(seed) % len(images)]
-    # fallback rõ nét
+        digest = int(hashlib.sha256(seed.encode("utf-8")).hexdigest()[:8], 16)
+        return images[digest % len(images)]
     return f"https://picsum.photos/seed/{hashlib.md5(seed.encode()).hexdigest()[:10]}/1200/630"
 
 
-def optional_product() -> dict | None:
-    """Lấy nhẹ 1 sản phẩm từ products.json nếu có — không bắt buộc."""
-    try:
-        from modules.product_manager import load_products, score_product
+def required_product(sequence: int) -> dict:
+    """Mỗi bài bắt buộc có một sản phẩm hợp lệ từ products.json, không phụ thuộc nội dung bài."""
+    from modules.product_manager import load_products
 
-        products = load_products()
-        if not products:
-            return None
-        # Ưu tiên sản phẩm gia dụng / quà tặng / sách / thủ công nhẹ nhàng
-        soft = []
-        for p in products:
-            blob = (p.get("name", "") + " " + p.get("highlights", "") + " " + p.get("category", "")).lower()
-            if any(k in blob for k in ["gia dụng", "bếp", "quà", "sách", "trà", "gốm", "tre", "mây", "nón", "lụa", "đèn", "nội thất"]):
-                soft.append(p)
-        pool = soft or products
-        pool = sorted(pool, key=score_product, reverse=True)
-        return pool[0] if pool else None
-    except Exception as e:
-        logger.info(f"Không gắn sản phẩm (tùy chọn): {e}")
-        return None
+    products = load_products()
+    valid = [
+        p for p in products
+        if p.get("name") and (p.get("affiliate_url") or p.get("link") or p.get("product_url"))
+    ]
+    if not valid:
+        raise RuntimeError("products.json không có sản phẩm nào có tên và link hợp lệ.")
+    valid.sort(key=lambda p: str(p.get("id") or p.get("name") or ""))
+    return valid[sequence % len(valid)]
+
+
+def word_count(text: str) -> int:
+    return len(re.findall(r"\S+", text or ""))
 
 
 def ai_write(topic: dict) -> str:
@@ -214,13 +212,22 @@ Yêu cầu:
   4) Kết luận truyền cảm hứng giữ gìn bản sắc / giá trị gia đình
 
 Chỉ trả về bài viết hoàn chỉnh."""
-    r = completion(
-        model=MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=TEMPERATURE,
-        max_tokens=MAX_TOKENS,
-    )
-    return (r.choices[0].message.content or "").strip()
+    for attempt in range(2):
+        extra = "" if attempt == 0 else "\nBản trước chưa đạt độ dài. Hãy viết lại, bảo đảm phần thân bài có 700–1000 từ tiếng Việt."
+        r = completion(
+            model=MODEL,
+            messages=[{"role": "user", "content": prompt + extra}],
+            temperature=TEMPERATURE,
+            max_tokens=MAX_TOKENS,
+        )
+        text = (r.choices[0].message.content or "").strip()
+        lines = [x.strip() for x in text.splitlines() if x.strip()]
+        body = "\n\n".join(lines[1:]) if len(lines) > 1 else text
+        count = word_count(body)
+        logger.info(f"Độ dài bài lần {attempt + 1}: {count} từ")
+        if 700 <= count <= 1000:
+            return text
+    raise RuntimeError("AI không tạo được bài trong khoảng 700–1000 từ sau 2 lần thử.")
 
 
 def render_article_html(title: str, body: str, image: str, date: str, slug: str, product: dict | None) -> str:
@@ -237,7 +244,7 @@ def render_article_html(title: str, body: str, image: str, date: str, slug: str,
         purl = product.get("affiliate_url") or product.get("link") or product.get("product_url") or "#"
         product_box = f"""
         <aside class="product">
-          <div class="product-label">Gợi ý từ Chợ Deal</div>
+          <div class="product-label">Liên kết sản phẩm</div>
           <div class="product-name">{html.escape(product.get("name", ""))}</div>
           <a href="{html.escape(purl, quote=True)}" target="_blank" rel="nofollow sponsored">Xem sản phẩm →</a>
         </aside>"""
@@ -354,7 +361,7 @@ def render_home(articles: list) -> str:
 <main class="wrap">
   <header class="mast">
     <h1>Gia Tộc Họ Nguyễn</h1>
-    <p>Báo về đất nước &amp; con người Việt Nam · Độc lập với Tờ Báo AI · 3 bài mỗi ngày</p>
+    <p>Ấn phẩm độc lập về đất nước, con người và giá trị gia đình Việt Nam · 3 bài mỗi ngày</p>
   </header>
   <section class="grid">{body_cards}</section>
 </main>
@@ -391,12 +398,11 @@ def main() -> None:
     date_str = now.strftime("%d/%m/%Y %H:%M")
     slug = f"bai-{now.strftime('%Y-%m-%d')}-{now.strftime('%H%M')}"
     image = pick_image(topic, title)
-    product = optional_product()
+    articles = load_articles()
+    product = required_product(len(articles))
 
     article_html = render_article_html(title, body, image, date_str, slug, product)
     (FAMILY_DIR / f"{slug}.html").write_text(article_html, encoding="utf-8")
-
-    articles = load_articles()
     entry = {
         "title": title,
         "body": body,
@@ -405,7 +411,8 @@ def main() -> None:
         "slug": slug,
         "topic_id": topic["id"],
         "created_at": now.isoformat(),
-        "product_name": (product or {}).get("name", ""),
+        "product_name": product.get("name", ""),
+        "product_url": product.get("affiliate_url") or product.get("link") or product.get("product_url"),
     }
     articles.insert(0, entry)
     save_articles(articles)
