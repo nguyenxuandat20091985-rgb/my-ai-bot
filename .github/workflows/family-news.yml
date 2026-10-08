@@ -1,0 +1,49 @@
+name: Gia Toc Ho Nguyen Newspaper
+
+on:
+  schedule:
+    # 07:00, 15:00, 23:00 giờ Việt Nam (UTC+7)
+    - cron: "0 0 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: family-news-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Publish one family newspaper article
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SAFE_MODE: "true"
+          AUTO_PUBLISH: "true"
+        run: python family_news_bot.py
+
+      - name: Commit family newspaper
+        run: |
+          git config user.name "my-ai-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p docs/gia-toc data
+          git add family_news_bot.py docs/gia-toc/ data/family_news_fingerprints.json data/family_articles.json || true
+          git diff --cached --quiet || git commit -m "chore: publish Gia Toc Ho Nguyen newspaper"
+          git push
