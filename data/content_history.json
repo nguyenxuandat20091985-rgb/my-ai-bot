@@ -646,5 +646,17 @@
       "slug": "2026-10-10",
       "score": 14.0
     }
+  },
+  {
+    "product_id": "noi-chien-001",
+    "title": "Cách biến bữa tối “ngon, nhanh, nhẹ” thành hiện thực chỉ trong 15 phút!",
+    "content_hash": "d4ca46d876a0c2b4",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-10-11T11:57:19.423638+07:00",
+    "extra": {
+      "slug": "2026-10-11",
+      "score": 18.5
+    }
   }
 ]
