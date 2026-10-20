@@ -148,5 +148,11 @@
     "topic_id": "phong-tuc",
     "slug": "bai-2026-10-20-1000",
     "created_at": "2026-10-20T10:00:43.621079+07:00"
+  },
+  {
+    "title_hash": "21b3a5a116d3ef80af2f",
+    "topic_id": "ho-nguyen",
+    "slug": "bai-2026-10-20-2013",
+    "created_at": "2026-10-20T20:13:41.635828+07:00"
   }
 ]
