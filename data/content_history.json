@@ -1006,5 +1006,17 @@
       "slug": "2026-11-10",
       "score": 14.0
     }
+  },
+  {
+    "product_id": "den-pin-001",
+    "title": "Ánh sáng rực rỡ trong đêm, bạn có thể thoát khỏi mọi bóng tối?",
+    "content_hash": "f8ff8a0f6866772f",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-11-11T12:27:50.180691+07:00",
+    "extra": {
+      "slug": "2026-11-11",
+      "score": 14.0
+    }
   }
 ]
