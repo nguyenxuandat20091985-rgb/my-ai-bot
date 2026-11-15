@@ -1054,5 +1054,17 @@
       "slug": "2026-11-14",
       "score": 14.0
     }
+  },
+  {
+    "product_id": "noi-chien-001",
+    "title": "Nồi chiên không dầu – Bữa ăn ngon, sức khỏe không lo mỡ",
+    "content_hash": "cd97a2a12046ae24",
+    "angle": "daily_review",
+    "content_type": "long_review",
+    "timestamp": "2026-11-15T12:39:43.132814+07:00",
+    "extra": {
+      "slug": "2026-11-15",
+      "score": 18.5
+    }
   }
 ]
